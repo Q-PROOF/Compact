@@ -1,0 +1,34 @@
+{
+  "_comment": "Exact environment of every documented benchmark run. See results/README.md for the artifact layout and README 'How Compact competes' for the tables these numbers back.",
+  "compactq": {
+    "documented_runs": "0.1.x engine (identical optimization-pass code; the 0.1.1 release adds objective selection without changing the default '2q' pipeline)",
+    "pre_release_provenance": "iterations v0.6-v2.6 during the 2026-09-10..16 prototyping sprint; the bench_results.md artifact generated on 2026-09-16 recorded the then-local version 2.4.0 at commit 760206fa64e2 - same engine, retired versioning",
+    "release_verification": "gauntlet 1018/1018 re-verified on the 0.1.0 release commit, 2026-09-17"
+  },
+  "competitors": {
+    "qiskit": "2.5.2",
+    "pytket": "2.18.1",
+    "cirq": "1.7.0",
+    "bqskit": "not yet benchmarked (roadmap: benchmark suite v1)"
+  },
+  "python": "3.11.9",
+  "os": "Windows 11 x64",
+  "run_dates": ["2026-09-08", "2026-09-16"],
+  "commands": {
+    "qasmbench_small": "python scripts/bench_json.py",
+    "qasmbench_by_size": "python scripts/realbench.py --size small|medium|large --max-qubits N",
+    "pytket_referee": "python scripts/referee_pytket.py",
+    "mqt_bench": "python scripts/mqtbench_run.py",
+    "suppression": "python scripts/suppress_bench.py && python scripts/head_to_head.py",
+    "stabilizer_scale": "python scripts/scale_bench.py",
+    "synthetic": "python -m compactq.bench",
+    "gauntlet": "python scripts/gauntlet.py"
+  },
+  "protocol": {
+    "inputs": "identical input circuit per tool (QASMBench unitary cores, level-0 normalized, same basis; MQT Bench flattened to one register)",
+    "metrics": "total gates / 2-qubit gates / depth / wall time",
+    "seeds": "fixed",
+    "timings": "wall-clock, single run unless stated best-of-3",
+    "referee": "qiskit.quantum_info.Operator fidelity |Tr(U+V)|/d, never compactq's own math"
+  }
+}

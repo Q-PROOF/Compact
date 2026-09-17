@@ -2,13 +2,37 @@
 
 All notable changes to Q-PROOF Compact are documented here.
 
-## [Unreleased]
+## [0.1.1] — 2026-09-17
+
+### Added
+- **Multi-objective optimization**: `objective=` on
+  `optimize` / `optimize_deep` / `optimize_search` and `--objective` on
+  the CLI.  Supported: `2q` (default), `depth`, `gate_count`, `latency`
+  (depth alias), and `weighted` (minimize 1.0·2q + 0.1·depth +
+  0.02·gates).  Each lexicographic objective reorders the same
+  (2q, gates, depth) tuple — the chosen primary metric can never grow,
+  by construction; the `2q` default is behavior-identical to 0.1.0
+  (drift-tested).  Hardware-error weighting remains
+  `compactq.target.optimize_for`.
+- `results/` benchmark-artifact directory: `environment.json` (exact
+  environment, commands and referee protocol of every documented run)
+  and the artifact layout; `bench_results.json`/`bench_results.md`
+  regenerated on the 0.1.1 code (commit-stamped, 43 rows).
+- Objective-mode test groups (`tests/test_objectives.py`, 4 groups)
+  wired into CI and the release pipeline.
 
 ### Changed
 - Console script `compact` retired in favor of `compactq` on all
   platforms — the bare `compact` name collides with Windows' built-in
-  `compact.exe` file-compression tool. `compact-bench` and
+  `compact.exe` file-compression tool.  `compact-bench` and
   `python -m compactq` are unchanged.
+- README: verification model stated as two exact tiers (algebraic /
+  symbolic vs numerical unitary certificate, with the 1e-7 tolerance as
+  part of the contract); "verified quantum compilation" positioning
+  with an explicit fair-claims statement; capability matrix vs
+  Qiskit/TKET/BQSKit/Cirq/Staq; suppression scope-of-claims note;
+  roadmap elevated (Trotter/Hamiltonian simulation as the primary
+  research target, scalable verification, benchmark suite v1).
 
 ### Removed
 - Stale prototype-era files from the repository root: the v0.2 KAK

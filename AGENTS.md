@@ -54,8 +54,11 @@ compactq/
 1. **Exactness**: every rewrite preserves the unitary up to global phase
 2. **Verification net**: `optimize()` proves results within the dense proof limit (8q with the native kernels), `optimize_large()` adds randomized K-state verification beyond it,
    returning; on any doubt it returns the original unchanged
-3. **Never grow**: the optimizer never increases (2q count, total, depth)
-   lexicographically — a pass that would make things worse is rejected
+3. **Never grow**: the optimizer never increases the chosen objective
+   lexicographically — default `2q` order (2q count, total, depth); also
+   `depth` and `gate_count` orders via the `objective=` parameter (each is
+   a reordering of the same tuple, so the invariant holds by construction);
+   `weighted` mode guarantees the weighted cost never increases
 4. **Zero dependencies**: the core (`compactq/`) uses only Python stdlib
 5. **Property tests**: every pass must survive 500+ random-circuit trials
 

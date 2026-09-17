@@ -1,27 +1,35 @@
 # Roadmap
 
-- **v0.1 (current)** — initial public release: the verified optimizer
-  (peephole / commutation / CP / pure-Python KAK / Clifford-tableau /
-  phase-polynomial passes, multi-pipeline search, exact + approximate
-  modes, hardware `Target` objectives, SABRE-lite routing, exact
-  placement, QASM2/3 IO, Qiskit bridge + plugin) and the open
-  error-suppression stack (noise-aware layout, exact Pauli twirling,
+- **v0.1.1 (current)** — initial public release + objective selection:
+  the verified optimizer (peephole / commutation / CP / pure-Python KAK /
+  Clifford-tableau / phase-polynomial passes, multi-pipeline search,
+  exact + approximate modes, hardware `Target` objectives, SABRE-lite
+  routing, exact placement, QASM2/3 IO, Qiskit bridge + plugin) and the
+  open error-suppression stack (noise-aware layout, exact Pauli twirling,
   benefit-gated DD with a sequence family, MLE readout mitigation,
   exact ZNE, CDR, trajectory + stabilizer simulators, device metrics,
   classical shadows, MaxCut-QAOA solver, resource estimates, execution
-  adapters)
+  adapters); multi-objective optimization (`2q` | `depth` |
+  `gate_count` | `latency` | `weighted`)
 
 ## Next
 
-- Clifford+T fragment resynthesis (CliffordSimp-class pass) for
-  basis_trotter-class rings — the one measured 2q loss (240 vs 179).
-  Investigated 2026-09-16 on the current codebase: the plateau at 240
-  is confirmed across ALL current levers — optimize_search depth 3/4,
-  winmerge merge_by_unitary (exact), kak_pass(force=True),
-  search->optimize fixpoint, and the Clifford+T normal-form pass
-  (inapplicable: the ring's majority angles are generic; only
-  isolated sites are pi/4-quantized). Closing it needs a new
-  fragment-resynthesis capability, not more tuning of existing passes.
+- **Primary research target — Trotter / Hamiltonian simulation.**
+  `basis_trotter_n4` (240 vs Qiskit's 179 2q) is the flagship measured
+  loss, and large structured phase/Trotter rings are exactly where
+  external benchmarking (Benchpress, Nature Computational Science 2025)
+  reports the biggest competitor gains.  Needs layer-boundary
+  content-permutation search with swap-network payoff (the Clifford+T
+  normal-form pass covers only the pi/4-quantized ring).
+- **Scalable verification.** Evolve `optimization → full-unitary proof →
+  return` into local proof certificates + compositional equivalence so
+  the verified regime extends past 8 qubits structurally (randomized
+  K-state verification covers ~30 qubits today).
+- **Benchmark suite v1.** Measured BQSKit column + the four MQT Bench
+  abstraction levels (algorithmic / target-independent / native-gate /
+  hardware-mapped); every raw artifact under `results/`.
+- Calibration-driven `weighted` objective weights (today fixed at
+  1.0/0.1/0.02); `hardware_error` ranking via `compactq.target`.
 - **Graph-form Clifford synthesis (ZX-class)** — the van den Nest
   decomposition U = R . CZ_Q . H_E . L: extract the stabilizer
   generators of U|0...0> from the tableau, GF(2)-reduce them to the
@@ -58,7 +66,8 @@
 - MQT Bench in CI (script exists: `scripts/mqtbench_run.py`)
 - Hardware-backed suppression benchmarks (adapters shipped; needs
   credential-carrying runs)
-- First PyPI publication (trusted-publisher release workflow ships;
-  requires one-time PyPI + GitHub environment configuration)
+- PyPI publication: DONE — compactq 0.1.0/0.1.1 live on PyPI
+  (release workflow: build → twine check → GitHub release → idempotent
+  publish)
 - multi-OS native wheels via cibuildwheel (Windows wheels ship today;
   other platforms build from source with maturin)

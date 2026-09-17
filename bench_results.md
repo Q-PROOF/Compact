@@ -1,35 +1,35 @@
 # Benchmark results (generated - do not edit)
 
-Generated 2026-09-16T04:39:13.676032+00:00 | commit `760206fa64e2` | compactq 2.4.0 | qiskit 2.5.2 | native yes 0.16.4
+Generated 2026-09-17T18:06:40.652840+00:00 | commit `1fa8896f390d` | compactq 0.1.1 | qiskit 2.5.2 | native yes 0.16.4
 
 | circuit | q | Compact T/2q/depth | Qiskit L3 T/2q/depth | proof | referee fid |
 |---|---|---|---|---|---|
 | adder_n10 | 10 | 110/57/95 | 137/65/99 | unverified | - |
 | adder_n4 | 4 | 16/7/9 | 23/10/11 | exact-unitary | 1.0 |
-| basis_change_n3 | 3 | 34/10/22 | 44/10/27 | exact-unitary | 1.0 |
+| basis_change_n3 | 3 | 34/10/22 | 47/10/28 | exact-unitary | 1.0 |
 | basis_test_n4 | 4 | 34/12/15 | 34/6/12 | exact-unitary | 1.0 |
-| basis_trotter_n4 | 4 | 773/240/352 | 801/179/363 | exact-unitary | 1.0 |
+| basis_trotter_n4 | 4 | 773/240/352 | 797/179/360 | exact-unitary | 1.0 |
 | bb84_n8 | - | skipped: non-unitary (mid-circuit measurement) | - | - | - |
-| bell_n4 | 4 | 18/5/7 | 27/5/11 | exact-unitary | 1.0 |
+| bell_n4 | 4 | 18/5/7 | 28/5/10 | exact-unitary | 1.0 |
 | cat_state_n4 | 4 | 4/3/4 | 4/3/4 | exact-unitary | 1.0 |
 | deutsch_n2 | 2 | 4/1/3 | 4/1/3 | exact-unitary | 1.0 |
 | dnn_n2 | 2 | 12/3/8 | 20/3/13 | exact-unitary | 1.0 |
-| dnn_n8 | 8 | 216/64/37 | 339/64/57 | exact-unitary | 1.0 |
-| error_correctiond3_n5 | 5 | 23/8/13 | 93/35/66 | exact-unitary | 1.0 |
+| dnn_n8 | 8 | 216/64/37 | 331/64/59 | exact-unitary | 1.0 |
+| error_correctiond3_n5 | 5 | 23/8/13 | 91/35/65 | exact-unitary | 1.0 |
 | fredkin_n3 | 3 | 19/8/11 | 19/8/11 | exact-unitary | 1.0 |
 | grover_n2 | 2 | 7/2/5 | 7/2/5 | exact-unitary | 1.0 |
 | hhl_n10 | - | skipped: parse: QASM2ParseError: "<input>:186801,8: 'q' is not defined in this scope" | - | - | - |
-| hhl_n7 | 7 | 191/72/128 | 254/92/168 | exact-unitary | 1.0 |
+| hhl_n7 | 7 | 191/72/128 | 252/92/166 | exact-unitary | 1.0 |
 | hs4_n4 | 4 | 12/4/5 | 12/4/5 | exact-unitary | 1.0 |
 | inverseqft_n4 | - | skipped: classical control flow | - | - | - |
 | ipea_n2 | - | skipped: classical control flow | - | - | - |
 | ising_n10 | 10 | 166/49/29 | 260/90/46 | unverified | - |
 | iswap_n2 | 2 | 7/2/5 | 8/2/6 | exact-unitary | 1.0 |
-| linearsolver_n3 | 3 | 11/4/9 | 17/4/12 | exact-unitary | 1.0 |
+| linearsolver_n3 | 3 | 11/4/9 | 15/4/10 | exact-unitary | 1.0 |
 | lpn_n5 | 5 | 7/2/4 | 7/2/4 | exact-unitary | 1.0 |
-| pea_n5 | 5 | 34/10/21 | 49/17/29 | exact-unitary | 1.0 |
+| pea_n5 | 5 | 34/10/21 | 52/17/32 | exact-unitary | 1.0 |
 | qaoa_n3 | - | skipped: non-unitary (mid-circuit measurement) | - | - | - |
-| qaoa_n6 | 6 | 114/36/47 | 170/36/65 | exact-unitary | 1.0 |
+| qaoa_n6 | 6 | 114/36/47 | 167/36/61 | exact-unitary | 1.0 |
 | qec_en_n5 | 5 | 23/10/15 | 23/10/15 | exact-unitary | 1.0 |
 | qec_sm_n5 | - | skipped: classical control flow | - | - | - |
 | qft_n4 | 4 | 20/6/10 | 34/12/20 | exact-unitary | 1.0 |
@@ -46,4 +46,4 @@ Generated 2026-09-16T04:39:13.676032+00:00 | commit `760206fa64e2` | compactq 2.
 | vqe_uccsd_n4 | - | skipped: parse: QASM2ParseError: "<input>:225,8: 'q' is not defined in this scope" | - | - | - |
 | vqe_uccsd_n6 | - | skipped: parse: QASM2ParseError: "<input>:2286,8: 'q' is not defined in this scope" | - | - | - |
 | vqe_uccsd_n8 | - | skipped: parse: QASM2ParseError: "<input>:10813,8: 'q' is not defined in this scope" | - | - | - |
-| wstate_n3 | 3 | 18/6/12 | 22/6/15 | exact-unitary | 1.0 |
+| wstate_n3 | 3 | 18/6/12 | 20/6/13 | exact-unitary | 1.0 |
