@@ -30,6 +30,8 @@ jobs:
         run: python scripts/version_lint.py
       - name: Run test suite (zero dependencies)
         run: python tests/run_tests.py
+      - name: Objective-mode tests
+        run: python tests/test_objectives.py
       - name: Quick benchmark (regression guard)
         run: python -m compactq.bench --quick
         continue-on-error: true

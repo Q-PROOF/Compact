@@ -11,7 +11,7 @@
   <a href="https://github.com/Q-PROOF/Compact/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/Q-PROOF/Compact/actions/workflows/ci.yml/badge.svg"></a>
 </p>
 
-**The verified quantum circuit optimizer.** Smaller circuits, proven. Compact takes a quantum circuit and returns an equivalent one that is smaller and shallower — with a machine-checked proof attached to every answer.
+**The verified quantum circuit optimizer.** Smaller circuits, proven. Compact takes a quantum circuit and returns an equivalent one that is smaller and shallower — with verification attached to every answer: exact algebraic proofs where the circuit structure allows them, and a numerical whole-unitary certificate otherwise. On any doubt, your input is returned unchanged.
 
 ```python
 import compactq
@@ -44,13 +44,29 @@ compactq accepts a slightly deeper circuit when it removes gates, never a larger
   (Weyl coordinates agree to ~1e-15 on randomized SU(4)s) and every re-synthesized
   block is re-verified against its own 4×4 unitary before it can replace anything.
 - Clifford blocks are re-synthesized with **tableau proofs**, exact at any qubit count.
-- The test suite (76 test functions; `python tests/run_tests.py`) includes property tests over thousands of random circuits
+- The test suite (76 test functions in `python tests/run_tests.py`, plus
+  objective-mode tests in `tests/test_objectives.py`) includes property tests over thousands of random circuits
   and a regression suite for the classic optimizer bugs (gate-order reversals,
   reversed-CX "cancellations", Euler-angle wrapping, ZZ-identity sign errors).
   `scripts/gauntlet.py` adds a 1,018-check end-to-end gauntlet: 61 realistic algorithm
   families × every public entry point, QASMBench through compactq's own importer, >8q
   no-verify soundness and CLI/bridge/round-trip checks — all refereed by Qiskit's
   `Operator`, never by compactq's own math.
+
+**What "verified" means — two exact tiers, stated precisely:**
+
+- **Algebraic / symbolic (exact, no floating point).** Clifford blocks are
+  proven with stabilizer tableaux (`clifford_equal`) at any qubit count;
+  every rewrite (peephole foldings, the `CX·RZ·CX → RZ·RZ·CP` identity,
+  SWAP templates, Euler refolds) is an algebraic identity checked at each
+  application; every KAK re-synthesis is re-verified against its own 4×4
+  block unitary before it can replace anything.
+- **Numerical unitary comparison (general circuits ≤ 8 qubits).** The
+  optimized circuit is accepted only when the Hilbert–Schmidt fidelity
+  |Tr(U†V)|/d against the input exceeds 1 − 1e-7.  This is a machine-checked
+  numerical certificate — strong, but not a formal proof-assistant-grade
+  certificate; the tolerance is part of the contract, and on any numerical
+  doubt the original circuit is returned unchanged.
 
 ## What's inside
 
@@ -90,10 +106,63 @@ compactq accepts a slightly deeper circuit when it removes gates, never a larger
   `maturin` (see Development). compactq auto-detects the kernel and silently
   falls back to the pure-Python path — the zero-dependency contract never changes.
 
+## Positioning: verified quantum compilation
+
+Compact's thesis is not "another optimizer" — it is **verified quantum
+compilation**: don't just optimize the circuit, return evidence that the
+transformation preserved the computation.
+
+```
+              quantum program
+                    │
+                    ▼
+            ┌───────────────┐
+            │   Compact     │
+            │  optimization │
+            └───────┬───────┘
+                    │
+        ┌───────────┼───────────┐
+        ▼           ▼           ▼
+    synthesis    routing    suppression
+        │           │           │
+        └───────────┼───────────┘
+                    ▼
+        verification / certificate
+                    │
+                    ▼
+            optimized circuit
+```
+
+**Fair claims.** Measured, independently refereed evidence supports
+competitive logical optimization — 2-qubit reduction, depth, structured
+families — versus Qiskit L3, pytket and Cirq on the suites below.  Not yet
+established, and not claimed: blanket superiority over the full
+Qiskit/TKET/BQSKit compiler stack (the Benchpress study, *Nature
+Computational Science* 2025, found no single tool dominating across
+construction, compilation and topology), advantage on hardware-mapped
+circuits, real-device suppression advantage, and formal
+proof-assistant-grade certificates.  Closing those gaps is the roadmap.
+
 ## How Compact competes
 
 Three axes, all measured on identical inputs (QASMBench unitary cores, level-0
 normalized, same basis, 2026-09-08 run unless noted):
+
+Capability matrix (✅ shipped · ◐ partial · ❌ not claimed):
+
+| capability | Compact | Qiskit | TKET | BQSKit | Cirq | Staq |
+|---|---|---|---|---|---|---|
+| logical optimization | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| 2-qubit unitary synthesis | ✅ | ✅ | ✅ | **strong** | ✅ | ✅ |
+| layout / routing | ✅ | ✅ | ✅ | ✅ | ✅ | ◐ |
+| hardware-aware objective | ✅ | ✅ | ✅ | ✅ | ◐ | ◐ |
+| approximate optimization | ✅ | ◐ | ◐ | ✅ | ◐ | varies |
+| in-product output verification | **✅** | external | external | external | external | external |
+| measured head-to-head vs Compact | — | ✅ below | ✅ below | not yet | ✅ (MQT) | not measurable here |
+
+(The cross-compiler reference point is the Benchpress suite — Qiskit, TKET,
+BQSKit, Cirq, Staq and others; adding a measured BQSKit column is a named
+roadmap item.)
 
 **1. Optimization quality** — win-or-tie on 2-qubit count vs Qiskit L3 on 30/32
 QASMBench small circuits (11 wins / 19 ties / 2 losses). One loss
@@ -247,6 +316,15 @@ ones — Mundada et al. randomized compiling, XY4 decoupling, tensored
 readout inversion). What we add is what no closed service can offer:
 per-layer exactness proofs, benefit gating with a no-net-loss argument,
 and a protocol anyone can re-run.
+
+**Scope of claims.** Suppression competes in a different ecosystem (Q-CTRL
+Fire Opal, Mitiq, Qiskit Runtime, Superstaq), where the correct benchmark is
+not gate count but: measured fidelity improvement over raw execution,
+sampling overhead, runtime overhead, and estimator bias/variance — on
+experimental noise models and, ultimately, hardware.  Compact ships the
+technique stack with simulator-based evidence only; hardware-backed
+suppression numbers are explicitly *not* claimed (execution adapters are
+shipped; credential-carrying runs are pending).
 
 All numbers below are from a single re-run (2026-09-16, Python 3.11.9, qiskit 2.5.2,
 pytket 2.18.1, Windows 11 x64, compactq 0.1.0 + native kernels 0.1.0) and are
@@ -444,6 +522,7 @@ tool. `python -m compactq` always works too.
 compactq in.qasm -o out.qasm        # optimize an OpenQASM 2.0 file
 compactq in.qasm --stats            # print gate-count/depth deltas
 compactq in.qasm --approx 0.99      # bounded-fidelity approximate mode
+compactq in.qasm --objective depth  # depth-first: depth may never grow
 python -m compactq.bench            # full benchmark vs Qiskit (if installed)
 python -m compactq.bench --quick    # 3-circuit CI guard
 compact-bench --out results.md     # installed console script
@@ -456,6 +535,13 @@ import compactq
 compactq.optimize(circuit, verify=True)        # Circuit -> Circuit (smaller, verified)
 compactq.optimize_deep(circuit)                # KAK cascade, best for dense circuits
 compactq.optimize_search(circuit)              # multi-pipeline search, keeps the best
+# objectives — which metric may never grow (all exact; lexicographic orders):
+compactq.optimize(c, objective="2q")           #   default: (2q, gates, depth)
+compactq.optimize(c, objective="depth")        #   depth-first acceptance
+compactq.optimize(c, objective="gate_count")   #   total-gates-first
+compactq.optimize(c, objective="latency")      #   depth alias
+compactq.optimize_search(c, objective="weighted")  # min 1.0*2q + 0.1*depth + 0.02*gates
+compactq.optimize_for(c, target)               # hardware-error weighting (compactq.target)
 compactq.approximate(circuit, min_fidelity=0.99)  # trade bounded fidelity for fewer 2q gates
 from compactq.target import Target, optimize_for
 t = Target(cx_fidelity={(0, 1): 0.999, (1, 0): 0.98})
@@ -518,14 +604,28 @@ via `from_qiskit` are boundary-decomposed automatically.
 
 ## Roadmap
 
-- `basis_trotter_n4` final disposition: qiskit's 179 and pytket's 159
-  are both *permutation-elided* (unverified outputs; this is exactly
-  the circuit where their refereed fidelity was 0.25/0.5).  Our 240 is
-  exact; matching them requires layer-boundary content-permutation
-  search with swap-network payoff at the output (roadmap).
-  `basis_test_n4` (the pi/4-quantized ring) has a Clifford+T
-  normal-form pass in `compactq/cliffordt.py`; the REAL trotter file
-  contains arbitrary-angle PhasedISWAPs and needs a different attack.
+- **Primary research target — Trotter / Hamiltonian simulation.**
+  `basis_trotter_n4` (240 vs Qiskit's 179 2q) is the flagship measured
+  loss, and large structured phase/Trotter rings are exactly where
+  external benchmarking (Benchpress, *Nature Computational Science*
+  2025) reports the biggest competitor gains.  Matching them requires
+  layer-boundary content-permutation search with swap-network payoff at
+  the output (the Clifford+T normal-form pass in
+  `compactq/cliffordt.py` covers only the pi/4-quantized ring; the real
+  trotter file contains arbitrary-angle PhasedISWAPs and needs a
+  different attack).  qiskit's 179 and pytket's 159 are both
+  *permutation-elided* (unverified outputs; their refereed fidelity on
+  this circuit was 0.25/0.5) — our 240 is exact.
+- **Scalable verification.** Evolve `optimization → full-unitary proof →
+  return` into local proof certificates + compositional equivalence, so
+  the verified regime extends past 8 qubits structurally (randomized
+  K-state verification covers ~30 qubits today).
+- **Benchmark suite v1.** Add a measured **BQSKit** column and the four
+  MQT Bench abstraction levels (algorithmic / target-independent /
+  native-gate / hardware-mapped) to the harness; publish every raw
+  artifact under `results/` with environment metadata.
+- calibration-driven `weighted` objective weights (today fixed at
+  1.0/0.1/0.02); `hardware_error` ranking via `compactq.target`
 - Rust parity-network BFS kernel: packed
   u64 wire-mask states; exactness fuzzed against the phase-polynomial
   reference (0 failures); parity_pass 302ms -> 25ms on parity-heavy

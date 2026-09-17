@@ -2,6 +2,7 @@
 
 Usage:
   compactq INPUT.qasm [-o OUTPUT.qasm] [--stats] [--approx FIDELITY]
+             [--objective {2q,depth,gate_count,weighted,latency}]
              [--no-verify] [--native {cz,ecr,iswap}] [--json]
 
 Reads an OpenQASM 2.0 file, optimizes it, and writes the result (stdout by
@@ -16,6 +17,10 @@ Verification policy (reported on stderr and in --json):
   unverified       --no-verify, or circuits beyond the randomized prover's
                    reach (> 30 qubits)
 
+--objective selects which metric may never grow: 2q (default; 2-qubit
+count, then gates, then depth), depth, gate_count, latency (depth alias),
+or weighted (minimize 1.0*2q + 0.1*depth + 0.02*gates).
+
 Trailing measurements in the input are dropped (the unitary core is
 optimized); mid-circuit measurement and reset are rejected.
 """
@@ -24,6 +29,10 @@ from __future__ import annotations
 import argparse
 import sys
 from pathlib import Path
+
+# dispatch mode for circuits beyond the prover's reach: optimize without the
+# whole-circuit proof and report the honest "unverified" status
+_NO_PROOF = False
 
 
 def _write_out(dest: str, text: str) -> None:
@@ -90,7 +99,7 @@ def _suppress_main(args, circ, to_qasm):
     return 0
 
 
-def _optimize_dispatch(circ, approx, verify):
+def _optimize_dispatch(circ, approx, verify, objective="2q"):
     """Returns (circuit, proof_status, dense_limit).  Never raises on
     circuit width: wide circuits fall back to unverified optimization
     with an honest status instead of crashing."""
@@ -100,10 +109,12 @@ def _optimize_dispatch(circ, approx, verify):
         return approximate(circ, min_fidelity=approx), "approximate", dense_limit
     if not verify:
         from compactq import optimize_search
-        return optimize_search(circ, verify=False), "unverified", dense_limit
+        return optimize_search(circ, verify=_NO_PROOF,
+                               objective=objective), "unverified", dense_limit
     if circ.num_qubits <= dense_limit:
         from compactq import optimize_search
-        return optimize_search(circ, verify=True), "exact-unitary", dense_limit
+        return optimize_search(circ, verify=True,
+                               objective=objective), "exact-unitary", dense_limit
     try:
         from compactq.verify_large import optimize_large
         out, st = optimize_large(circ)
@@ -115,7 +126,8 @@ def _optimize_dispatch(circ, approx, verify):
     except ValueError:
         # beyond the randomized prover's reach: optimize without proof
         from compactq import optimize_search
-        return optimize_search(circ, verify=False), "unverified", dense_limit
+        return optimize_search(circ, verify=_NO_PROOF,
+                               objective=objective), "unverified", dense_limit
 
 
 def main(argv=None) -> int:
@@ -131,6 +143,12 @@ def main(argv=None) -> int:
                         help="approximate mode: per-block fidelity floor "
                              "(e.g. 0.99); trades bounded fidelity for fewer "
                              "2-qubit gates")
+    parser.add_argument("--objective", default="2q",
+                        choices=["2q", "depth", "gate_count", "weighted",
+                                 "latency"],
+                        help="metric that may never grow: 2q (default), "
+                             "depth, gate_count, latency (= depth), or "
+                             "weighted (1.0*2q + 0.1*depth + 0.02*gates)")
     parser.add_argument("--no-verify", action="store_true",
                         help="skip the whole-circuit proof (large circuits "
                              "automatically use randomized state verification)")
@@ -172,7 +190,8 @@ def main(argv=None) -> int:
         return _suppress_main(args, circ, to_qasm)
 
     out, status, dense_limit = _optimize_dispatch(
-        circ, args.approx, verify=not args.no_verify)
+        circ, args.approx, verify=not args.no_verify,
+        objective=args.objective)
     if args.native is not None:
         from compactq.native import rebase
         out = rebase(out, args.native)
@@ -183,6 +202,7 @@ def main(argv=None) -> int:
         "num_qubits": circ.num_qubits,
         "dense_proof_limit": dense_limit,
         "native": args.native,
+        "objective": args.objective,
         "before": _stats_dict(circ),
         "after": _stats_dict(out),
     }

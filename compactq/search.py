@@ -3,17 +3,45 @@
 Tries several exact optimization strategies and keeps the best verified
 result.  No randomness — candidate pipelines are fixed and every candidate is
 re-verified against the input when the qubit count allows it.
+
+objectives: '2q' (default), 'depth', 'gate_count' reorder the lexicographic
+metric tuple used for every keep/discard decision (the chosen primary metric
+can never grow); 'latency' is a depth alias; 'weighted' ranks candidates by
+1.0*2q + 0.1*depth + 0.02*gates (the weighted cost never exceeds the input's).
 """
 from __future__ import annotations
 
 from .circuit import Circuit
 from .equivalence import check_equivalent
-from .optimize import optimize, optimize_deep, u3_fold
+from .optimize import optimize, optimize_deep, u3_fold, _UNVERIFIED, _OBJECTIVES
 from .transforms import commute_cancel, peephole, slide_1q, swap_template
 
+_SEARCH_OBJECTIVES = _OBJECTIVES + ("weighted",)
 
-def _score(c: Circuit):
-    return (c.two_qubit_count(), len(c.ops), c.depth())
+# weighted-mode cost: NISQ-oriented — the 2-qubit count dominates, depth and
+# total gates are secondary penalties.  Hardware-error weighting (per-pair
+# fidelities) lives in compactq.target.optimize_for.
+_WEIGHTS = {"2q": 1.0, "depth": 0.1, "gates": 0.02}
+
+
+def _score(c: Circuit, objective: str = "2q"):
+    if objective == "weighted":
+        return (_WEIGHTS["2q"] * c.two_qubit_count()
+                + _WEIGHTS["depth"] * c.depth()
+                + _WEIGHTS["gates"] * len(c.ops),)
+    from .optimize import _score as _opt_score
+    return _opt_score(c, objective)
+
+
+def _normalize(objective: str) -> str:
+    if objective == "latency":  # depth is the latency proxy
+        return "depth"
+    if objective not in _SEARCH_OBJECTIVES:
+        raise ValueError(
+            f"unknown objective {objective!r}; expected one of "
+            f"{sorted(_SEARCH_OBJECTIVES)} (hardware-error weighting lives "
+            f"in compactq.target.optimize_for)")
+    return objective
 
 
 def _deep(c: Circuit, rounds: int) -> Circuit:
@@ -76,13 +104,19 @@ def _select_candidates(feats: dict, verify: bool) -> set:
 
 def optimize_search(circ: Circuit, verify: bool | None = None, depth: int = 2,
                     fidelity_tolerance: float = 1.0,
-                    max_gates: int = 4000) -> Circuit:
+                    max_gates: int = 4000, objective: str = "2q") -> Circuit:
     """Optimize with several deterministic pipelines and keep the smallest.
 
     Every candidate is produced by exact passes; the winner is re-verified
     against the input when `verify` allows, otherwise the plain `optimize`
     result is returned.  Guarantees: never wrong, never larger than plain
     `optimize`.
+
+    objective selects the acceptance order: '2q' (default), 'depth',
+    'gate_count' are lexicographic reorderings of (2q, gates, depth) — the
+    chosen primary metric never grows; 'latency' aliases 'depth'; 'weighted'
+    ranks candidates by 1.0*2q + 0.1*depth + 0.02*gates and guarantees the
+    weighted cost never exceeds the input's.
 
     fidelity_tolerance < 1 enables approximate mode: two-qubit blocks may be
     re-synthesized into a lower-CX class whose average gate fidelity
@@ -94,34 +128,36 @@ def optimize_search(circ: Circuit, verify: bool | None = None, depth: int = 2,
     is always computed first, and an approximate candidate wins only when it
     is strictly smaller.
     """
+    objective = _normalize(objective)
+    pipe_obj = objective if objective in _OBJECTIVES else "2q"
     from .equivalence import _MAX_QUBITS as _PROOF_QUBITS
     approx = fidelity_tolerance < 1.0
     if verify is None:
         verify = circ.num_qubits <= _PROOF_QUBITS and not approx
     # scale guardrail: very large circuits get the cheap pipeline only
     if len(circ.ops) > max_gates:
-        return optimize(circ, verify=False)
+        return optimize(circ, verify=_UNVERIFIED, objective=pipe_obj)
 
-    base = optimize(circ, verify=verify)
-    deep = optimize_deep(circ, verify=verify,
+    base = optimize(circ, verify=verify, objective=pipe_obj)
+    deep = optimize_deep(circ, verify=verify, objective=pipe_obj,
                          fid_tol=1 - (1 - fidelity_tolerance) if approx else 1 - 1e-13)
-    if _score(deep) < _score(base):
+    if _score(deep, objective) < _score(base, objective):
         base = deep
-    best, best_score = base, _score(base)
+    best, best_score = base, _score(base, objective)
 
     # candidate 1: deep multi-round pass composition (no full re-verify here;
     # the whole candidate is verified below)
     deep = _deep(circ, rounds=3 * max(1, depth))
-    if _score(deep) < best_score:
+    if _score(deep, objective) < best_score:
         if verify and not check_equivalent(circ, deep):
             return best
-        best, best_score = deep, _score(deep)
+        best, best_score = deep, _score(deep, objective)
 
     # NOTE: an older revision had a "reversed-gate-order" candidate here
     # (optimize the reversed circuit, then reverse back).  It was UNSOUND:
     # reversing a gate list does not preserve the operator, so whenever
     # optimize changed the decomposition the candidate silently became a
-    # different unitary.  Removed - see tests (verify=False exactness).
+    # different unitary.  Removed - see tests (no-verify exactness).
 
     feats = _circuit_features(circ)
     sel = _select_candidates(feats, verify)
@@ -129,10 +165,10 @@ def optimize_search(circ: Circuit, verify: bool | None = None, depth: int = 2,
     # candidate 3: template reorderings feeding the exact pass chain
     from .templates import template_pass
     cand = template_pass(best)
-    cand = optimize(cand, verify=False)
-    if _score(cand) < best_score:
+    cand = optimize(cand, verify=_UNVERIFIED, objective=pipe_obj)
+    if _score(cand, objective) < best_score:
         if not verify or check_equivalent(circ, cand):
-            best, best_score = cand, _score(cand)
+            best, best_score = cand, _score(cand, objective)
 
     # candidate 3b: phase-polynomial re-synthesis of diagonal cores
     # (each replacement is fidelity-verified against the window unitary).
@@ -141,30 +177,30 @@ def optimize_search(circ: Circuit, verify: bool | None = None, depth: int = 2,
         cand = parity_pass(best)
     else:
         cand = best
-    if _score(cand) < best_score:
+    if _score(cand, objective) < best_score:
         if not verify or check_equivalent(circ, cand):
-            best, best_score = cand, _score(cand)
+            best, best_score = cand, _score(cand, objective)
 
     # candidate 4: cross-pair commutative merge + KAK on the merged blocks
     from .kak import kak_pass, merge_crosspair
     merged = merge_crosspair(best) if "crosspair" in sel else best
-    cand = optimize(merged, verify=False)
+    cand = optimize(merged, verify=_UNVERIFIED, objective=pipe_obj)
     cand = kak_pass(cand, force=False)
-    cand = optimize(cand, verify=False)
-    if _score(cand) < best_score:
+    cand = optimize(cand, verify=_UNVERIFIED, objective=pipe_obj)
+    if _score(cand, objective) < best_score:
         if not verify or check_equivalent(circ, cand):
-            best, best_score = cand, _score(cand)
+            best, best_score = cand, _score(cand, objective)
 
     # candidate 4b: unitary-verified window merge + KAK
     from .winmerge import merge_by_unitary
     merged2 = merge_by_unitary(best)
     if merged2 is not best:
-        cand = optimize(merged2, verify=False)
+        cand = optimize(merged2, verify=_UNVERIFIED, objective=pipe_obj)
         cand = kak_pass(cand, force=False)
-        cand = optimize(cand, verify=False)
-        if _score(cand) < best_score:
+        cand = optimize(cand, verify=_UNVERIFIED, objective=pipe_obj)
+        if _score(cand, objective) < best_score:
             if not verify or check_equivalent(circ, cand):
-                best, best_score = cand, _score(cand)
+                best, best_score = cand, _score(cand, objective)
 
     # candidate 5: Clifford resynthesis (tableau-proven exact at any qubit
     # count - blocks are verified with clifford_equal inside the pass).
@@ -173,27 +209,27 @@ def optimize_search(circ: Circuit, verify: bool | None = None, depth: int = 2,
         cand = clifford_optimize(best)
     else:
         cand = best
-    if _score(cand) < best_score:
+    if _score(cand, objective) < best_score:
         if not verify or check_equivalent(circ, cand):
-            best, best_score = cand, _score(cand)
+            best, best_score = cand, _score(cand, objective)
 
     # candidate 5b: Clifford-structure reveal - rewrite Clifford-valued u3/rz
     # runs into canonical H/S/X, then Clifford-resynthesize (tableau-proven).
     # Helps Clifford-dense inputs; never accepted unless strictly better.
     from .clifford import cliffordize, clifford_pass as _cpass
     cand = _cpass(cliffordize(best))
-    cand = optimize(cand, verify=False)
-    if _score(cand) < best_score:
+    cand = optimize(cand, verify=_UNVERIFIED, objective=pipe_obj)
+    if _score(cand, objective) < best_score:
         if not verify or check_equivalent(circ, cand):
-            best, best_score = cand, _score(cand)
+            best, best_score = cand, _score(cand, objective)
     # final polish: fold 1q runs into single-u3 form (exact, gate-count only).
     # Runs LAST because u3 gates are opaque to the commutation passes.
     cand = u3_fold(best)
-    if _score(cand) < best_score:
+    if _score(cand, objective) < best_score:
         if not verify or check_equivalent(circ, cand):
-            best, best_score = cand, _score(cand)
-    if _score(cand) < best_score:
+            best, best_score = cand, _score(cand, objective)
+    if _score(cand, objective) < best_score:
         if not verify or check_equivalent(circ, cand):
-            best, best_score = cand, _score(cand)
+            best, best_score = cand, _score(cand, objective)
 
     return best
