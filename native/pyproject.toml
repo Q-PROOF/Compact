@@ -1,0 +1,13 @@
+[build-system]
+requires = ["maturin>=1.0"]
+build-backend = "maturin"
+
+[project]
+name = "compactq-native"
+version = "0.1.0"
+description = "Optional Rust acceleration kernels for compactq"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+
+[tool.maturin]
+include = []

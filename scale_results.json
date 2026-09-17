@@ -1,0 +1,37 @@
+{
+  "schema": "qproof-scale/1",
+  "shots": 2000,
+  "p_cx": 0.01,
+  "readout": 0.03,
+  "wall_time_s": 350.1,
+  "results": [
+    {
+      "family": "ghz",
+      "n": 16,
+      "naive-map": 0.3985,
+      "aware-map": 0.5005,
+      "aware+mem": 0.6954
+    },
+    {
+      "family": "ghz",
+      "n": 24,
+      "naive-map": 0.28,
+      "aware-map": 0.3455,
+      "aware+mem": 0.4553
+    },
+    {
+      "family": "bv",
+      "n": 16,
+      "naive-map": 0.3545,
+      "aware-map": 0.3895,
+      "aware+mem": 0.5361
+    },
+    {
+      "family": "bv",
+      "n": 24,
+      "naive-map": 0.2115,
+      "aware-map": 0.2215,
+      "aware+mem": 0.2748
+    }
+  ]
+}

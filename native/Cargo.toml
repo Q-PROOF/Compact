@@ -1,0 +1,18 @@
+[package]
+name = "compactq-native"
+version = "0.1.0"
+edition = "2021"
+description = "Rust acceleration for compactq quantum circuit optimizer"
+license = "MIT"
+
+[lib]
+name = "compactq_native"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+pyo3 = { version = "0.22", features = ["extension-module", "abi3-py39"] }
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1

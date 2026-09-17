@@ -1,0 +1,93 @@
+{
+  "schema": "qproof-ddseq/1",
+  "results": [
+    {
+      "scenario": "decoherence",
+      "family": "ghz",
+      "n": 4,
+      "raw": 0.7779,
+      "xy4": 0.8733,
+      "xy8": 0.8438,
+      "xzx": 0.8733,
+      "pdd4": 0.8733,
+      "auto": 0.8733
+    },
+    {
+      "scenario": "decoherence",
+      "family": "ghz",
+      "n": 5,
+      "raw": 0.6215,
+      "xy4": 0.7544,
+      "xy8": 0.7733,
+      "xzx": 0.7544,
+      "pdd4": 0.7544,
+      "auto": 0.8011
+    },
+    {
+      "scenario": "decoherence",
+      "family": "bv",
+      "n": 4,
+      "raw": 0.5455,
+      "xy4": 0.9117,
+      "xy8": 0.8966,
+      "xzx": 0.9117,
+      "pdd4": 0.9117,
+      "auto": 0.9117
+    },
+    {
+      "scenario": "decoherence",
+      "family": "bv",
+      "n": 5,
+      "raw": 0.3061,
+      "xy4": 0.8337,
+      "xy8": 0.834,
+      "xzx": 0.8337,
+      "pdd4": 0.8337,
+      "auto": 0.8496
+    },
+    {
+      "scenario": "combined",
+      "family": "ghz",
+      "n": 4,
+      "raw": 0.8587,
+      "xy4": 0.9412,
+      "xy8": 0.941,
+      "xzx": 0.9412,
+      "pdd4": 0.9412,
+      "auto": 0.9412
+    },
+    {
+      "scenario": "combined",
+      "family": "ghz",
+      "n": 5,
+      "raw": 0.799,
+      "xy4": 0.9009,
+      "xy8": 0.9021,
+      "xzx": 0.9009,
+      "pdd4": 0.9009,
+      "auto": 0.9021
+    },
+    {
+      "scenario": "combined",
+      "family": "bv",
+      "n": 4,
+      "raw": 0.8622,
+      "xy4": 0.9331,
+      "xy8": 0.9346,
+      "xzx": 0.9331,
+      "pdd4": 0.9331,
+      "auto": 0.9331
+    },
+    {
+      "scenario": "combined",
+      "family": "bv",
+      "n": 5,
+      "raw": 0.8086,
+      "xy4": 0.8994,
+      "xy8": 0.8957,
+      "xzx": 0.8994,
+      "pdd4": 0.8994,
+      "auto": 0.8948
+    }
+  ]
+}

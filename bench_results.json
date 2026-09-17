@@ -1,0 +1,844 @@
+{
+  "schema": "qproof-bench/1",
+  "generated": "2026-09-16T04:39:13.676032+00:00",
+  "commit": "760206fa64e2",
+  "package_version": "2.4.0",
+  "python": "3.11.9",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "qiskit": "2.5.2",
+  "native_kernels": {
+    "installed": true,
+    "version": "0.16.4",
+    "kernels": [
+      "block_unitary",
+      "compactq_native",
+      "det4",
+      "parity_network",
+      "resynth_1q",
+      "sim_unitary",
+      "trace2"
+    ]
+  },
+  "wall_time_s": 8.3,
+  "circuits": [
+    {
+      "circuit": "adder_n10",
+      "num_qubits": 10,
+      "input": {
+        "gates": 142,
+        "two_qubit": 65,
+        "depth": 99
+      },
+      "compactq": {
+        "gates": 110,
+        "two_qubit": 57,
+        "depth": 95
+      },
+      "compactq_ms": 66,
+      "proof": "unverified",
+      "qiskit_l3": {
+        "gates": 137,
+        "two_qubit": 65,
+        "depth": 99
+      },
+      "qiskit_ms": 5
+    },
+    {
+      "circuit": "adder_n4",
+      "num_qubits": 4,
+      "input": {
+        "gates": 23,
+        "two_qubit": 10,
+        "depth": 11
+      },
+      "compactq": {
+        "gates": 16,
+        "two_qubit": 7,
+        "depth": 9
+      },
+      "compactq_ms": 12,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 23,
+        "two_qubit": 10,
+        "depth": 11
+      },
+      "qiskit_ms": 4,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "basis_change_n3",
+      "num_qubits": 3,
+      "input": {
+        "gates": 125,
+        "two_qubit": 10,
+        "depth": 65
+      },
+      "compactq": {
+        "gates": 34,
+        "two_qubit": 10,
+        "depth": 22
+      },
+      "compactq_ms": 19,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 44,
+        "two_qubit": 10,
+        "depth": 27
+      },
+      "qiskit_ms": 5,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "basis_test_n4",
+      "num_qubits": 4,
+      "input": {
+        "gates": 98,
+        "two_qubit": 34,
+        "depth": 56
+      },
+      "compactq": {
+        "gates": 34,
+        "two_qubit": 12,
+        "depth": 15
+      },
+      "compactq_ms": 21,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 34,
+        "two_qubit": 6,
+        "depth": 12
+      },
+      "qiskit_ms": 5,
+      "qiskit_referee_fidelity": 0.25
+    },
+    {
+      "circuit": "basis_trotter_n4",
+      "num_qubits": 4,
+      "input": {
+        "gates": 2370,
+        "two_qubit": 462,
+        "depth": 1102
+      },
+      "compactq": {
+        "gates": 773,
+        "two_qubit": 240,
+        "depth": 352
+      },
+      "compactq_ms": 574,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 801,
+        "two_qubit": 179,
+        "depth": 363
+      },
+      "qiskit_ms": 12,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "bb84_n8",
+      "status": "skipped",
+      "reason": "non-unitary (mid-circuit measurement)"
+    },
+    {
+      "circuit": "bell_n4",
+      "num_qubits": 4,
+      "input": {
+        "gates": 65,
+        "two_qubit": 7,
+        "depth": 21
+      },
+      "compactq": {
+        "gates": 18,
+        "two_qubit": 5,
+        "depth": 7
+      },
+      "compactq_ms": 10,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 27,
+        "two_qubit": 5,
+        "depth": 11
+      },
+      "qiskit_ms": 4,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "cat_state_n4",
+      "num_qubits": 4,
+      "input": {
+        "gates": 4,
+        "two_qubit": 3,
+        "depth": 4
+      },
+      "compactq": {
+        "gates": 4,
+        "two_qubit": 3,
+        "depth": 4
+      },
+      "compactq_ms": 1,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 4,
+        "two_qubit": 3,
+        "depth": 4
+      },
+      "qiskit_ms": 3,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "deutsch_n2",
+      "num_qubits": 2,
+      "input": {
+        "gates": 5,
+        "two_qubit": 1,
+        "depth": 4
+      },
+      "compactq": {
+        "gates": 4,
+        "two_qubit": 1,
+        "depth": 3
+      },
+      "compactq_ms": 1,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 4,
+        "two_qubit": 1,
+        "depth": 3
+      },
+      "qiskit_ms": 3,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "dnn_n2",
+      "num_qubits": 2,
+      "input": {
+        "gates": 450,
+        "two_qubit": 42,
+        "depth": 266
+      },
+      "compactq": {
+        "gates": 12,
+        "two_qubit": 3,
+        "depth": 8
+      },
+      "compactq_ms": 27,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 20,
+        "two_qubit": 3,
+        "depth": 13
+      },
+      "qiskit_ms": 4,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "dnn_n8",
+      "num_qubits": 8,
+      "input": {
+        "gates": 2032,
+        "two_qubit": 192,
+        "depth": 300
+      },
+      "compactq": {
+        "gates": 216,
+        "two_qubit": 64,
+        "depth": 37
+      },
+      "compactq_ms": 752,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 339,
+        "two_qubit": 64,
+        "depth": 57
+      },
+      "qiskit_ms": 8,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "error_correctiond3_n5",
+      "num_qubits": 5,
+      "input": {
+        "gates": 114,
+        "two_qubit": 49,
+        "depth": 77
+      },
+      "compactq": {
+        "gates": 23,
+        "two_qubit": 8,
+        "depth": 13
+      },
+      "compactq_ms": 37,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 93,
+        "two_qubit": 35,
+        "depth": 66
+      },
+      "qiskit_ms": 5,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "fredkin_n3",
+      "num_qubits": 3,
+      "input": {
+        "gates": 19,
+        "two_qubit": 8,
+        "depth": 11
+      },
+      "compactq": {
+        "gates": 19,
+        "two_qubit": 8,
+        "depth": 11
+      },
+      "compactq_ms": 5,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 19,
+        "two_qubit": 8,
+        "depth": 11
+      },
+      "qiskit_ms": 5,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "grover_n2",
+      "num_qubits": 2,
+      "input": {
+        "gates": 16,
+        "two_qubit": 2,
+        "depth": 11
+      },
+      "compactq": {
+        "gates": 7,
+        "two_qubit": 2,
+        "depth": 5
+      },
+      "compactq_ms": 3,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 7,
+        "two_qubit": 2,
+        "depth": 5
+      },
+      "qiskit_ms": 4,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "hhl_n10",
+      "status": "skipped",
+      "reason": "parse: QASM2ParseError: \"<input>:186801,8: 'q' is not defined in this scope\""
+    },
+    {
+      "circuit": "hhl_n7",
+      "num_qubits": 7,
+      "input": {
+        "gates": 689,
+        "two_qubit": 196,
+        "depth": 550
+      },
+      "compactq": {
+        "gates": 191,
+        "two_qubit": 72,
+        "depth": 128
+      },
+      "compactq_ms": 299,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 254,
+        "two_qubit": 92,
+        "depth": 168
+      },
+      "qiskit_ms": 8,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "hs4_n4",
+      "num_qubits": 4,
+      "input": {
+        "gates": 28,
+        "two_qubit": 4,
+        "depth": 9
+      },
+      "compactq": {
+        "gates": 12,
+        "two_qubit": 4,
+        "depth": 5
+      },
+      "compactq_ms": 6,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 12,
+        "two_qubit": 4,
+        "depth": 5
+      },
+      "qiskit_ms": 4,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "inverseqft_n4",
+      "status": "skipped",
+      "reason": "classical control flow"
+    },
+    {
+      "circuit": "ipea_n2",
+      "status": "skipped",
+      "reason": "classical control flow"
+    },
+    {
+      "circuit": "ising_n10",
+      "num_qubits": 10,
+      "input": {
+        "gates": 480,
+        "two_qubit": 90,
+        "depth": 70
+      },
+      "compactq": {
+        "gates": 166,
+        "two_qubit": 49,
+        "depth": 29
+      },
+      "compactq_ms": 105,
+      "proof": "unverified",
+      "qiskit_l3": {
+        "gates": 260,
+        "two_qubit": 90,
+        "depth": 46
+      },
+      "qiskit_ms": 6
+    },
+    {
+      "circuit": "iswap_n2",
+      "num_qubits": 2,
+      "input": {
+        "gates": 9,
+        "two_qubit": 2,
+        "depth": 7
+      },
+      "compactq": {
+        "gates": 7,
+        "two_qubit": 2,
+        "depth": 5
+      },
+      "compactq_ms": 2,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 8,
+        "two_qubit": 2,
+        "depth": 6
+      },
+      "qiskit_ms": 4,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "linearsolver_n3",
+      "num_qubits": 3,
+      "input": {
+        "gates": 27,
+        "two_qubit": 4,
+        "depth": 18
+      },
+      "compactq": {
+        "gates": 11,
+        "two_qubit": 4,
+        "depth": 9
+      },
+      "compactq_ms": 4,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 17,
+        "two_qubit": 4,
+        "depth": 12
+      },
+      "qiskit_ms": 4,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "lpn_n5",
+      "num_qubits": 5,
+      "input": {
+        "gates": 11,
+        "two_qubit": 2,
+        "depth": 4
+      },
+      "compactq": {
+        "gates": 7,
+        "two_qubit": 2,
+        "depth": 4
+      },
+      "compactq_ms": 1,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 7,
+        "two_qubit": 2,
+        "depth": 4
+      },
+      "qiskit_ms": 4,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "pea_n5",
+      "num_qubits": 5,
+      "input": {
+        "gates": 98,
+        "two_qubit": 42,
+        "depth": 83
+      },
+      "compactq": {
+        "gates": 34,
+        "two_qubit": 10,
+        "depth": 21
+      },
+      "compactq_ms": 48,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 49,
+        "two_qubit": 17,
+        "depth": 29
+      },
+      "qiskit_ms": 4,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "qaoa_n3",
+      "status": "skipped",
+      "reason": "non-unitary (mid-circuit measurement)"
+    },
+    {
+      "circuit": "qaoa_n6",
+      "num_qubits": 6,
+      "input": {
+        "gates": 558,
+        "two_qubit": 54,
+        "depth": 197
+      },
+      "compactq": {
+        "gates": 114,
+        "two_qubit": 36,
+        "depth": 47
+      },
+      "compactq_ms": 107,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 170,
+        "two_qubit": 36,
+        "depth": 65
+      },
+      "qiskit_ms": 7,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "qec_en_n5",
+      "num_qubits": 5,
+      "input": {
+        "gates": 25,
+        "two_qubit": 10,
+        "depth": 17
+      },
+      "compactq": {
+        "gates": 23,
+        "two_qubit": 10,
+        "depth": 15
+      },
+      "compactq_ms": 6,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 23,
+        "two_qubit": 10,
+        "depth": 15
+      },
+      "qiskit_ms": 4,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "qec_sm_n5",
+      "status": "skipped",
+      "reason": "classical control flow"
+    },
+    {
+      "circuit": "qft_n4",
+      "num_qubits": 4,
+      "input": {
+        "gates": 37,
+        "two_qubit": 12,
+        "depth": 22
+      },
+      "compactq": {
+        "gates": 20,
+        "two_qubit": 6,
+        "depth": 10
+      },
+      "compactq_ms": 32,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 34,
+        "two_qubit": 12,
+        "depth": 20
+      },
+      "qiskit_ms": 4,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "qpe_n9",
+      "status": "skipped",
+      "reason": "non-unitary (mid-circuit measurement)"
+    },
+    {
+      "circuit": "qrng_n4",
+      "num_qubits": 4,
+      "input": {
+        "gates": 4,
+        "two_qubit": 0,
+        "depth": 1
+      },
+      "compactq": {
+        "gates": 4,
+        "two_qubit": 0,
+        "depth": 1
+      },
+      "compactq_ms": 1,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 4,
+        "two_qubit": 0,
+        "depth": 1
+      },
+      "qiskit_ms": 3,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "quantumwalks_n2",
+      "num_qubits": 2,
+      "input": {
+        "gates": 43,
+        "two_qubit": 3,
+        "depth": 23
+      },
+      "compactq": {
+        "gates": 8,
+        "two_qubit": 2,
+        "depth": 5
+      },
+      "compactq_ms": 6,
+      "proof": "exact-unitary",
+      "referee_fidelity": 0.999999999972,
+      "qiskit_l3": {
+        "gates": 20,
+        "two_qubit": 3,
+        "depth": 13
+      },
+      "qiskit_ms": 4,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "sat_n7",
+      "num_qubits": 7,
+      "input": {
+        "gates": 180,
+        "two_qubit": 60,
+        "depth": 89
+      },
+      "compactq": {
+        "gates": 125,
+        "two_qubit": 52,
+        "depth": 71
+      },
+      "compactq_ms": 71,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 158,
+        "two_qubit": 60,
+        "depth": 86
+      },
+      "qiskit_ms": 6,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "shor_n5",
+      "status": "skipped",
+      "reason": "classical control flow"
+    },
+    {
+      "circuit": "simon_n6",
+      "num_qubits": 6,
+      "input": {
+        "gates": 46,
+        "two_qubit": 14,
+        "depth": 27
+      },
+      "compactq": {
+        "gates": 30,
+        "two_qubit": 12,
+        "depth": 22
+      },
+      "compactq_ms": 23,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 43,
+        "two_qubit": 14,
+        "depth": 27
+      },
+      "qiskit_ms": 4,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "teleportation_n3",
+      "num_qubits": 3,
+      "input": {
+        "gates": 8,
+        "two_qubit": 2,
+        "depth": 6
+      },
+      "compactq": {
+        "gates": 5,
+        "two_qubit": 2,
+        "depth": 4
+      },
+      "compactq_ms": 1,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 6,
+        "two_qubit": 2,
+        "depth": 4
+      },
+      "qiskit_ms": 4,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "toffoli_n3",
+      "num_qubits": 3,
+      "input": {
+        "gates": 18,
+        "two_qubit": 6,
+        "depth": 12
+      },
+      "compactq": {
+        "gates": 14,
+        "two_qubit": 5,
+        "depth": 10
+      },
+      "compactq_ms": 5,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 18,
+        "two_qubit": 6,
+        "depth": 12
+      },
+      "qiskit_ms": 4,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "variational_n4",
+      "num_qubits": 4,
+      "input": {
+        "gates": 54,
+        "two_qubit": 16,
+        "depth": 33
+      },
+      "compactq": {
+        "gates": 29,
+        "two_qubit": 8,
+        "depth": 14
+      },
+      "compactq_ms": 16,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 45,
+        "two_qubit": 8,
+        "depth": 19
+      },
+      "qiskit_ms": 5,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "vqe_n4",
+      "num_qubits": 4,
+      "input": {
+        "gates": 89,
+        "two_qubit": 9,
+        "depth": 27
+      },
+      "compactq": {
+        "gates": 25,
+        "two_qubit": 9,
+        "depth": 11
+      },
+      "compactq_ms": 9,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 46,
+        "two_qubit": 9,
+        "depth": 18
+      },
+      "qiskit_ms": 4,
+      "qiskit_referee_fidelity": 1.0
+    },
+    {
+      "circuit": "vqe_uccsd_n4",
+      "status": "skipped",
+      "reason": "parse: QASM2ParseError: \"<input>:225,8: 'q' is not defined in this scope\""
+    },
+    {
+      "circuit": "vqe_uccsd_n6",
+      "status": "skipped",
+      "reason": "parse: QASM2ParseError: \"<input>:2286,8: 'q' is not defined in this scope\""
+    },
+    {
+      "circuit": "vqe_uccsd_n8",
+      "status": "skipped",
+      "reason": "parse: QASM2ParseError: \"<input>:10813,8: 'q' is not defined in this scope\""
+    },
+    {
+      "circuit": "wstate_n3",
+      "num_qubits": 3,
+      "input": {
+        "gates": 34,
+        "two_qubit": 9,
+        "depth": 25
+      },
+      "compactq": {
+        "gates": 18,
+        "two_qubit": 6,
+        "depth": 12
+      },
+      "compactq_ms": 7,
+      "proof": "exact-unitary",
+      "referee_fidelity": 1.0,
+      "qiskit_l3": {
+        "gates": 22,
+        "two_qubit": 6,
+        "depth": 15
+      },
+      "qiskit_ms": 4,
+      "qiskit_referee_fidelity": 1.0
+    }
+  ]
+}

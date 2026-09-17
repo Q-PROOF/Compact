@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  # PRs, manual, and every push to main (public repo: Actions minutes are free)
+  pull_request:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Version-consistency lint
+        run: python scripts/version_lint.py
+      - name: Run test suite (zero dependencies)
+        run: python tests/run_tests.py
+      - name: Quick benchmark (regression guard)
+        run: python -m compactq.bench --quick
+        continue-on-error: true
+
+  regression-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install numpy + qiskit
+        run: pip install numpy "qiskit==2.5.2"
+      - name: Optimization regression gate
+        run: python scripts/bench_gate.py

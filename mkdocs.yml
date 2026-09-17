@@ -1,0 +1,17 @@
+site_name: compactq
+site_description: Zero-dependency quantum circuit optimizer SDK
+repo_url: https://github.com/Q-PROOF/Compact
+theme:
+  name: material
+  palette:
+    primary: indigo
+  features:
+    - content.code.copy
+nav:
+  - Home: index.md
+  - Correctness model: correctness.md
+  - Error suppression: suppression.md
+  - Benchmarks: benchmarks.md
+  - API: api.md
+  - CLI: cli.md
+  - Roadmap: roadmap.md

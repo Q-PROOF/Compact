@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.coverage
+.venv/
+.DS_Store
+native/target/
+native/dist/
+site/
+build_dist/
+release_dist/
+.e2e/
+.mimosa/
