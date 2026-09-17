@@ -97,6 +97,35 @@ def main() -> int:
                 print(f"{mode:8s} {name:24s} nq={nq} fid={fstr}  <-- {note}")
         print(f"{mode} mode: {len(bad)} inequivalent of {len(sub)} refereed")
 
+    # committed raw artifact: one JSON record per refereed circuit, so the
+    # inequivalence claims are directly reproducible and auditable
+    import json
+    from datetime import datetime, timezone
+    from bench_json import git_sha
+    records = []
+    for name, mode, nq, fv, verdict, met in rows:
+        records.append({
+            "circuit": name,
+            "tool": "pytket",
+            "pytket_version": pytket.__version__,
+            "mode": mode,
+            "num_qubits": nq,
+            "output_fidelity": fv,
+            "status": verdict,
+            "metrics": met,
+        })
+    doc = {
+        "generated": datetime.now(timezone.utc).isoformat(),
+        "commit": git_sha(),
+        "referee": "qiskit.quantum_info.Operator, |Tr(U+V)|/d > 1 - 1e-6",
+        "count": len(records),
+        "records": records,
+    }
+    out = REPO / "results" / "pytket_referee.json"
+    out.parent.mkdir(exist_ok=True)
+    out.write_text(json.dumps(doc, indent=2) + "\n", encoding="utf-8")
+    print(f"wrote {out} ({len(records)} records)")
+
     # 2q tally vs compactq (from the fresh bench_results.json), invalid
     # pytket outputs excluded from the comparison
     import json

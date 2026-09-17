@@ -77,6 +77,13 @@ class Circuit:
     def two_qubit_count(self) -> int:
         return sum(1 for g in self.ops if len(g.qubits) == 2)
 
+    def cx_equivalent_count(self) -> int:
+        """Level-B hardware-cost metric: 2-qubit gates counted in
+        CX-equivalents (a SWAP decomposes into 3 CX; every other 2-qubit
+        gate counts 1).  The logical count is `two_qubit_count`."""
+        return sum(3 if g.name == "swap" else 1
+                   for g in self.ops if len(g.qubits) == 2)
+
     def depth(self) -> int:
         """Standard gate-depth (ASAP layering)."""
         if not self.ops:

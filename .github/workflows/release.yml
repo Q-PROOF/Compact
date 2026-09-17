@@ -33,6 +33,8 @@ jobs:
         run: python tests/run_tests.py
       - name: Objective-mode tests
         run: python tests/test_objectives.py
+      - name: Verification-API tests
+        run: python tests/test_verify_api.py
       - name: Build sdist and wheel
         run: |
           pip install build twine

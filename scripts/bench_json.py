@@ -33,6 +33,14 @@ import numpy as np  # noqa: E402
 from qiskit.quantum_info import Operator  # noqa: E402
 
 
+def _cx_eq(qc):
+    """Level-B metric for a qiskit circuit: 2-qubit gates counted in
+    CX-equivalents (SWAP = 3; every other 2-qubit gate = 1).  Mirrors
+    compactq.Circuit.cx_equivalent_count()."""
+    return sum(3 if i.operation.name == "swap" else 1
+               for i in qc.data if len(i.qubits) == 2)
+
+
 def git_sha():
     try:
         return subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True,
@@ -119,7 +127,8 @@ def collect_rows(max_q: int = 32, verbose: bool = True):
         except Exception:
             inp = normalize_harder(prepared)
         row = {"circuit": name, "num_qubits": nq,
-               "input": dict(zip(("gates", "two_qubit", "depth"), metrics(inp)))}
+               "input": dict(zip(("gates", "two_qubit", "depth"), metrics(inp))),
+               "input_cx_equivalent": _cx_eq(inp)}
         try:
             from compactq.qiskit_bridge import from_qiskit, to_qiskit
             from compactq import optimize_search
@@ -130,6 +139,7 @@ def collect_rows(max_q: int = 32, verbose: bool = True):
             out_qc = to_qiskit(opt)
             row["compactq"] = dict(zip(("gates", "two_qubit", "depth"),
                                        metrics(out_qc)))
+            row["compactq"]["cx_equivalent"] = circ.cx_equivalent_count()
             row["compactq_ms"] = round(dt * 1000)
             row["proof"] = "exact-unitary" if nq <= 8 else "unverified"
             if nq <= 8:
@@ -145,6 +155,7 @@ def collect_rows(max_q: int = 32, verbose: bool = True):
             qk, dtk = run_qiskit(inp)
             row["qiskit_l3"] = dict(zip(("gates", "two_qubit", "depth"),
                                         metrics(qk)))
+            row["qiskit_l3"]["cx_equivalent"] = _cx_eq(qk)
             row["qiskit_ms"] = round(dtk * 1000)
             if nq <= 8:
                 ref = Operator(inp).data

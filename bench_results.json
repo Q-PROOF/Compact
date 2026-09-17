@@ -1,8 +1,8 @@
 {
   "schema": "qproof-bench/1",
-  "generated": "2026-09-17T18:06:40.652840+00:00",
-  "commit": "1fa8896f390d",
-  "package_version": "0.1.1",
+  "generated": "2026-09-17T18:26:29.128531+00:00",
+  "commit": "9dc08b12d11c",
+  "package_version": "0.1.2",
   "python": "3.11.9",
   "platform": "Windows-10-10.0.26200-SP0",
   "qiskit": "2.5.2",
@@ -19,7 +19,7 @@
       "trace2"
     ]
   },
-  "wall_time_s": 15.9,
+  "wall_time_s": 8.3,
   "circuits": [
     {
       "circuit": "adder_n10",
@@ -29,17 +29,20 @@
         "two_qubit": 65,
         "depth": 99
       },
+      "input_cx_equivalent": 65,
       "compactq": {
         "gates": 110,
         "two_qubit": 57,
-        "depth": 95
+        "depth": 95,
+        "cx_equivalent": 65
       },
-      "compactq_ms": 27,
+      "compactq_ms": 29,
       "proof": "unverified",
       "qiskit_l3": {
         "gates": 137,
         "two_qubit": 65,
-        "depth": 99
+        "depth": 99,
+        "cx_equivalent": 65
       },
       "qiskit_ms": 6
     },
@@ -51,10 +54,12 @@
         "two_qubit": 10,
         "depth": 11
       },
+      "input_cx_equivalent": 10,
       "compactq": {
         "gates": 16,
         "two_qubit": 7,
-        "depth": 9
+        "depth": 9,
+        "cx_equivalent": 10
       },
       "compactq_ms": 12,
       "proof": "exact-unitary",
@@ -62,7 +67,8 @@
       "qiskit_l3": {
         "gates": 23,
         "two_qubit": 10,
-        "depth": 11
+        "depth": 11,
+        "cx_equivalent": 10
       },
       "qiskit_ms": 5,
       "qiskit_referee_fidelity": 1.0
@@ -75,18 +81,21 @@
         "two_qubit": 10,
         "depth": 65
       },
+      "input_cx_equivalent": 10,
       "compactq": {
         "gates": 34,
         "two_qubit": 10,
-        "depth": 22
+        "depth": 22,
+        "cx_equivalent": 10
       },
-      "compactq_ms": 18,
+      "compactq_ms": 19,
       "proof": "exact-unitary",
       "referee_fidelity": 1.0,
       "qiskit_l3": {
-        "gates": 47,
+        "gates": 44,
         "two_qubit": 10,
-        "depth": 28
+        "depth": 27,
+        "cx_equivalent": 10
       },
       "qiskit_ms": 5,
       "qiskit_referee_fidelity": 1.0
@@ -99,18 +108,21 @@
         "two_qubit": 34,
         "depth": 56
       },
+      "input_cx_equivalent": 46,
       "compactq": {
         "gates": 34,
         "two_qubit": 12,
-        "depth": 15
+        "depth": 15,
+        "cx_equivalent": 46
       },
-      "compactq_ms": 20,
+      "compactq_ms": 22,
       "proof": "exact-unitary",
       "referee_fidelity": 1.0,
       "qiskit_l3": {
         "gates": 34,
         "two_qubit": 6,
-        "depth": 12
+        "depth": 12,
+        "cx_equivalent": 6
       },
       "qiskit_ms": 5,
       "qiskit_referee_fidelity": 0.25
@@ -123,20 +135,23 @@
         "two_qubit": 462,
         "depth": 1102
       },
+      "input_cx_equivalent": 582,
       "compactq": {
         "gates": 773,
         "two_qubit": 240,
-        "depth": 352
+        "depth": 352,
+        "cx_equivalent": 582
       },
-      "compactq_ms": 556,
+      "compactq_ms": 569,
       "proof": "exact-unitary",
       "referee_fidelity": 1.0,
       "qiskit_l3": {
-        "gates": 797,
+        "gates": 798,
         "two_qubit": 179,
-        "depth": 360
+        "depth": 358,
+        "cx_equivalent": 179
       },
-      "qiskit_ms": 12,
+      "qiskit_ms": 13,
       "qiskit_referee_fidelity": 1.0
     },
     {
@@ -152,20 +167,23 @@
         "two_qubit": 7,
         "depth": 21
       },
+      "input_cx_equivalent": 7,
       "compactq": {
         "gates": 18,
         "two_qubit": 5,
-        "depth": 7
+        "depth": 7,
+        "cx_equivalent": 7
       },
-      "compactq_ms": 12,
+      "compactq_ms": 10,
       "proof": "exact-unitary",
       "referee_fidelity": 1.0,
       "qiskit_l3": {
-        "gates": 28,
+        "gates": 29,
         "two_qubit": 5,
-        "depth": 10
+        "depth": 12,
+        "cx_equivalent": 5
       },
-      "qiskit_ms": 3,
+      "qiskit_ms": 4,
       "qiskit_referee_fidelity": 1.0
     },
     {
@@ -176,10 +194,12 @@
         "two_qubit": 3,
         "depth": 4
       },
+      "input_cx_equivalent": 3,
       "compactq": {
         "gates": 4,
         "two_qubit": 3,
-        "depth": 4
+        "depth": 4,
+        "cx_equivalent": 3
       },
       "compactq_ms": 1,
       "proof": "exact-unitary",
@@ -187,7 +207,8 @@
       "qiskit_l3": {
         "gates": 4,
         "two_qubit": 3,
-        "depth": 4
+        "depth": 4,
+        "cx_equivalent": 3
       },
       "qiskit_ms": 4,
       "qiskit_referee_fidelity": 1.0
@@ -200,20 +221,23 @@
         "two_qubit": 1,
         "depth": 4
       },
+      "input_cx_equivalent": 1,
       "compactq": {
         "gates": 4,
         "two_qubit": 1,
-        "depth": 3
+        "depth": 3,
+        "cx_equivalent": 1
       },
-      "compactq_ms": 1,
+      "compactq_ms": 2,
       "proof": "exact-unitary",
       "referee_fidelity": 1.0,
       "qiskit_l3": {
         "gates": 4,
         "two_qubit": 1,
-        "depth": 3
+        "depth": 3,
+        "cx_equivalent": 1
       },
-      "qiskit_ms": 3,
+      "qiskit_ms": 4,
       "qiskit_referee_fidelity": 1.0
     },
     {
@@ -224,10 +248,12 @@
         "two_qubit": 42,
         "depth": 266
       },
+      "input_cx_equivalent": 42,
       "compactq": {
         "gates": 12,
         "two_qubit": 3,
-        "depth": 8
+        "depth": 8,
+        "cx_equivalent": 42
       },
       "compactq_ms": 24,
       "proof": "exact-unitary",
@@ -235,7 +261,8 @@
       "qiskit_l3": {
         "gates": 20,
         "two_qubit": 3,
-        "depth": 13
+        "depth": 13,
+        "cx_equivalent": 3
       },
       "qiskit_ms": 4,
       "qiskit_referee_fidelity": 1.0
@@ -248,20 +275,23 @@
         "two_qubit": 192,
         "depth": 300
       },
+      "input_cx_equivalent": 192,
       "compactq": {
         "gates": 216,
         "two_qubit": 64,
-        "depth": 37
+        "depth": 37,
+        "cx_equivalent": 192
       },
-      "compactq_ms": 2039,
+      "compactq_ms": 772,
       "proof": "exact-unitary",
       "referee_fidelity": 1.0,
       "qiskit_l3": {
-        "gates": 331,
+        "gates": 340,
         "two_qubit": 64,
-        "depth": 59
+        "depth": 60,
+        "cx_equivalent": 64
       },
-      "qiskit_ms": 17,
+      "qiskit_ms": 8,
       "qiskit_referee_fidelity": 1.0
     },
     {
@@ -272,20 +302,23 @@
         "two_qubit": 49,
         "depth": 77
       },
+      "input_cx_equivalent": 49,
       "compactq": {
         "gates": 23,
         "two_qubit": 8,
-        "depth": 13
+        "depth": 13,
+        "cx_equivalent": 49
       },
-      "compactq_ms": 73,
+      "compactq_ms": 34,
       "proof": "exact-unitary",
       "referee_fidelity": 1.0,
       "qiskit_l3": {
         "gates": 91,
         "two_qubit": 35,
-        "depth": 65
+        "depth": 65,
+        "cx_equivalent": 35
       },
-      "qiskit_ms": 9,
+      "qiskit_ms": 5,
       "qiskit_referee_fidelity": 1.0
     },
     {
@@ -296,20 +329,23 @@
         "two_qubit": 8,
         "depth": 11
       },
+      "input_cx_equivalent": 8,
       "compactq": {
         "gates": 19,
         "two_qubit": 8,
-        "depth": 11
+        "depth": 11,
+        "cx_equivalent": 8
       },
-      "compactq_ms": 13,
+      "compactq_ms": 4,
       "proof": "exact-unitary",
       "referee_fidelity": 1.0,
       "qiskit_l3": {
         "gates": 19,
         "two_qubit": 8,
-        "depth": 11
+        "depth": 11,
+        "cx_equivalent": 8
       },
-      "qiskit_ms": 11,
+      "qiskit_ms": 4,
       "qiskit_referee_fidelity": 1.0
     },
     {
@@ -320,20 +356,23 @@
         "two_qubit": 2,
         "depth": 11
       },
+      "input_cx_equivalent": 2,
       "compactq": {
         "gates": 7,
         "two_qubit": 2,
-        "depth": 5
+        "depth": 5,
+        "cx_equivalent": 2
       },
-      "compactq_ms": 11,
+      "compactq_ms": 3,
       "proof": "exact-unitary",
       "referee_fidelity": 1.0,
       "qiskit_l3": {
         "gates": 7,
         "two_qubit": 2,
-        "depth": 5
+        "depth": 5,
+        "cx_equivalent": 2
       },
-      "qiskit_ms": 6,
+      "qiskit_ms": 3,
       "qiskit_referee_fidelity": 1.0
     },
     {
@@ -349,20 +388,23 @@
         "two_qubit": 196,
         "depth": 550
       },
+      "input_cx_equivalent": 196,
       "compactq": {
         "gates": 191,
         "two_qubit": 72,
-        "depth": 128
+        "depth": 128,
+        "cx_equivalent": 196
       },
-      "compactq_ms": 523,
+      "compactq_ms": 292,
       "proof": "exact-unitary",
       "referee_fidelity": 1.0,
       "qiskit_l3": {
-        "gates": 252,
+        "gates": 255,
         "two_qubit": 92,
-        "depth": 166
+        "depth": 168,
+        "cx_equivalent": 92
       },
-      "qiskit_ms": 16,
+      "qiskit_ms": 8,
       "qiskit_referee_fidelity": 1.0
     },
     {
@@ -373,20 +415,23 @@
         "two_qubit": 4,
         "depth": 9
       },
+      "input_cx_equivalent": 4,
       "compactq": {
         "gates": 12,
         "two_qubit": 4,
-        "depth": 5
+        "depth": 5,
+        "cx_equivalent": 4
       },
-      "compactq_ms": 15,
+      "compactq_ms": 6,
       "proof": "exact-unitary",
       "referee_fidelity": 1.0,
       "qiskit_l3": {
         "gates": 12,
         "two_qubit": 4,
-        "depth": 5
+        "depth": 5,
+        "cx_equivalent": 4
       },
-      "qiskit_ms": 9,
+      "qiskit_ms": 4,
       "qiskit_referee_fidelity": 1.0
     },
     {
@@ -407,19 +452,22 @@
         "two_qubit": 90,
         "depth": 70
       },
+      "input_cx_equivalent": 90,
       "compactq": {
         "gates": 166,
         "two_qubit": 49,
-        "depth": 29
+        "depth": 29,
+        "cx_equivalent": 90
       },
-      "compactq_ms": 147,
+      "compactq_ms": 101,
       "proof": "unverified",
       "qiskit_l3": {
         "gates": 260,
         "two_qubit": 90,
-        "depth": 46
+        "depth": 46,
+        "cx_equivalent": 90
       },
-      "qiskit_ms": 9
+      "qiskit_ms": 6
     },
     {
       "circuit": "iswap_n2",
@@ -429,20 +477,23 @@
         "two_qubit": 2,
         "depth": 7
       },
+      "input_cx_equivalent": 2,
       "compactq": {
         "gates": 7,
         "two_qubit": 2,
-        "depth": 5
+        "depth": 5,
+        "cx_equivalent": 2
       },
-      "compactq_ms": 7,
+      "compactq_ms": 3,
       "proof": "exact-unitary",
       "referee_fidelity": 1.0,
       "qiskit_l3": {
         "gates": 8,
         "two_qubit": 2,
-        "depth": 6
+        "depth": 6,
+        "cx_equivalent": 2
       },
-      "qiskit_ms": 9,
+      "qiskit_ms": 4,
       "qiskit_referee_fidelity": 1.0
     },
     {
@@ -453,20 +504,23 @@
         "two_qubit": 4,
         "depth": 18
       },
+      "input_cx_equivalent": 4,
       "compactq": {
         "gates": 11,
         "two_qubit": 4,
-        "depth": 9
+        "depth": 9,
+        "cx_equivalent": 4
       },
-      "compactq_ms": 11,
+      "compactq_ms": 4,
       "proof": "exact-unitary",
       "referee_fidelity": 1.0,
       "qiskit_l3": {
         "gates": 15,
         "two_qubit": 4,
-        "depth": 10
+        "depth": 10,
+        "cx_equivalent": 4
       },
-      "qiskit_ms": 10,
+      "qiskit_ms": 4,
       "qiskit_referee_fidelity": 1.0
     },
     {
@@ -477,20 +531,23 @@
         "two_qubit": 2,
         "depth": 4
       },
+      "input_cx_equivalent": 2,
       "compactq": {
         "gates": 7,
         "two_qubit": 2,
-        "depth": 4
+        "depth": 4,
+        "cx_equivalent": 2
       },
-      "compactq_ms": 3,
+      "compactq_ms": 2,
       "proof": "exact-unitary",
       "referee_fidelity": 1.0,
       "qiskit_l3": {
         "gates": 7,
         "two_qubit": 2,
-        "depth": 4
+        "depth": 4,
+        "cx_equivalent": 2
       },
-      "qiskit_ms": 8,
+      "qiskit_ms": 4,
       "qiskit_referee_fidelity": 1.0
     },
     {
@@ -501,20 +558,23 @@
         "two_qubit": 42,
         "depth": 83
       },
+      "input_cx_equivalent": 42,
       "compactq": {
         "gates": 34,
         "two_qubit": 10,
-        "depth": 21
+        "depth": 21,
+        "cx_equivalent": 42
       },
-      "compactq_ms": 94,
+      "compactq_ms": 44,
       "proof": "exact-unitary",
       "referee_fidelity": 1.0,
       "qiskit_l3": {
-        "gates": 52,
+        "gates": 49,
         "two_qubit": 17,
-        "depth": 32
+        "depth": 29,
+        "cx_equivalent": 17
       },
-      "qiskit_ms": 8,
+      "qiskit_ms": 5,
       "qiskit_referee_fidelity": 1.0
     },
     {
@@ -530,20 +590,23 @@
         "two_qubit": 54,
         "depth": 197
       },
+      "input_cx_equivalent": 54,
       "compactq": {
         "gates": 114,
         "two_qubit": 36,
-        "depth": 47
+        "depth": 47,
+        "cx_equivalent": 54
       },
-      "compactq_ms": 207,
+      "compactq_ms": 105,
       "proof": "exact-unitary",
       "referee_fidelity": 1.0,
       "qiskit_l3": {
-        "gates": 167,
+        "gates": 165,
         "two_qubit": 36,
-        "depth": 61
+        "depth": 63,
+        "cx_equivalent": 36
       },
-      "qiskit_ms": 11,
+      "qiskit_ms": 7,
       "qiskit_referee_fidelity": 1.0
     },
     {
@@ -554,20 +617,23 @@
         "two_qubit": 10,
         "depth": 17
       },
+      "input_cx_equivalent": 10,
       "compactq": {
         "gates": 23,
         "two_qubit": 10,
-        "depth": 15
+        "depth": 15,
+        "cx_equivalent": 10
       },
-      "compactq_ms": 16,
+      "compactq_ms": 6,
       "proof": "exact-unitary",
       "referee_fidelity": 1.0,
       "qiskit_l3": {
         "gates": 23,
         "two_qubit": 10,
-        "depth": 15
+        "depth": 15,
+        "cx_equivalent": 10
       },
-      "qiskit_ms": 9,
+      "qiskit_ms": 4,
       "qiskit_referee_fidelity": 1.0
     },
     {
@@ -583,20 +649,23 @@
         "two_qubit": 12,
         "depth": 22
       },
+      "input_cx_equivalent": 12,
       "compactq": {
         "gates": 20,
         "two_qubit": 6,
-        "depth": 10
+        "depth": 10,
+        "cx_equivalent": 12
       },
-      "compactq_ms": 73,
+      "compactq_ms": 32,
       "proof": "exact-unitary",
       "referee_fidelity": 1.0,
       "qiskit_l3": {
         "gates": 34,
         "two_qubit": 12,
-        "depth": 20
+        "depth": 20,
+        "cx_equivalent": 12
       },
-      "qiskit_ms": 9,
+      "qiskit_ms": 4,
       "qiskit_referee_fidelity": 1.0
     },
     {
@@ -612,20 +681,23 @@
         "two_qubit": 0,
         "depth": 1
       },
+      "input_cx_equivalent": 0,
       "compactq": {
         "gates": 4,
         "two_qubit": 0,
-        "depth": 1
+        "depth": 1,
+        "cx_equivalent": 0
       },
-      "compactq_ms": 3,
+      "compactq_ms": 1,
       "proof": "exact-unitary",
       "referee_fidelity": 1.0,
       "qiskit_l3": {
         "gates": 4,
         "two_qubit": 0,
-        "depth": 1
+        "depth": 1,
+        "cx_equivalent": 0
       },
-      "qiskit_ms": 8,
+      "qiskit_ms": 3,
       "qiskit_referee_fidelity": 1.0
     },
     {
@@ -636,20 +708,23 @@
         "two_qubit": 3,
         "depth": 23
       },
+      "input_cx_equivalent": 3,
       "compactq": {
         "gates": 8,
         "two_qubit": 2,
-        "depth": 5
+        "depth": 5,
+        "cx_equivalent": 3
       },
-      "compactq_ms": 20,
+      "compactq_ms": 7,
       "proof": "exact-unitary",
       "referee_fidelity": 0.999999999972,
       "qiskit_l3": {
         "gates": 20,
         "two_qubit": 3,
-        "depth": 13
+        "depth": 13,
+        "cx_equivalent": 3
       },
-      "qiskit_ms": 8,
+      "qiskit_ms": 4,
       "qiskit_referee_fidelity": 1.0
     },
     {
@@ -660,20 +735,23 @@
         "two_qubit": 60,
         "depth": 89
       },
+      "input_cx_equivalent": 60,
       "compactq": {
         "gates": 125,
         "two_qubit": 52,
-        "depth": 71
+        "depth": 71,
+        "cx_equivalent": 60
       },
-      "compactq_ms": 147,
+      "compactq_ms": 71,
       "proof": "exact-unitary",
       "referee_fidelity": 1.0,
       "qiskit_l3": {
         "gates": 158,
         "two_qubit": 60,
-        "depth": 86
+        "depth": 86,
+        "cx_equivalent": 60
       },
-      "qiskit_ms": 9,
+      "qiskit_ms": 5,
       "qiskit_referee_fidelity": 1.0
     },
     {
@@ -689,20 +767,23 @@
         "two_qubit": 14,
         "depth": 27
       },
+      "input_cx_equivalent": 14,
       "compactq": {
         "gates": 30,
         "two_qubit": 12,
-        "depth": 22
+        "depth": 22,
+        "cx_equivalent": 14
       },
-      "compactq_ms": 37,
+      "compactq_ms": 21,
       "proof": "exact-unitary",
       "referee_fidelity": 1.0,
       "qiskit_l3": {
         "gates": 43,
         "two_qubit": 14,
-        "depth": 27
+        "depth": 27,
+        "cx_equivalent": 14
       },
-      "qiskit_ms": 8,
+      "qiskit_ms": 4,
       "qiskit_referee_fidelity": 1.0
     },
     {
@@ -713,20 +794,23 @@
         "two_qubit": 2,
         "depth": 6
       },
+      "input_cx_equivalent": 2,
       "compactq": {
         "gates": 5,
         "two_qubit": 2,
-        "depth": 4
+        "depth": 4,
+        "cx_equivalent": 2
       },
-      "compactq_ms": 4,
+      "compactq_ms": 1,
       "proof": "exact-unitary",
       "referee_fidelity": 1.0,
       "qiskit_l3": {
         "gates": 6,
         "two_qubit": 2,
-        "depth": 4
+        "depth": 4,
+        "cx_equivalent": 2
       },
-      "qiskit_ms": 8,
+      "qiskit_ms": 4,
       "qiskit_referee_fidelity": 1.0
     },
     {
@@ -737,20 +821,23 @@
         "two_qubit": 6,
         "depth": 12
       },
+      "input_cx_equivalent": 6,
       "compactq": {
         "gates": 14,
         "two_qubit": 5,
-        "depth": 10
+        "depth": 10,
+        "cx_equivalent": 6
       },
-      "compactq_ms": 13,
+      "compactq_ms": 5,
       "proof": "exact-unitary",
       "referee_fidelity": 1.0,
       "qiskit_l3": {
         "gates": 18,
         "two_qubit": 6,
-        "depth": 12
+        "depth": 12,
+        "cx_equivalent": 6
       },
-      "qiskit_ms": 9,
+      "qiskit_ms": 4,
       "qiskit_referee_fidelity": 1.0
     },
     {
@@ -761,20 +848,23 @@
         "two_qubit": 16,
         "depth": 33
       },
+      "input_cx_equivalent": 16,
       "compactq": {
         "gates": 29,
         "two_qubit": 8,
-        "depth": 14
+        "depth": 14,
+        "cx_equivalent": 16
       },
-      "compactq_ms": 33,
+      "compactq_ms": 15,
       "proof": "exact-unitary",
       "referee_fidelity": 1.0,
       "qiskit_l3": {
         "gates": 45,
         "two_qubit": 8,
-        "depth": 19
+        "depth": 19,
+        "cx_equivalent": 8
       },
-      "qiskit_ms": 8,
+      "qiskit_ms": 5,
       "qiskit_referee_fidelity": 1.0
     },
     {
@@ -785,20 +875,23 @@
         "two_qubit": 9,
         "depth": 27
       },
+      "input_cx_equivalent": 9,
       "compactq": {
         "gates": 25,
         "two_qubit": 9,
-        "depth": 11
+        "depth": 11,
+        "cx_equivalent": 9
       },
-      "compactq_ms": 16,
+      "compactq_ms": 8,
       "proof": "exact-unitary",
       "referee_fidelity": 1.0,
       "qiskit_l3": {
         "gates": 46,
         "two_qubit": 9,
-        "depth": 18
+        "depth": 18,
+        "cx_equivalent": 9
       },
-      "qiskit_ms": 10,
+      "qiskit_ms": 4,
       "qiskit_referee_fidelity": 1.0
     },
     {
@@ -824,20 +917,23 @@
         "two_qubit": 9,
         "depth": 25
       },
+      "input_cx_equivalent": 9,
       "compactq": {
         "gates": 18,
         "two_qubit": 6,
-        "depth": 12
+        "depth": 12,
+        "cx_equivalent": 9
       },
-      "compactq_ms": 11,
+      "compactq_ms": 6,
       "proof": "exact-unitary",
       "referee_fidelity": 1.0,
       "qiskit_l3": {
         "gates": 20,
         "two_qubit": 6,
-        "depth": 13
+        "depth": 13,
+        "cx_equivalent": 6
       },
-      "qiskit_ms": 6,
+      "qiskit_ms": 4,
       "qiskit_referee_fidelity": 1.0
     }
   ]

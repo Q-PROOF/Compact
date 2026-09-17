@@ -2,6 +2,32 @@
 
 All notable changes to Q-PROOF Compact are documented here.
 
+## [0.1.2] — 2026-09-17
+
+### Added
+- **`compactq.verify(original, optimized)`** — the public
+  verification/evidence API: independently checks any two circuits and
+  returns `{'equivalent', 'tier', 'method', 'global_phase_ignored',
+  'runtime_ms'}`.  Tiers: 3 = algebraic Clifford-tableau proof (any
+  width), 2 = dense unitary certificate (≤ 8q), 1 = randomized K-state
+  sampling (numpy), 0 = prover unavailable; tiers 4 (compositional
+  certificates) and 5 (formal proof) are reserved and documented.
+- **Level-B metric**: `Circuit.cx_equivalent_count()` (SWAP = 3 CX);
+  `bench_results.json` now emits CX-equivalents for Compact, Qiskit L3
+  and the input baseline — the normalized 2-qubit cost alongside the
+  logical count.
+- **Committed referee artifacts**: `results/pytket_referee.json` — one
+  auditable record per refereed pytket circuit (version, mode, output
+  fidelity, status, metrics), making the inequivalence claims directly
+  reproducible.
+- `scripts/bqskit_bench.py` — the BQSKit column for benchmark suite v1
+  (scaffold; produces `results/bqskit.json` once BQSKit is installed;
+  no BQSKit numbers are claimed until then).
+- README: 15-second evidence block, verification tier table, Level
+  A/B/C metric definitions, "verification layer for quantum
+  compilation" positioning, calibration-aware-compilation roadmap,
+  ordered research sequence.
+
 ## [0.1.1] — 2026-09-17
 
 ### Added

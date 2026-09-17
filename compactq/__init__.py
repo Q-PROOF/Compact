@@ -23,6 +23,7 @@ from .io_qasm import from_qasm, from_qasm3, to_qasm
 from .errors import UnsupportedCircuitError
 from .symbolic import param, bind, structure_optimize
 from .verify_large import optimize_large, states_agree
+from .verify import verify, VERIFICATION_TIERS
 from .io_qasm3 import to_qasm3
 from .qiskit_bridge import from_qiskit, to_qiskit, compactq_pass
 from .hardware import exact_placement
@@ -43,10 +44,11 @@ from .solvers import maxcut_qaoa, brute_force_maxcut
 from .simulate import statevector, exact_probabilities
 from . import benchmarks
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 __all__ = ["Circuit", "Gate", "optimize", "optimize_deep", "optimize_search", "is_clifford", "clifford_equal", "approximate", "Target", "optimize_for", "approximate_for_target", "from_qasm3", "expand_mcx", "expand_mcp", "template_pass", "from_qasm", "to_qasm",
            "to_qasm3", "benchmarks", "__version__", "param", "bind",
-            "structure_optimize", "optimize_large", "states_agree",
+            "structure_optimize", "optimize_large", "states_agree", "verify",
+            "VERIFICATION_TIERS",
             "UnsupportedCircuitError",
             "NoiseModel", "default_model", "pauli_twirl", "insert_dd",
             "suppress_plan", "suppress_execute", "expand_for_suppression",

@@ -1,0 +1,848 @@
+{
+  "generated": "2026-09-17T18:26:19.290058+00:00",
+  "commit": "9dc08b12d11c",
+  "referee": "qiskit.quantum_info.Operator, |Tr(U+V)|/d > 1 - 1e-6",
+  "count": 60,
+  "records": [
+    {
+      "circuit": "adder_n4",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 4,
+      "output_fidelity": 0.9999999999999999,
+      "status": "OK",
+      "metrics": [
+        25,
+        10,
+        14
+      ]
+    },
+    {
+      "circuit": "adder_n4",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 4,
+      "output_fidelity": 0.9999999999999999,
+      "status": "OK",
+      "metrics": [
+        25,
+        10,
+        14
+      ]
+    },
+    {
+      "circuit": "basis_change_n3",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 3,
+      "output_fidelity": 1.0000000000000007,
+      "status": "OK",
+      "metrics": [
+        79,
+        10,
+        50
+      ]
+    },
+    {
+      "circuit": "basis_change_n3",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 3,
+      "output_fidelity": 1.0000000000000007,
+      "status": "OK",
+      "metrics": [
+        79,
+        10,
+        50
+      ]
+    },
+    {
+      "circuit": "basis_test_n4",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 4,
+      "output_fidelity": 0.49999999999999956,
+      "status": "INEQUIVALENT",
+      "metrics": [
+        42,
+        5,
+        16
+      ]
+    },
+    {
+      "circuit": "basis_test_n4",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 4,
+      "output_fidelity": 0.9999999999999998,
+      "status": "OK",
+      "metrics": [
+        61,
+        20,
+        29
+      ]
+    },
+    {
+      "circuit": "basis_trotter_n4",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 4,
+      "output_fidelity": 1.0000000000000129,
+      "status": "OK",
+      "metrics": [
+        969,
+        159,
+        419
+      ]
+    },
+    {
+      "circuit": "basis_trotter_n4",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 4,
+      "output_fidelity": 0.5000000000000066,
+      "status": "INEQUIVALENT",
+      "metrics": [
+        1076,
+        224,
+        489
+      ]
+    },
+    {
+      "circuit": "bell_n4",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 4,
+      "output_fidelity": 1.0000000000000004,
+      "status": "OK",
+      "metrics": [
+        29,
+        5,
+        12
+      ]
+    },
+    {
+      "circuit": "bell_n4",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 4,
+      "output_fidelity": 1.0000000000000004,
+      "status": "OK",
+      "metrics": [
+        29,
+        5,
+        12
+      ]
+    },
+    {
+      "circuit": "cat_state_n4",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 4,
+      "output_fidelity": 1.0000000000000002,
+      "status": "OK",
+      "metrics": [
+        6,
+        3,
+        6
+      ]
+    },
+    {
+      "circuit": "cat_state_n4",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 4,
+      "output_fidelity": 1.0000000000000002,
+      "status": "OK",
+      "metrics": [
+        6,
+        3,
+        6
+      ]
+    },
+    {
+      "circuit": "deutsch_n2",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 2,
+      "output_fidelity": 0.9999999999999997,
+      "status": "OK",
+      "metrics": [
+        9,
+        1,
+        6
+      ]
+    },
+    {
+      "circuit": "deutsch_n2",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 2,
+      "output_fidelity": 0.9999999999999997,
+      "status": "OK",
+      "metrics": [
+        9,
+        1,
+        6
+      ]
+    },
+    {
+      "circuit": "dnn_n2",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 2,
+      "output_fidelity": 1.0000000000000027,
+      "status": "OK",
+      "metrics": [
+        29,
+        3,
+        17
+      ]
+    },
+    {
+      "circuit": "dnn_n2",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 2,
+      "output_fidelity": 1.0000000000000027,
+      "status": "OK",
+      "metrics": [
+        29,
+        3,
+        17
+      ]
+    },
+    {
+      "circuit": "dnn_n8",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 8,
+      "output_fidelity": 1.0000000000000107,
+      "status": "OK",
+      "metrics": [
+        464,
+        64,
+        75
+      ]
+    },
+    {
+      "circuit": "dnn_n8",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 8,
+      "output_fidelity": 1.0000000000000107,
+      "status": "OK",
+      "metrics": [
+        464,
+        64,
+        75
+      ]
+    },
+    {
+      "circuit": "error_correctiond3_n5",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 5,
+      "output_fidelity": 0.9999999999999954,
+      "status": "OK",
+      "metrics": [
+        40,
+        9,
+        20
+      ]
+    },
+    {
+      "circuit": "error_correctiond3_n5",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 5,
+      "output_fidelity": 0.9999999999999962,
+      "status": "OK",
+      "metrics": [
+        88,
+        22,
+        50
+      ]
+    },
+    {
+      "circuit": "fredkin_n3",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 3,
+      "output_fidelity": 0.9999999999999996,
+      "status": "OK",
+      "metrics": [
+        22,
+        8,
+        13
+      ]
+    },
+    {
+      "circuit": "fredkin_n3",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 3,
+      "output_fidelity": 0.9999999999999996,
+      "status": "OK",
+      "metrics": [
+        22,
+        8,
+        13
+      ]
+    },
+    {
+      "circuit": "grover_n2",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 2,
+      "output_fidelity": 0.4999999999999996,
+      "status": "INEQUIVALENT",
+      "metrics": [
+        9,
+        1,
+        7
+      ]
+    },
+    {
+      "circuit": "grover_n2",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 2,
+      "output_fidelity": 0.9999999999999992,
+      "status": "OK",
+      "metrics": [
+        11,
+        2,
+        9
+      ]
+    },
+    {
+      "circuit": "hhl_n7",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 7,
+      "output_fidelity": 1.0000000000000027,
+      "status": "OK",
+      "metrics": [
+        421,
+        92,
+        310
+      ]
+    },
+    {
+      "circuit": "hhl_n7",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 7,
+      "output_fidelity": 1.0000000000000027,
+      "status": "OK",
+      "metrics": [
+        421,
+        92,
+        310
+      ]
+    },
+    {
+      "circuit": "hs4_n4",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 4,
+      "output_fidelity": 0.24999999999999978,
+      "status": "INEQUIVALENT",
+      "metrics": [
+        14,
+        2,
+        7
+      ]
+    },
+    {
+      "circuit": "hs4_n4",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 4,
+      "output_fidelity": 0.9999999999999987,
+      "status": "OK",
+      "metrics": [
+        22,
+        4,
+        10
+      ]
+    },
+    {
+      "circuit": "iswap_n2",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 2,
+      "output_fidelity": 0.49999999999999983,
+      "status": "INEQUIVALENT",
+      "metrics": [
+        9,
+        1,
+        7
+      ]
+    },
+    {
+      "circuit": "iswap_n2",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 2,
+      "output_fidelity": 0.9999999999999999,
+      "status": "OK",
+      "metrics": [
+        12,
+        2,
+        9
+      ]
+    },
+    {
+      "circuit": "linearsolver_n3",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 3,
+      "output_fidelity": 0.9999999999999991,
+      "status": "OK",
+      "metrics": [
+        25,
+        4,
+        19
+      ]
+    },
+    {
+      "circuit": "linearsolver_n3",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 3,
+      "output_fidelity": 0.9999999999999991,
+      "status": "OK",
+      "metrics": [
+        25,
+        4,
+        19
+      ]
+    },
+    {
+      "circuit": "lpn_n5",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 5,
+      "output_fidelity": 0.9999999999999992,
+      "status": "OK",
+      "metrics": [
+        15,
+        2,
+        8
+      ]
+    },
+    {
+      "circuit": "lpn_n5",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 5,
+      "output_fidelity": 0.9999999999999992,
+      "status": "OK",
+      "metrics": [
+        15,
+        2,
+        8
+      ]
+    },
+    {
+      "circuit": "pea_n5",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 5,
+      "output_fidelity": 0.9999999999999998,
+      "status": "OK",
+      "metrics": [
+        62,
+        17,
+        41
+      ]
+    },
+    {
+      "circuit": "pea_n5",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 5,
+      "output_fidelity": 0.9999999999999998,
+      "status": "OK",
+      "metrics": [
+        62,
+        17,
+        41
+      ]
+    },
+    {
+      "circuit": "qaoa_n6",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 6,
+      "output_fidelity": 1.0000000000000075,
+      "status": "OK",
+      "metrics": [
+        197,
+        36,
+        83
+      ]
+    },
+    {
+      "circuit": "qaoa_n6",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 6,
+      "output_fidelity": 1.0000000000000075,
+      "status": "OK",
+      "metrics": [
+        197,
+        36,
+        83
+      ]
+    },
+    {
+      "circuit": "qec_en_n5",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 5,
+      "output_fidelity": 0.24999999999999975,
+      "status": "INEQUIVALENT",
+      "metrics": [
+        24,
+        8,
+        14
+      ]
+    },
+    {
+      "circuit": "qec_en_n5",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 5,
+      "output_fidelity": 0.999999999999999,
+      "status": "OK",
+      "metrics": [
+        42,
+        10,
+        22
+      ]
+    },
+    {
+      "circuit": "qft_n4",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 4,
+      "output_fidelity": 1.0,
+      "status": "OK",
+      "metrics": [
+        39,
+        12,
+        23
+      ]
+    },
+    {
+      "circuit": "qft_n4",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 4,
+      "output_fidelity": 1.0,
+      "status": "OK",
+      "metrics": [
+        39,
+        12,
+        23
+      ]
+    },
+    {
+      "circuit": "qrng_n4",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 4,
+      "output_fidelity": 0.9999999999999999,
+      "status": "OK",
+      "metrics": [
+        12,
+        0,
+        3
+      ]
+    },
+    {
+      "circuit": "qrng_n4",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 4,
+      "output_fidelity": 0.9999999999999999,
+      "status": "OK",
+      "metrics": [
+        12,
+        0,
+        3
+      ]
+    },
+    {
+      "circuit": "quantumwalks_n2",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 2,
+      "output_fidelity": 1.0000000000000002,
+      "status": "OK",
+      "metrics": [
+        36,
+        3,
+        22
+      ]
+    },
+    {
+      "circuit": "quantumwalks_n2",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 2,
+      "output_fidelity": 1.0000000000000002,
+      "status": "OK",
+      "metrics": [
+        36,
+        3,
+        22
+      ]
+    },
+    {
+      "circuit": "sat_n7",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 7,
+      "output_fidelity": 0.015624999999999962,
+      "status": "INEQUIVALENT",
+      "metrics": [
+        193,
+        60,
+        107
+      ]
+    },
+    {
+      "circuit": "sat_n7",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 7,
+      "output_fidelity": 0.015624999999999962,
+      "status": "INEQUIVALENT",
+      "metrics": [
+        193,
+        60,
+        107
+      ]
+    },
+    {
+      "circuit": "simon_n6",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 6,
+      "output_fidelity": 0.9999999999999993,
+      "status": "OK",
+      "metrics": [
+        58,
+        14,
+        37
+      ]
+    },
+    {
+      "circuit": "simon_n6",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 6,
+      "output_fidelity": 0.9999999999999993,
+      "status": "OK",
+      "metrics": [
+        58,
+        14,
+        37
+      ]
+    },
+    {
+      "circuit": "teleportation_n3",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 3,
+      "output_fidelity": 0.9999999999999994,
+      "status": "OK",
+      "metrics": [
+        12,
+        2,
+        8
+      ]
+    },
+    {
+      "circuit": "teleportation_n3",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 3,
+      "output_fidelity": 0.9999999999999994,
+      "status": "OK",
+      "metrics": [
+        12,
+        2,
+        8
+      ]
+    },
+    {
+      "circuit": "toffoli_n3",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 3,
+      "output_fidelity": 0.9999999999999996,
+      "status": "OK",
+      "metrics": [
+        21,
+        6,
+        14
+      ]
+    },
+    {
+      "circuit": "toffoli_n3",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 3,
+      "output_fidelity": 0.9999999999999996,
+      "status": "OK",
+      "metrics": [
+        21,
+        6,
+        14
+      ]
+    },
+    {
+      "circuit": "variational_n4",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 4,
+      "output_fidelity": 0.9999999999999993,
+      "status": "OK",
+      "metrics": [
+        51,
+        8,
+        24
+      ]
+    },
+    {
+      "circuit": "variational_n4",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 4,
+      "output_fidelity": 0.9999999999999993,
+      "status": "OK",
+      "metrics": [
+        51,
+        8,
+        24
+      ]
+    },
+    {
+      "circuit": "vqe_n4",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 4,
+      "output_fidelity": 1.0000000000000004,
+      "status": "OK",
+      "metrics": [
+        75,
+        9,
+        23
+      ]
+    },
+    {
+      "circuit": "vqe_n4",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 4,
+      "output_fidelity": 1.0000000000000004,
+      "status": "OK",
+      "metrics": [
+        75,
+        9,
+        23
+      ]
+    },
+    {
+      "circuit": "wstate_n3",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "default",
+      "num_qubits": 3,
+      "output_fidelity": 0.9999999999999993,
+      "status": "OK",
+      "metrics": [
+        30,
+        6,
+        21
+      ]
+    },
+    {
+      "circuit": "wstate_n3",
+      "tool": "pytket",
+      "pytket_version": "2.18.1",
+      "mode": "safe",
+      "num_qubits": 3,
+      "output_fidelity": 0.9999999999999993,
+      "status": "OK",
+      "metrics": [
+        30,
+        6,
+        21
+      ]
+    }
+  ]
+}
