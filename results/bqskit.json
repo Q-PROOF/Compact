@@ -1,8 +1,20 @@
 {
-  "generated": "2026-09-18T17:48:59.107051+00:00",
-  "commit": "fe4288d32e04",
+  "generated": "2026-09-18T18:17:08.427298+00:00",
+  "commit": "53d00ca20e3f",
   "referee": "qiskit.quantum_info.Operator, |Tr(U+V)|/d > 1 - 1e-6",
   "pipeline": "bqskit.compile (documented default optimization)",
+  "environment": {
+    "generated": "2026-09-18T18:17:08.445056+00:00",
+    "git_sha": "53d00ca20e3f",
+    "python": "3.11.9",
+    "os": "Windows 10 AMD64",
+    "cpu": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+    "dependencies": {
+      "qiskit": "2.5.2",
+      "numpy": "2.4.6",
+      "bqskit": "1.2.1"
+    }
+  },
   "count": 32,
   "records": [
     {
@@ -10,13 +22,13 @@
       "tool": "bqskit",
       "bqskit_version": "1.2.1",
       "num_qubits": 10,
-      "gates": 192,
-      "two_qubit": 57,
-      "cx_equivalent": 57,
-      "depth": 105,
+      "gates": 181,
+      "two_qubit": 58,
+      "cx_equivalent": 58,
+      "depth": 103,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 9290
+      "wall_ms": 8981
     },
     {
       "circuit": "adder_n4",
@@ -29,20 +41,20 @@
       "depth": 11,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 7611
+      "wall_ms": 6931
     },
     {
       "circuit": "basis_change_n3",
       "tool": "bqskit",
       "bqskit_version": "1.2.1",
       "num_qubits": 3,
-      "gates": 27,
+      "gates": 21,
       "two_qubit": 6,
       "cx_equivalent": 6,
-      "depth": 16,
+      "depth": 13,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 10504
+      "wall_ms": 9906
     },
     {
       "circuit": "basis_test_n4",
@@ -55,20 +67,20 @@
       "depth": 41,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 7302
+      "wall_ms": 6667
     },
     {
       "circuit": "basis_trotter_n4",
       "tool": "bqskit",
       "bqskit_version": "1.2.1",
       "num_qubits": 4,
-      "gates": 1095,
-      "two_qubit": 258,
-      "cx_equivalent": 258,
-      "depth": 486,
+      "gates": 1088,
+      "two_qubit": 259,
+      "cx_equivalent": 259,
+      "depth": 489,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 31106
+      "wall_ms": 13825
     },
     {
       "circuit": "bell_n4",
@@ -81,7 +93,7 @@
       "depth": 7,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 5510
+      "wall_ms": 5358
     },
     {
       "circuit": "cat_state_n4",
@@ -94,7 +106,7 @@
       "depth": 4,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 5509
+      "wall_ms": 6378
     },
     {
       "circuit": "deutsch_n2",
@@ -107,7 +119,7 @@
       "depth": 3,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 6434
+      "wall_ms": 6571
     },
     {
       "circuit": "dnn_n2",
@@ -120,7 +132,7 @@
       "depth": 7,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 6217
+      "wall_ms": 7823
     },
     {
       "circuit": "dnn_n8",
@@ -133,20 +145,20 @@
       "depth": 38,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 10192
+      "wall_ms": 10980
     },
     {
       "circuit": "error_correctiond3_n5",
       "tool": "bqskit",
       "bqskit_version": "1.2.1",
       "num_qubits": 5,
-      "gates": 104,
-      "two_qubit": 26,
-      "cx_equivalent": 26,
-      "depth": 61,
+      "gates": 105,
+      "two_qubit": 27,
+      "cx_equivalent": 27,
+      "depth": 62,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 7812
+      "wall_ms": 8166
     },
     {
       "circuit": "fredkin_n3",
@@ -159,7 +171,7 @@
       "depth": 15,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 5826
+      "wall_ms": 5856
     },
     {
       "circuit": "grover_n2",
@@ -172,7 +184,7 @@
       "depth": 5,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 5256
+      "wall_ms": 5317
     },
     {
       "circuit": "hhl_n7",
@@ -185,7 +197,7 @@
       "depth": 157,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 13098
+      "wall_ms": 14664
     },
     {
       "circuit": "hs4_n4",
@@ -198,7 +210,7 @@
       "depth": 5,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 5299
+      "wall_ms": 5389
     },
     {
       "circuit": "ising_n10",
@@ -211,7 +223,7 @@
       "depth": 49,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 7224
+      "wall_ms": 8349
     },
     {
       "circuit": "iswap_n2",
@@ -224,7 +236,7 @@
       "depth": 5,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 5301
+      "wall_ms": 5441
     },
     {
       "circuit": "linearsolver_n3",
@@ -237,7 +249,7 @@
       "depth": 9,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 5515
+      "wall_ms": 5704
     },
     {
       "circuit": "lpn_n5",
@@ -250,20 +262,20 @@
       "depth": 4,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 6785
+      "wall_ms": 6958
     },
     {
       "circuit": "pea_n5",
       "tool": "bqskit",
       "bqskit_version": "1.2.1",
       "num_qubits": 5,
-      "gates": 71,
-      "two_qubit": 20,
-      "cx_equivalent": 20,
-      "depth": 45,
+      "gates": 78,
+      "two_qubit": 23,
+      "cx_equivalent": 23,
+      "depth": 50,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 10273
+      "wall_ms": 9626
     },
     {
       "circuit": "qaoa_n6",
@@ -276,7 +288,7 @@
       "depth": 52,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 11514
+      "wall_ms": 8552
     },
     {
       "circuit": "qec_en_n5",
@@ -289,7 +301,7 @@
       "depth": 15,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 9391
+      "wall_ms": 7607
     },
     {
       "circuit": "qft_n4",
@@ -302,7 +314,7 @@
       "depth": 22,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 10347
+      "wall_ms": 7813
     },
     {
       "circuit": "qrng_n4",
@@ -315,7 +327,7 @@
       "depth": 1,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 9454
+      "wall_ms": 6753
     },
     {
       "circuit": "quantumwalks_n2",
@@ -328,7 +340,7 @@
       "depth": 5,
       "output_fidelity": 0.999999999972,
       "status": "OK",
-      "wall_ms": 7466
+      "wall_ms": 5561
     },
     {
       "circuit": "sat_n7",
@@ -341,20 +353,20 @@
       "depth": 84,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 10440
+      "wall_ms": 8256
     },
     {
       "circuit": "simon_n6",
       "tool": "bqskit",
       "bqskit_version": "1.2.1",
       "num_qubits": 6,
-      "gates": 32,
+      "gates": 27,
       "two_qubit": 6,
       "cx_equivalent": 6,
-      "depth": 16,
+      "depth": 13,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 9832
+      "wall_ms": 7655
     },
     {
       "circuit": "teleportation_n3",
@@ -367,7 +379,7 @@
       "depth": 5,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 9917
+      "wall_ms": 6438
     },
     {
       "circuit": "toffoli_n3",
@@ -380,7 +392,7 @@
       "depth": 12,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 9159
+      "wall_ms": 7637
     },
     {
       "circuit": "variational_n4",
@@ -393,7 +405,7 @@
       "depth": 15,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 8740
+      "wall_ms": 5798
     },
     {
       "circuit": "vqe_n4",
@@ -406,7 +418,7 @@
       "depth": 19,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 7361
+      "wall_ms": 5831
     },
     {
       "circuit": "wstate_n3",
@@ -419,7 +431,7 @@
       "depth": 13,
       "output_fidelity": 1.0,
       "status": "OK",
-      "wall_ms": 5994
+      "wall_ms": 5747
     }
   ]
 }
