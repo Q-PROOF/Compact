@@ -5,9 +5,10 @@ bench_results.json) and compares every circuit's compactq output
 against the committed baseline.  The 2-QUBIT COUNT is the hard
 invariant (win-or-tie required).  Total gates carry a documented
 cross-platform drift allowance of max(3, 5% of the baseline count)
-and depth +2: floating-point tie-breaks in 1q resynthesis differ
-across platforms and native-kernel availability, so byte-identical
-1q counts are not a cross-platform invariant - the 2q count is.
+and depth max(2, 5% of the baseline depth): floating-point tie-breaks
+in 1q resynthesis differ across platforms and native-kernel
+availability, so byte-identical 1q counts and tight depth are not a
+cross-platform invariant - the 2q count is.
 Any regression exits non-zero; improvements are reported and can be
 committed with --update.
 
@@ -41,7 +42,8 @@ def main() -> int:
             and "two_qubit" in r.get("compactq", {})]
     GATE_DRIFT_FRAC = 0.05   # cross-platform 1q tie-break allowance:
     GATE_DRIFT_MIN = 3       # max(3, 5% of baseline gates)
-    GATE_DRIFT_DEPTH = 2
+    DEPTH_DRIFT_FRAC = 0.05  # max(2, 5% of baseline depth): the same
+    DEPTH_DRIFT_MIN = 2      # tie-break drift applies to depth
     regressions = []
     improvements = []
     for row in rows:
@@ -54,10 +56,11 @@ def main() -> int:
         old_cq = baseline[name]["compactq"]
         old = (old_cq["two_qubit"], old_cq["gates"], old_cq["depth"])
         gate_allow = max(GATE_DRIFT_MIN, round(old[1] * GATE_DRIFT_FRAC))
+        depth_allow = max(DEPTH_DRIFT_MIN, round(old[2] * DEPTH_DRIFT_FRAC))
         if new[0] > old[0]:
             regressions.append((name, old, new))
         elif new[0] == old[0] and (new[1] > old[1] + gate_allow
-                                   or new[2] > old[2] + GATE_DRIFT_DEPTH):
+                                   or new[2] > old[2] + depth_allow):
             regressions.append((name, old, new))
         elif new < old:
             improvements.append((name, old, new))

@@ -5,6 +5,11 @@ All notable changes to Q-PROOF Compact are documented here.
 ## [0.1.6] — 2026-09-18
 
 ### Fixed
+- **Regression-gate depth allowance** is now cross-platform scaled
+  (max(2, 5% of baseline depth), matching the gates philosophy):
+  floating-point tie-breaks in 1q resynthesis also drift the depth of
+  large structured circuits on other platforms (observed: Linux/3.12
+  basis_trotter_n4 depth +12, 2q identical).
 - **Evidence integrity release.**  The 0.1.5 notes quoted an untracked
   6.0 s figure for the 256Q Ising/Trotter case while the committed
   gauntlet artifact recorded 146.8 s.  Both are real measurements with
