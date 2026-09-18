@@ -2,6 +2,40 @@
 
 All notable changes to Q-PROOF Compact are documented here.
 
+## [0.1.6] — 2026-09-18
+
+### Fixed
+- **Evidence integrity release.**  The 0.1.5 notes quoted an untracked
+  6.0 s figure for the 256Q Ising/Trotter case while the committed
+  gauntlet artifact recorded 146.8 s.  Both are real measurements with
+  different instruments: the gauntlet times optimization **under the
+  allocation tracker** (tracemalloc adds large overhead on
+  allocation-heavy pipelines; 146.8 s), the profiling run without it
+  completes in 6.0 s.  The README now reports both numbers with their
+  measurement conditions.
+- `compactq.verify` docstring said "tier 0-3 today" after tier 4
+  shipped; corrected to 0-4 with the compositional-strategy caveat.
+- `VERIFICATION_TIERS[4]` / docstring / tests fully consistent (T4
+  shipped, T5 roadmap).
+
+### Added
+- `scripts/provenance.py` + embedded environment blocks in every
+  benchmark artifact: git SHA, package version, dependency versions,
+  Python, OS, CPU, timestamp.
+- `scripts/check_provenance.py` — reproducibility gate validating
+  provenance of every committed artifact (wired advisory into CI).
+- Scalability report upgraded: runtime-tier classes (excellent /
+  interactive / practical / batch / extreme) and P95 / max per width;
+  the runtime ceiling is now the strict "practical" class (median
+  ≤ 30 s), replacing a meaningless 25-hour threshold.
+- `verify_segmented` exported at package top level
+  (`compactq.verify_segmented`).
+
+### Changed
+- All benchmark artifacts regenerated on the 0.1.6 code at a single
+  commit: bench_results, pytket referee, BQSKit head-to-head,
+  scalability gauntlet.
+
 ## [0.1.5] — 2026-09-18
 
 ### Fixed

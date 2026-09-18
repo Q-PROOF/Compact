@@ -46,6 +46,20 @@ _OFF = False
 TIMEOUT_S = 180
 MEMORY_BUDGET_MB = 1024.0
 
+# runtime tiers (median optimization time per width) — a wall-clock class,
+# not the correctness ceiling
+RUNTIME_TIERS = ((1_000, "excellent"), (5_000, "interactive"),
+                 (30_000, "practical"), (300_000, "batch"))
+
+
+def _runtime_class(ms):
+    if ms is None:
+        return "n/a"
+    for limit, label in RUNTIME_TIERS:
+        if ms < limit:
+            return label
+    return "extreme"
+
 
 # ----------------------------------------------------------------- workloads
 def _w_ghz(n: int):
@@ -299,6 +313,9 @@ def summarize(records, timeout_s, memory_budget_mb):
                        if isinstance(r.get("optimization_ms"), int))
         peak = max((r.get("peak_mb", 0) for r in rs), default=0)
         median = round(statistics.median(times)) if times else None
+        # runtime tier class (median); the ceiling only follows the
+        # 'practical' class (< 30 s median) — honest, not the 25 h joke
+        rclass = _runtime_class(median)
         ok = (crashes == 0 and timeouts == 0 and incorrect == 0
               and policy_bad == 0 and nondet == 0)
         status = "PASS" if ok else ("FAIL" if (crashes or incorrect or policy_bad)
@@ -310,6 +327,11 @@ def summarize(records, timeout_s, memory_budget_mb):
             "nondeterministic": nondet,
             "verified": len(decided), "unverified": len(rs) - len(decided),
             "median_opt_ms": median,
+            "p95_opt_ms": (round(times[min(len(times) - 1,
+                                           max(0, int(round(0.95 * len(times))) - 1))])
+                           if times else None),
+            "max_opt_ms": times[-1] if times else None,
+            "runtime_class": rclass,
             "peak_mb": peak,
             "tiers": sorted({r.get("tier", "?") for r in rs}),
             "status": status,
@@ -320,7 +342,7 @@ def summarize(records, timeout_s, memory_budget_mb):
             continue
         if status == "PASS":
             correctness_ceiling = w
-            if median is not None and median <= timeout_s * 500:
+            if rclass in ("excellent", "interactive", "practical"):
                 runtime_ceiling = w
             if peak <= memory_budget_mb:
                 memory_ceiling = w
@@ -352,7 +374,8 @@ def write_md(rows, ceilings, doc, path):
     lines += ["",
               f"- correctness/stability ceiling (all workloads): "
               f"**{corr}Q**",
-              f"- runtime ceiling (median opt time sane): **{runtime}Q**",
+              f"- runtime ceiling (median ≤ 30 s, 'practical' class): "
+              f"**{runtime}Q**",
               f"- memory ceiling (< {int(doc['memory_budget_mb'])} MB peak): "
               f"**{memory}Q**",
               "",
@@ -408,8 +431,11 @@ def main() -> int:
         "referee_limit": args.referee_limit,
         "timeout_s": args.timeout,
         "memory_budget_mb": args.memory_budget_mb,
+        "runtime_tiers": {label: f"< {limit / 1000:g}s median"
+                          for limit, label in RUNTIME_TIERS},
         "ceilings": {"correctness_stability": corr, "runtime": runtime,
                      "memory": memory},
+        "environment": __import__("provenance").environment(),
         "records": records,
     }
     try:

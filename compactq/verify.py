@@ -43,7 +43,12 @@ def verify(original: Circuit, optimized: Circuit) -> dict:
 
     Returns a dict:
       equivalent          True / False / None (None = could not decide)
-      tier                0-3 today (4-5 reserved; see VERIFICATION_TIERS)
+      tier                0-4 today (5 = formal proof, roadmap; see
+                          VERIFICATION_TIERS).  Tier 4 fires only when the
+                          circuit structure satisfies the compositional
+                          strategy (disjoint blocks); sequential-segment
+                          proofs are available via
+                          compactq.compositional.verify_segmented.
       method              which prover produced the answer
       global_phase_ignored  always True: equivalence is up to global phase
       runtime_ms          wall time of the check

@@ -106,6 +106,8 @@ def main() -> int:
         "commit": git_sha(),
         "referee": "qiskit.quantum_info.Operator, |Tr(U+V)|/d > 1 - 1e-6",
         "pipeline": "bqskit.compile (documented default optimization)",
+        "environment": __import__("provenance").environment(
+            extra_deps=("bqskit",)),
         "count": len(records),
         "records": records,
     }

@@ -223,14 +223,18 @@ Capability matrix (✅ shipped · ◐ partial · ❌ not claimed):
 (The cross-compiler reference point is the Benchpress suite — Qiskit, TKET,
 BQSKit, Cirq, Staq and others.)
 
-**BQSKit head-to-head (measured 2026-09-18** — BQSKit 1.2.1, its documented
-`bqskit.compile` pipeline, same normalized QASMBench small inputs, every
-output refereed; `results/bqskit.json`): **2q win 10 / tie 19 / lose 3**
-for Compact; geomean BQSKit/Compact 2q ratio **1.16**; all 32 BQSKit
-outputs passed the independent referee.  Compact's three measured losses —
-basis_change_n3 (10 vs 6), fredkin_n3 (8 vs 7), simon_n6 (12 vs 6) — are
-small structured blocks where BQSKit's numerical synthesis shines; that is
-the honest profile of a numerical-synthesis specialist.
+**BQSKit head-to-head (32 QASMBench small circuits — a measured
+comparison, not a universal ranking**; BQSKit 1.2.1, its documented
+`bqskit.compile` pipeline, same normalized inputs, every output
+refereed; `results/bqskit.json`): **2q win 10 / tie 19 / lose 3** for
+Compact; geomean BQSKit/Compact 2q ratio **1.16**; all 32 BQSKit
+outputs passed the independent referee.  The fair reading: Compact
+provides a complementary verified optimization architecture and is
+competitive with numerical synthesis on this benchmark, while BQSKit's
+numerical synthesis is stronger on specific small dense blocks —
+Compact's three measured losses are basis_change_n3 (10 vs 6),
+fredkin_n3 (8 vs 7) and simon_n6 (12 vs 6), which is exactly the case
+for the 3Q/4Q synthesis roadmap item.
 
 **Metric levels.** A raw "2-qubit gate count" is a logical metric, not a
 hardware-cost metric — a SWAP is three CX, and CP/RZZ/ECR costs are
@@ -628,7 +632,12 @@ incorrect outputs, zero never-grow violations, fully deterministic
 repeats.  In 0.1.5 the 256Q Ising/Trotter runtime timeout was fixed by a
 measured heavy-circuit guardrail (skipping the unitary-window synthesis
 candidates beyond 1,200 gates — behavior-identical below the limit,
-drift-tested), taking that case from a 180 s timeout to **6.0 s**.
+drift-tested).  The committed artifact records that case at **146.8 s
+under the gauntlet's allocation tracker** (`tracemalloc` adds large
+overhead on allocation-heavy pipelines); the identical run **without
+allocation tracking completes in 6.0 s**.  Both measurements are real
+and reported — the tracker buys exact Python-memory accounting at a
+known time cost.
 
 Verification is tiered by width: independent Qiskit `Operator` referee
 through 10 qubits (8/8 workloads refereed); **exact algebraic tableau

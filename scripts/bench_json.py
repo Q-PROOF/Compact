@@ -32,6 +32,8 @@ sys.path.insert(0, str(REPO / "scripts"))
 import numpy as np  # noqa: E402
 from qiskit.quantum_info import Operator  # noqa: E402
 
+from provenance import environment  # noqa: E402
+
 
 def _cx_eq(qc):
     """Level-B metric for a qiskit circuit: 2-qubit gates counted in
@@ -200,8 +202,10 @@ def main() -> int:
         "package_version": compactq.__version__,
         "python": platform.python_version(),
         "platform": platform.platform(),
+        "cpu": platform.processor() or platform.machine(),
         "qiskit": qiskit_version,
         "native_kernels": _native_info(),
+        "environment": environment(),
         "wall_time_s": round(time.perf_counter() - t_start, 1),
         "circuits": rows,
     }

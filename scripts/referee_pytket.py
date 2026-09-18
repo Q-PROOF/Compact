@@ -118,6 +118,8 @@ def main() -> int:
         "generated": datetime.now(timezone.utc).isoformat(),
         "commit": git_sha(),
         "referee": "qiskit.quantum_info.Operator, |Tr(U+V)|/d > 1 - 1e-6",
+        "environment": __import__("provenance").environment(
+            extra_deps=("pytket",)),
         "count": len(records),
         "records": records,
     }
