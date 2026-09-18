@@ -68,6 +68,48 @@ def test_certificate_structure():
     assert cert["input_hash"] == cert2["input_hash"]
 
 
+def test_t4_segmented_soundness():
+    import compactq
+    from compactq.benchmarks import qft
+    from compactq.compositional import verify_segmented
+    orig = qft(4)
+    # identical circuits, identical cuts -> every segment matches: True
+    r = verify_segmented(orig, orig, [6], [6])
+    assert r is not None and r["equivalent"] is True and r["tier"] == 4, r
+    # optimizer output has a different gate layout: arbitrary cuts do not
+    # align it, so the method must DECLINE (equivalent None), never accuse
+    same = compactq.optimize(orig)
+    r2 = verify_segmented(orig, same, [6], [6])
+    assert r2 is None or r2["equivalent"] is None, r2
+    # segments acting on different qubits -> undecided (None), never False
+    other = compactq.optimize(compactq.benchmarks.ghz(4))
+    r3 = verify_segmented(orig, other, [2], [2])
+    assert r3 is None or r3["equivalent"] is None, r3
+
+
+def test_heavy_circuit_fast_path():
+    """256-qubit structured circuits must complete within the gauntlet
+    budget after the heavy-gate guardrail (regression: 180s timeout)."""
+    import random
+    import time
+    from compactq import Circuit, Gate, optimize_search
+    rng = random.Random(256)
+    ops = []
+    for _ in range(3):
+        for q in range(256):
+            ops.append(Gate("rz", (rng.uniform(0.4, 1.2),), (q,)))
+        for q in range(255):
+            ops.append(Gate("cx", (), (q, q + 1)))
+            ops.append(Gate("rz", (rng.uniform(0.2, 0.8),), (q + 1,)))
+    circ = Circuit(256, ops)
+    t0 = time.perf_counter()
+    out = optimize_search(circ)
+    dt = time.perf_counter() - t0
+    assert (out.two_qubit_count(), len(out.ops), out.depth()) <= \
+           (circ.two_qubit_count(), len(circ.ops), circ.depth())
+    assert dt < 120, f"256Q structured optimize took {dt:.1f}s"
+
+
 def test_coupling_presets():
     import compactq
     line = compactq.coupling_preset("line", 6)
@@ -110,6 +152,10 @@ ALL = [
     ("T4 compositional: tampered block detected and named",
      test_t4_tampered_block_named),
     ("certificate: structure, hashes, metrics", test_certificate_structure),
+    ("T4.1 segmented proof: sound splits + undecided mismatches",
+     test_t4_segmented_soundness),
+    ("heavy-circuit fast path: 256Q structured < 120s",
+     test_heavy_circuit_fast_path),
     ("coupling presets: line/all-to-all/heavy-hex/grid",
      test_coupling_presets),
     ("verify CLI subcommand end-to-end", lambda: test_verify_cli_subcommand(

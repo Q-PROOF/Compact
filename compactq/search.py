@@ -18,6 +18,14 @@ from .transforms import commute_cancel, peephole, slide_1q, swap_template
 
 _SEARCH_OBJECTIVES = _OBJECTIVES + ("weighted",)
 
+# Heavy-circuit guardrail (measured on the scalability gauntlet): beyond
+# this gate count the expensive synthesis candidates (phase-polynomial
+# re-synthesis, cross-pair KAK, unitary window merge, Cliffordize) can
+# dominate runtime for marginal gain on wide structured circuits, so they
+# are skipped and the cheap exact pipeline + template/fold candidates run.
+# Small benchmark circuits (QASMBench small max ~500 gates) are unaffected.
+_HEAVY_GATE_LIMIT = 1200
+
 # weighted-mode cost: NISQ-oriented — the 2-qubit count dominates, depth and
 # total gates are secondary penalties.  Hardware-error weighting (per-pair
 # fidelities) lives in compactq.target.optimize_for.
@@ -161,6 +169,9 @@ def optimize_search(circ: Circuit, verify: bool | None = None, depth: int = 2,
 
     feats = _circuit_features(circ)
     sel = _select_candidates(feats, verify)
+    heavy = len(circ.ops) > _HEAVY_GATE_LIMIT
+    if heavy:
+        sel -= {"parity", "crosspair", "clifford"}
 
     # candidate 3: template reorderings feeding the exact pass chain
     from .templates import template_pass
@@ -172,7 +183,7 @@ def optimize_search(circ: Circuit, verify: bool | None = None, depth: int = 2,
 
     # candidate 3b: phase-polynomial re-synthesis of diagonal cores
     # (each replacement is fidelity-verified against the window unitary).
-    if "parity" in sel:
+    if "parity" in sel and not heavy:
         from .parity import parity_pass
         cand = parity_pass(best)
     else:
@@ -193,7 +204,7 @@ def optimize_search(circ: Circuit, verify: bool | None = None, depth: int = 2,
 
     # candidate 4b: unitary-verified window merge + KAK
     from .winmerge import merge_by_unitary
-    merged2 = merge_by_unitary(best)
+    merged2 = merge_by_unitary(best) if not heavy else best
     if merged2 is not best:
         cand = optimize(merged2, verify=_UNVERIFIED, objective=pipe_obj)
         cand = kak_pass(cand, force=False)

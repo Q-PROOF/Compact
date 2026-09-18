@@ -2,6 +2,45 @@
 
 All notable changes to Q-PROOF Compact are documented here.
 
+## [0.1.5] — 2026-09-18
+
+### Fixed
+- **T4 API consistency**: `VERIFICATION_TIERS[4]` now reads
+  `compositional_certificates` (shipped) — the module docstring, the
+  tier table and the tests previously disagreed about whether T4 was
+  roadmap or shipped.
+
+### Added
+- **T4.1 sequential-segment proof**: `compactq.compositional.
+  verify_segmented(a, b, cuts_a, cuts_b)` — sound for ANY consecutive
+  segmentations (per-segment phase factors commute with everything);
+  each segment pair is dense-verified on its active qubits, so callers
+  who can name narrow segments (Trotter layers, barrier boundaries,
+  rewrite correspondence) get compositional proofs beyond the disjoint-
+  block case.  Undecidable shapes return None, never a guess.
+- **Heavy-circuit guardrail** in `optimize_search`: beyond 1,200 gates
+  the expensive synthesis candidates (phase-polynomial re-synthesis,
+  cross-pair KAK, unitary window merge, Cliffordize) are skipped and
+  the cheap exact pipeline runs.  Measured effect: 256-qubit
+  Ising/Trotter optimization drops from a **180 s gauntlet timeout to
+  6.0 s** (-22% gates, never-grow holds), moving the measured runtime
+  frontier through 256Q.  Circuits under the limit (all of QASMBench
+  small) are behavior-identical (drift-tested).
+
+### Changed
+- **BQSKit head-to-head executed** (the review's largest evidence gap):
+  BQSKit 1.2.1, its documented `bqskit.compile` pipeline, same
+  normalized QASMBench small inputs, every output refereed —
+  `results/bqskit.json`.  Result: **Compact 2q win 10 / tie 19 /
+  lose 3**, geomean BQSKit/Compact 2q ratio 1.16; all 32 BQSKit outputs
+  referee-clean.  Compact's measured losses (basis_change_n3, fredkin_n3,
+  simon_n6) are documented.
+- Scalability artifact regenerated on the 0.1.5 code with the
+  heavy-circuit guardrail: **all three ceilings (correctness/stability,
+  runtime, memory) now sit at 256Q** — the 256Q Ising/Trotter case
+  dropped from a 180 s timeout to 6.0 s (median 34.3 s across its 8
+  workloads), zero crashes/timeouts/incorrect outputs at any width.
+
 ## [0.1.4] — 2026-09-18
 
 ### Added

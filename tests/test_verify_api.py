@@ -58,7 +58,9 @@ def test_verify_tier_coverage_documented():
     import compactq
     tiers = compactq.VERIFICATION_TIERS
     assert set(tiers) == {0, 1, 2, 3, 4, 5}
-    assert "roadmap" in tiers[4] and "roadmap" in tiers[5]
+    # T4 is SHIPPED (compositional) — it must not be marked roadmap
+    assert tiers[4] == "compositional_certificates"
+    assert "roadmap" in tiers[5]
 
 
 ALL = [

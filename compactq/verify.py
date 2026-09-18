@@ -14,8 +14,10 @@ evidence backs the answer:
   tier 0  none                 prover unavailable (e.g. numpy missing on a
                                >limit circuit) — `equivalent` is None
 
-Tiers 4 (compositional certificates) and 5 (formal proof) are roadmap; the
-tier field is part of the stable API so callers can require a minimum grade.
+Tier 4 (compositional certificates — disjoint-block decomposition, and
+sequential segments via `verify_segmented`) ships today; tier 5 (formal
+proof) is roadmap.  The tier field is part of the stable API so callers
+can require a minimum grade.
 """
 from __future__ import annotations
 
@@ -30,7 +32,7 @@ VERIFICATION_TIERS = {
     1: "randomized_sampling",
     2: "full_unitary",
     3: "clifford_tableau",
-    4: "compositional_certificates (roadmap)",
+    4: "compositional_certificates",
     5: "formal_proof (roadmap)",
 }
 

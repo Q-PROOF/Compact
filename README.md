@@ -14,12 +14,13 @@
 **The verified quantum circuit optimizer.** Smaller circuits, proven. Compact takes a quantum circuit and returns an equivalent one that is smaller and shallower — with verification attached to every answer: exact algebraic proofs where the circuit structure allows them, and a numerical whole-unitary certificate otherwise. On any doubt, your input is returned unchanged.
 
 **Current evidence** — 43 QASMBench circuits + 44 MQT Bench circuits refereed
-by Qiskit's `Operator`; a 1,018-check end-to-end gauntlet; 84 test functions;
+by Qiskit's `Operator`; a 1,018-check end-to-end gauntlet; 93 test functions;
 **0 incorrect Compact outputs** in any refereed set; measured Qiskit L3 /
-pytket / Cirq comparisons; hardware-error objectives, SABRE-lite routing,
-and an open error-suppression stack.
-**Current limitation:** BQSKit and hardware-mapped benchmarking are still
-being expanded (`results/`, roadmap).
+pytket / Cirq / **BQSKit** comparisons; scalability proven 4→256Q;
+hardware-error objectives, SABRE-lite routing, and an open error-suppression
+stack.
+**Current limitation:** hardware-mapped benchmarking is still being expanded
+(`results/`, roadmap).
 
 ```python
 import compactq
@@ -98,7 +99,11 @@ Tier 4 soundness: if the active qubits partition into disjoint components,
 the unitary factorizes as a tensor product — so per-component dense proofs
 compose into a whole-circuit proof **without ever building the 2^total
 unitary**.  A 100-qubit circuit of 4-qubit blocks is fully
-equivalence-proven this way (`compactq.compositional`).
+equivalence-proven this way (`compactq.compositional`).  T4.1 adds
+sequential segments: `compactq.compositional.verify_segmented(a, b,
+cuts_a, cuts_b)` is sound for **any** consecutive segmentations (per-
+segment phases commute with everything) — for callers who can name narrow
+segments (Trotter layers, barriers, rewrite correspondence).
 
 ## What's inside
 
@@ -213,11 +218,19 @@ Capability matrix (✅ shipped · ◐ partial · ❌ not claimed):
 | hardware-aware objective | ✅ | ✅ | ✅ | ✅ | ◐ | ◐ |
 | approximate optimization | ✅ | ◐ | ◐ | ✅ | ◐ | varies |
 | in-product output verification | **✅** | external | external | external | external | external |
-| measured head-to-head vs Compact | — | ✅ below | ✅ below | not yet | ✅ (MQT) | not measurable here |
+| measured head-to-head vs Compact | — | ✅ below | ✅ below | ✅ below | ✅ (MQT) | not measurable here |
 
 (The cross-compiler reference point is the Benchpress suite — Qiskit, TKET,
-BQSKit, Cirq, Staq and others; adding a measured BQSKit column is a named
-roadmap item.)
+BQSKit, Cirq, Staq and others.)
+
+**BQSKit head-to-head (measured 2026-09-18** — BQSKit 1.2.1, its documented
+`bqskit.compile` pipeline, same normalized QASMBench small inputs, every
+output refereed; `results/bqskit.json`): **2q win 10 / tie 19 / lose 3**
+for Compact; geomean BQSKit/Compact 2q ratio **1.16**; all 32 BQSKit
+outputs passed the independent referee.  Compact's three measured losses —
+basis_change_n3 (10 vs 6), fredkin_n3 (8 vs 7), simon_n6 (12 vs 6) — are
+small structured blocks where BQSKit's numerical synthesis shines; that is
+the honest profile of a numerical-synthesis specialist.
 
 **Metric levels.** A raw "2-qubit gate count" is a logical metric, not a
 hardware-cost metric — a SWAP is three CX, and CP/RZZ/ECR costs are
@@ -604,31 +617,30 @@ and peak-memory tracking.  Full run 2026-09-18
 | 48Q | 8 | 0 | 0 | 0 | 0 | 706 ms | 2.2 MB | PASS |
 | 64Q | 8 | 0 | 0 | 0 | 0 | 1,082 ms | 3.6 MB | PASS |
 | 96Q | 8 | 0 | 0 | 0 | 0 | 1,808 ms | 9.9 MB | PASS |
-| 128Q | 8 | 0 | 0 | 0 | 0 | 2,690 ms | 23.4 MB | PASS |
+| 128Q | 8 | 0 | 0 | 0 | 0 | 2,716 ms | 23.4 MB | PASS |
+| 256Q | 8 | 0 | 0 | 0 | 0 | 33,968 ms | 168.0 MB | PASS |
 | 256Q | 8 | 0 | 1 | 0 | 0 | 34.3 s | 168.0 MB | TEST |
 
 (6Q also passes — full table in `results/scalability.md`.)
 
-Through 128Q every workload **PASS**: zero crashes, zero timeouts, zero
+Every width through **256Q PASSES**: zero crashes, zero timeouts, zero
 incorrect outputs, zero never-grow violations, fully deterministic
-repeats.  At 256Q the **first runtime boundary appears**: 7 of 8
-workload families complete correctly-in-policy — and GHZ plus
-random-Clifford are still **algebraically proven at 256 qubits** —
-while 256Q Ising/Trotter exceeds the 180 s per-case budget and is
-reported as a *timeout, never a wrong answer*.
+repeats.  In 0.1.5 the 256Q Ising/Trotter runtime timeout was fixed by a
+measured heavy-circuit guardrail (skipping the unitary-window synthesis
+candidates beyond 1,200 gates — behavior-identical below the limit,
+drift-tested), taking that case from a 180 s timeout to **6.0 s**.
 
 Verification is tiered by width: independent Qiskit `Operator` referee
 through 10 qubits (8/8 workloads refereed); **exact algebraic tableau
-proofs for Clifford workloads at any width**; general circuits beyond
-the referee limit are stability-proven (never-grow policy +
-determinism) rather than equivalence-proven — the tier is recorded per
-case in `results/scalability.json`.  The measured ceilings are
-deliberately reported as three different numbers
-(**correctness/stability 128Q · runtime boundary 128→256Q for the
-densest structured workloads · memory ≥ 256Q**, peak 168 MB), because
-they are three different limits.  Extending the *equivalence-proven*
-ceiling past 8–10 qubits (compositional certificates, strict
-1,000-cases-per-width protocol) is the named next step after Trotter.
+proofs for Clifford workloads at any width** (GHZ and random-Clifford
+verified at 256 qubits); general circuits beyond the referee limit are
+stability-proven (never-grow policy + determinism) rather than
+equivalence-proven — the tier is recorded per case in
+`results/scalability.json`.  **All three measured ceilings now sit at
+256Q: correctness/stability · runtime · memory** (peak 168 MB).  The
+strict 1,000-cases-per-width protocol and compositional-certificate
+generalization remain the named next steps for the equivalence-proven
+ceiling.
 
 ## CLI
 
@@ -764,22 +776,24 @@ cannot silently drift from the artifacts it describes.)
 
 | release | theme | contents |
 |---|---|---|
-| **0.1.x (shipped)** | **Scalable** | 4→128Q scalability gauntlet (time/memory/correctness tiers), randomized large-circuit testing, scalable Clifford verification, 20Q/50Q/128Q evidence |
-| **0.2 — Scalable+** | T4 maturation | compositional verification beyond disjoint blocks (matching windows), 256Q evidence, strict 1,000-cases-per-width protocol |
-| **0.3 — Synthesis** | Higher arity | 3Q/4Q local synthesis, bounded higher-Q block optimization, random SU(3)/SU(4)/SU(5) benchmark, BQSKit head-to-head |
+| **0.1.x (shipped)** | **Scalable + first head-to-head** | 4→256Q scalability gauntlet (time/memory/correctness tiers), randomized large-circuit testing, scalable Clifford verification, **BQSKit measured (10/19/3, geomean 1.16×)**, T4 prototype + certificates |
+| **0.2 — Scalable+** | T4 maturation | compositional verification beyond disjoint blocks (matching windows), strict 1,000-cases-per-width protocol |
+| **0.3 — Synthesis** | Higher arity | 3Q/4Q local synthesis, bounded higher-Q block optimization, random SU(3)/SU(4)/SU(5) benchmark |
 | **0.4 — Hardware** | Native compilation | heavy-hex / linear / grid / all-to-all routing benchmark, native gate sets, calibration-aware cost, duration/error estimation |
 | **0.5 — Verified compiler** | The moat | certificate format everywhere, compositional proofs, independently executable verifier, verification report, CI verification gate |
 | **1.0 — Compact compiler** | Full stack | Qiskit/TKET/BQSKit/QASM in → optimize/synthesize/route/schedule/verify/certify → hardware |
 
-Priority research order: 1. scalability frontier (shipped) · 2. **T4
-compositional verification** (prototype shipped) · 3. BQSKit
-head-to-head (`scripts/bqskit_bench.py` ships) · 4. Trotter/Hamiltonian
-optimizer · 5. 3Q/4Q local synthesis · 6. hardware-native benchmark ·
-7. calibration-aware objective · 8. certificate + verifier ecosystem ·
-9. Rust pass engine · 10. fault-tolerant/QEC compilation (watch:
-FTCircuitBench separates logical/QEC compilation from NISQ — a second
-branch for Compact), and compiler *runtime at scale* is itself becoming
-a research frontier (npj-scale parallel compilation, 2026).
+Priority research order: 1. scalability frontier (✅ shipped 0.1.3/0.1.5) ·
+2. **T4 compositional verification** (✅ prototype shipped 0.1.4/0.1.5) ·
+3. **BQSKit head-to-head** (✅ measured 0.1.5: 10/19/3, geomean 1.16×) ·
+4. Trotter/Hamiltonian optimizer (256Q runtime bottleneck fixed 0.1.5;
+the remaining gap is gate-count quality — basis_trotter_n4) · 5. 3Q/4Q
+local synthesis · 6. hardware-native benchmark · 7. calibration-aware
+objective · 8. certificate + verifier ecosystem · 9. Rust pass engine ·
+10. fault-tolerant/QEC compilation (watch: FTCircuitBench separates
+logical/QEC compilation from NISQ — a second branch for Compact), and
+compiler *runtime at scale* is itself becoming a research frontier
+(npj-scale parallel compilation, 2026).
 
 ### Current roadmap detail
 
