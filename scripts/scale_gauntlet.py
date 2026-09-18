@@ -364,7 +364,8 @@ def write_md(rows, ceilings, doc, path):
 
 def main() -> int:
     ap = argparse.ArgumentParser(description="Compact scalability gauntlet")
-    ap.add_argument("--widths", default="4,6,8,10,12,16,20,24,32,48,64,96,128")
+    ap.add_argument("--widths",
+                    default="4,6,8,10,12,16,20,24,32,48,64,96,128,256")
     ap.add_argument("--cases", type=int, default=1,
                     help="cases per (width, workload); scale to 1000 for the "
                          "strict-ceiling protocol")

@@ -2,6 +2,38 @@
 
 All notable changes to Q-PROOF Compact are documented here.
 
+## [0.1.4] — 2026-09-18
+
+### Added
+- **T4 compositional verification (prototype)**:
+  `compactq.compositional` proves equivalence for block-structured
+  circuits at ANY width — disjoint qubit components are dense-verified
+  per block at each block's own width (soundness: block-diagonal
+  unitaries factorize, so per-component proofs compose).  Integrated
+  into `compactq.verify()` as tier 4; a 100-qubit circuit of 4-qubit
+  blocks is now fully equivalence-proven without any 2^100 unitary.
+  Tampered blocks are detected and the failing block's qubits are named.
+- **Certificate format + `compactq verify` CLI**:
+  `compactq.build_certificate()` emits the trust artifact — sha256
+  hashes of both circuits' canonical QASM, before/after metrics
+  (gates/2q/CX-equivalents/depth) and the verification evidence; and
+  `compactq verify ORIGINAL.qasm OPTIMIZED.qasm -o certificate.json`
+  re-checks the claim on another machine (exit 0 = equivalent).
+- **Coupling-map presets** (`compactq.topology.coupling_preset`):
+  line / grid / heavy-hex (IBM-style) / all-to-all for
+  hardware-mapped routing benchmarks.
+- Scalability gauntlet extended to **256 qubits**: the measured frontier
+  is now reported as three different numbers — correctness/stability
+  128Q (all workloads PASS), runtime boundary 128→256Q (256Q
+  Ising/Trotter exceeds the 180 s per-case budget as a clean timeout,
+  never a wrong answer), memory ≥ 256Q (peak 168 MB).  GHZ and
+  random-Clifford remain **algebraically proven at 256 qubits**.
+- README: "trust layer" positioning with the artifact architecture,
+  verification tier table (T0-T5 with T4 shipped), certificate format
+  docs, release ladder (0.2 Scalable+ / 0.3 Synthesis / 0.4 Hardware /
+  0.5 Verified compiler / 1.0 Compact compiler), priority research
+  order, fault-tolerant-compiler watch item.
+
 ## [0.1.3] — 2026-09-18
 
 ### Added

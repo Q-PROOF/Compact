@@ -48,10 +48,13 @@ def verify(original: Circuit, optimized: Circuit) -> dict:
     """
     t0 = time.perf_counter()
 
-    def pack(equivalent, tier, method):
-        return {"equivalent": equivalent, "tier": tier, "method": method,
-                "global_phase_ignored": True,
-                "runtime_ms": round((time.perf_counter() - t0) * 1000)}
+    def pack(equivalent, tier, method, extra=None):
+        out = {"equivalent": equivalent, "tier": tier, "method": method,
+               "global_phase_ignored": True,
+               "runtime_ms": round((time.perf_counter() - t0) * 1000)}
+        if extra:
+            out.update(extra)
+        return out
 
     if original.num_qubits != optimized.num_qubits:
         return pack(False, 0, "shape_mismatch")
@@ -72,7 +75,18 @@ def verify(original: Circuit, optimized: Circuit) -> dict:
             return pack(bool(check_equivalent(original, optimized)),
                         2, "full_unitary")
         except Exception:
-            pass  # numerical doubt: fall through to sampling
+            pass  # numerical doubt: fall through
+
+    # tier 4: compositional proof for block-structured circuits at any
+    # width (per-block dense verification over disjoint components — no
+    # 2^total unitary is ever built)
+    from .compositional import verify_compositional
+    comp = verify_compositional(original, optimized)
+    if comp is not None:
+        extra = {"blocks": comp["blocks"]}
+        if not comp["equivalent"]:
+            extra["failing_block_qubits"] = comp["failing_block_qubits"]
+        return pack(comp["equivalent"], 4, comp["method"], extra)
 
     # tier 1: randomized K-state sampling (numpy optional)
     try:

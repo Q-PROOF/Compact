@@ -91,8 +91,14 @@ verdict **and** the evidence tier:
 | 1 | randomized state sampling | today (numpy) |
 | 2 | full-unitary numerical equivalence | today (≤ 8q) |
 | 3 | local algebraic certificate (tableau) | today (Clifford) |
-| 4 | compositional certificates | roadmap |
+| 4 | compositional certificates — **disjoint-block decomposition shipped**: wide block-structured circuits are proven block-by-block at each block's own width | **today (prototype)** |
 | 5 | formal proof | roadmap |
+
+Tier 4 soundness: if the active qubits partition into disjoint components,
+the unitary factorizes as a tensor product — so per-component dense proofs
+compose into a whole-circuit proof **without ever building the 2^total
+unitary**.  A 100-qubit circuit of 4-qubit blocks is fully
+equivalence-proven this way (`compactq.compositional`).
 
 ## What's inside
 
@@ -132,32 +138,42 @@ verdict **and** the evidence tier:
   `maturin` (see Development). compactq auto-detects the kernel and silently
   falls back to the pure-Python path — the zero-dependency contract never changes.
 
-## Positioning: verified quantum compilation
+## Positioning: the trust layer for quantum compilation
 
-Compact's thesis is not "another optimizer" — it is **verified quantum
-compilation**: don't just optimize the circuit, return evidence that the
-transformation preserved the computation.
+Compact's thesis is not "another optimizer" — it is **the trust layer for
+quantum compilation**: optimize → compile → verify → certify.  Qiskit,
+TKET and BQSKit are superb compilers; Compact is complementary — it
+optimizes, and it independently verifies anyone's output:
 
 ```
-              quantum program
-                    │
-                    ▼
-            ┌───────────────┐
-            │   Compact     │
-            │  optimization │
-            └───────┬───────┘
-                    │
-        ┌───────────┼───────────┐
-        ▼           ▼           ▼
-    synthesis    routing    suppression
-        │           │           │
-        └───────────┼───────────┘
-                    ▼
-        verification / certificate
-                    │
-                    ▼
-            optimized circuit
+                    Quantum Program
+                          │
+                ┌─────────▼─────────┐
+                │ Compact Frontend  │  QASM · Qiskit · Cirq bridges
+                └─────────┬─────────┘
+                          ▼
+                ┌───────────────────┐
+                │ Compact Compiler  │  Optimize · Synthesize · Route
+                └─────────┬─────────┘
+                          ▼
+                ┌───────────────────┐
+                │ Verification      │  Algebraic · Numerical · (Formal)
+                │ Engine            │
+                └─────────┬─────────┘
+                          ▼
+                   Trust Artifact
+        optimized.qasm + certificate.json + metrics
 ```
+
+What a user gets — the compiler output **plus** the evidence:
+
+```python
+qiskit_out = transpile(circ, optimization_level=3)
+compactq.verify(circ, compactq.from_qiskit(qiskit_out))
+# {'equivalent': True, 'tier': 2, 'method': 'full_unitary', ...}
+```
+
+Compile with anything; trust the circuit only when the evidence tier says so.
 
 **Fair claims.** Measured, independently refereed evidence supports
 competitive logical optimization — 2-qubit reduction, depth, structured
@@ -589,22 +605,30 @@ and peak-memory tracking.  Full run 2026-09-18
 | 64Q | 8 | 0 | 0 | 0 | 0 | 1,082 ms | 3.6 MB | PASS |
 | 96Q | 8 | 0 | 0 | 0 | 0 | 1,808 ms | 9.9 MB | PASS |
 | 128Q | 8 | 0 | 0 | 0 | 0 | 2,690 ms | 23.4 MB | PASS |
+| 256Q | 8 | 0 | 1 | 0 | 0 | 34.3 s | 168.0 MB | TEST |
 
 (6Q also passes — full table in `results/scalability.md`.)
 
-Every width **PASS**: zero crashes, zero timeouts, zero incorrect
-outputs, zero never-grow violations, fully deterministic repeats.
+Through 128Q every workload **PASS**: zero crashes, zero timeouts, zero
+incorrect outputs, zero never-grow violations, fully deterministic
+repeats.  At 256Q the **first runtime boundary appears**: 7 of 8
+workload families complete correctly-in-policy — and GHZ plus
+random-Clifford are still **algebraically proven at 256 qubits** —
+while 256Q Ising/Trotter exceeds the 180 s per-case budget and is
+reported as a *timeout, never a wrong answer*.
 
 Verification is tiered by width: independent Qiskit `Operator` referee
 through 10 qubits (8/8 workloads refereed); **exact algebraic tableau
 proofs for Clifford workloads at any width**; general circuits beyond
 the referee limit are stability-proven (never-grow policy +
 determinism) rather than equivalence-proven — the tier is recorded per
-case in `results/scalability.json`.  Measured ceilings:
-**correctness/stability 128Q · runtime 128Q · memory 128Q** (peak
-23.4 MB at 128Q).  Extending the *equivalence-proven* ceiling past
-8–10 qubits (strict 1,000-cases-per-width protocol, compositional
-certificates) is the named next step after Trotter.
+case in `results/scalability.json`.  The measured ceilings are
+deliberately reported as three different numbers
+(**correctness/stability 128Q · runtime boundary 128→256Q for the
+densest structured workloads · memory ≥ 256Q**, peak 168 MB), because
+they are three different limits.  Extending the *equivalence-proven*
+ceiling past 8–10 qubits (compositional certificates, strict
+1,000-cases-per-width protocol) is the named next step after Trotter.
 
 ## CLI
 
@@ -619,6 +643,8 @@ compactq in.qasm -o out.qasm        # optimize an OpenQASM 2.0 file
 compactq in.qasm --stats            # print gate-count/depth deltas
 compactq in.qasm --approx 0.99      # bounded-fidelity approximate mode
 compactq in.qasm --objective depth  # depth-first: depth may never grow
+compactq verify orig.qasm opt.qasm -o certificate.json
+                                    # independent verification + trust artifact (exit 0 = equivalent)
 python -m compactq.bench            # full benchmark vs Qiskit (if installed)
 python -m compactq.bench --quick    # 3-circuit CI guard
 compact-bench --out results.md     # installed console script
@@ -639,6 +665,8 @@ compactq.optimize(c, objective="latency")      #   depth alias
 compactq.optimize_search(c, objective="weighted")  # min 1.0*2q + 0.1*depth + 0.02*gates
 compactq.optimize_for(c, target)               # hardware-error weighting (compactq.target)
 compactq.verify(original, optimized)           # independent evidence: {'equivalent', 'tier', 'method', ...}
+compactq.build_certificate(original, optimized)  # trust artifact: hashes + metrics + verification
+compactq.coupling_preset("heavy_hex", 100)     # standard topologies: line/grid/heavy_hex/all_to_all
 compactq.approximate(circuit, min_fidelity=0.99)  # trade bounded fidelity for fewer 2q gates
 from compactq.target import Target, optimize_for
 t = Target(cx_fidelity={(0, 1): 0.999, (1, 0): 0.98})
@@ -699,7 +727,61 @@ via `from_qiskit` are boundary-decomposed automatically.
   produced the engine; those internal numbers are retired and the git
   history keeps the full trail.
 
-## Roadmap
+## The certificate — the trust artifact
+
+Every Compact compilation can ship with a machine-checkable certificate:
+
+```json
+{
+  "compiler": "compactq",
+  "version": "0.1.4",
+  "input_hash": "sha256:<canonical QASM>",
+  "output_hash": "sha256:<canonical QASM>",
+  "input_qubits": 4,
+  "optimization": {
+    "gates_before": 34, "gates_after": 20,
+    "two_qubit_before": 12, "two_qubit_after": 6,
+    "cx_equivalent_before": 12, "cx_equivalent_after": 6,
+    "depth_before": 22, "depth_after": 10
+  },
+  "verification": {
+    "equivalent": true, "tier": 2,
+    "method": "full_unitary", "global_phase_ignored": true
+  }
+}
+```
+
+Another machine re-checks the claim in one command:
+
+```bash
+compactq verify original.qasm optimized.qasm -o certificate.json
+```
+
+(exit 0 = equivalent; hashes pin the exact circuits, so the certificate
+cannot silently drift from the artifacts it describes.)
+
+## Roadmap — release ladder
+
+| release | theme | contents |
+|---|---|---|
+| **0.1.x (shipped)** | **Scalable** | 4→128Q scalability gauntlet (time/memory/correctness tiers), randomized large-circuit testing, scalable Clifford verification, 20Q/50Q/128Q evidence |
+| **0.2 — Scalable+** | T4 maturation | compositional verification beyond disjoint blocks (matching windows), 256Q evidence, strict 1,000-cases-per-width protocol |
+| **0.3 — Synthesis** | Higher arity | 3Q/4Q local synthesis, bounded higher-Q block optimization, random SU(3)/SU(4)/SU(5) benchmark, BQSKit head-to-head |
+| **0.4 — Hardware** | Native compilation | heavy-hex / linear / grid / all-to-all routing benchmark, native gate sets, calibration-aware cost, duration/error estimation |
+| **0.5 — Verified compiler** | The moat | certificate format everywhere, compositional proofs, independently executable verifier, verification report, CI verification gate |
+| **1.0 — Compact compiler** | Full stack | Qiskit/TKET/BQSKit/QASM in → optimize/synthesize/route/schedule/verify/certify → hardware |
+
+Priority research order: 1. scalability frontier (shipped) · 2. **T4
+compositional verification** (prototype shipped) · 3. BQSKit
+head-to-head (`scripts/bqskit_bench.py` ships) · 4. Trotter/Hamiltonian
+optimizer · 5. 3Q/4Q local synthesis · 6. hardware-native benchmark ·
+7. calibration-aware objective · 8. certificate + verifier ecosystem ·
+9. Rust pass engine · 10. fault-tolerant/QEC compilation (watch:
+FTCircuitBench separates logical/QEC compilation from NISQ — a second
+branch for Compact), and compiler *runtime at scale* is itself becoming
+a research frontier (npj-scale parallel compilation, 2026).
+
+### Current roadmap detail
 
 **Research order** (post-release review, 2026-09-17): 1. Trotter/Hamiltonian
 optimization → 2. scalable verification → 3. BQSKit benchmark

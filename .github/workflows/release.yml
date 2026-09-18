@@ -35,6 +35,8 @@ jobs:
         run: python tests/test_objectives.py
       - name: Verification-API tests
         run: python tests/test_verify_api.py
+      - name: Trust-layer tests
+        run: python tests/test_trust_layer.py
       - name: Build sdist and wheel
         run: |
           pip install build twine
