@@ -13,6 +13,7 @@ No claim without a producer script; no number without a raw artifact.
 | `../suppress_results.json` | `python scripts/suppress_bench.py` | suppression pipeline vs raw execution, per scenario |
 | `../dd_sequence_results.json` | `python scripts/suppress_bench.py` | DD sequence family comparison (xy4/xy8/xzx/pdd4/auto) |
 | `../scale_results.json` | `python scripts/scale_bench.py` | CHP stabilizer simulator scaling (n=16..24) |
+| `scalability.json` + `scalability.md` | `python scripts/scale_gauntlet.py` | per-width correctness/stability/runtime/memory ceilings, 4 → 128 qubits × 8 workload families, tiered verification (independent Qiskit referee / algebraic tableau at any width / never-grow policy + determinism) |
 | `pytket_referee.json` | `python scripts/referee_pytket.py` | per-circuit referee records for pytket default + safe modes: version, mode, output fidelity, status, metrics — the raw evidence behind the inequivalence claims |
 | `bqskit.json` | `python scripts/bqskit_bench.py` (scaffold; runs when BQSKit is installed) | BQSKit column for benchmark suite v1 — **not yet measured** |
 | `../volumetric_report.md` | `python scripts/volumetric_report.py` | QED-C-style width/depth tables |

@@ -2,6 +2,25 @@
 
 All notable changes to Q-PROOF Compact are documented here.
 
+## [0.1.3] — 2026-09-18
+
+### Added
+- **Scalability gauntlet** (`scripts/scale_gauntlet.py`): battle-tests
+  widths 4 → 128 qubits × 8 workload families (GHZ, QFT, random
+  Clifford, random general, Ising/Trotter, QPE-like,
+  hardware-efficient ansatz, library random).  Every case runs in an
+  isolated subprocess with a wall-clock timeout and tracemalloc peak
+  memory; every output is verified at the strongest available tier —
+  independent Qiskit Operator referee at small widths, exact algebraic
+  tableau proof for Clifford workloads at ANY width, and the never-grow
+  policy check (gates / 2q / depth / CX-equivalents) plus a
+  determinism double-run everywhere.  Emits
+  `results/scalability.json` + `results/scalability.md` with per-width
+  PASS/TEST/FAIL and the three measured ceilings (correctness/stability,
+  runtime, memory).
+- README scalability section: the honest statement of measured ceilings
+  (replacing guesses about "maximum supported width").
+
 ## [0.1.2] — 2026-09-17
 
 ### Added

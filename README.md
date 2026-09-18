@@ -564,6 +564,48 @@ compactq's proof-included time wins the majority of head-to-head circuits, and
 pytket needs external verification on every output (its default mode is
 inequivalent on 10 of 44 MQT and 6 of 30 refereed QASMBench circuits this run).
 
+## Scalability — measured ceilings to 128 qubits
+
+The honest statement is not "Compact supports N qubits" but *at which
+widths it stays stable, correct, and useful under realistic workloads*.
+The scalability gauntlet (`scripts/scale_gauntlet.py`) battle-tests 13
+widths (4 → 128 qubits) × 8 workload families (GHZ, QFT, random
+Clifford, random general, Ising/Trotter, QPE-like, hardware-efficient
+ansatz, library random) in isolated subprocesses with per-case timeouts
+and peak-memory tracking.  Full run 2026-09-18
+(`results/scalability.md`, 104 records, compactq 0.1.3):
+
+| width | tests | incorrect | crashes | timeouts | policy viol | median opt | peak mem | status |
+|---:|---:|---:|---:|---:|---:|---:|---:|---|
+| 4Q | 8 | 0 | 0 | 0 | 0 | 78 ms | 0.9 MB | PASS |
+| 8Q | 8 | 0 | 0 | 0 | 0 | 94 ms | 0.3 MB | PASS |
+| 10Q | 8 | 0 | 0 | 0 | 0 | 143 ms | 0.4 MB | PASS |
+| 12Q | 8 | 0 | 0 | 0 | 0 | 143 ms | 0.5 MB | PASS |
+| 16Q | 8 | 0 | 0 | 0 | 0 | 205 ms | 0.7 MB | PASS |
+| 20Q | 8 | 0 | 0 | 0 | 0 | 220 ms | 1.5 MB | PASS |
+| 24Q | 8 | 0 | 0 | 0 | 0 | 277 ms | 0.6 MB | PASS |
+| 32Q | 8 | 0 | 0 | 0 | 0 | 409 ms | 0.8 MB | PASS |
+| 48Q | 8 | 0 | 0 | 0 | 0 | 706 ms | 2.2 MB | PASS |
+| 64Q | 8 | 0 | 0 | 0 | 0 | 1,082 ms | 3.6 MB | PASS |
+| 96Q | 8 | 0 | 0 | 0 | 0 | 1,808 ms | 9.9 MB | PASS |
+| 128Q | 8 | 0 | 0 | 0 | 0 | 2,690 ms | 23.4 MB | PASS |
+
+(6Q also passes — full table in `results/scalability.md`.)
+
+Every width **PASS**: zero crashes, zero timeouts, zero incorrect
+outputs, zero never-grow violations, fully deterministic repeats.
+
+Verification is tiered by width: independent Qiskit `Operator` referee
+through 10 qubits (8/8 workloads refereed); **exact algebraic tableau
+proofs for Clifford workloads at any width**; general circuits beyond
+the referee limit are stability-proven (never-grow policy +
+determinism) rather than equivalence-proven — the tier is recorded per
+case in `results/scalability.json`.  Measured ceilings:
+**correctness/stability 128Q · runtime 128Q · memory 128Q** (peak
+23.4 MB at 128Q).  Extending the *equivalence-proven* ceiling past
+8–10 qubits (strict 1,000-cases-per-width protocol, compositional
+certificates) is the named next step after Trotter.
+
 ## CLI
 
 Input policy: trailing measurements are dropped (the unitary core is optimized); mid-circuit measurement and reset are rejected with `UnsupportedCircuitError`; the Qiskit bridge rejects them outright (strip them first).  The CLI never crashes on width: circuits above the dense proof limit are routed to randomized verification, and every run reports its proof status
