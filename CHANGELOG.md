@@ -2,6 +2,28 @@
 
 All notable changes to Q-PROOF Compact are documented here.
 
+## [0.1.7] — 2026-09-19
+
+### Added
+- **Provenance gate is now blocking in CI** (was advisory): a missing or
+  malformed artifact provenance block fails the build.
+- `check_provenance.py --strict-current-sha`: opt-in strict mode that
+  additionally requires every present artifact's recorded commit to
+  equal the current HEAD — intended immediately after a regeneration
+  pass; artifacts legitimately lag HEAD between releases, so CI runs
+  the schema-validity mode as the blocking gate.
+- README: scalability claim stated precisely — stability
+  *demonstrated across the tested workload suite through 256Q*, with
+  formal equivalence at large widths documented as workload- and
+  structure-dependent; roadmap sharpened (T4.2 interaction-window
+  verification for connected circuits as the next technical leap,
+  3Q/4Q synthesis targeting the measured BQSKit gap).
+
+### Fixed
+- `scale_results.json` regenerated on the current code: the
+  prototype-era artifact predated the provenance system and failed the
+  (now blocking) provenance gate.
+
 ## [0.1.6] — 2026-09-18
 
 ### Fixed

@@ -3,7 +3,20 @@
   "shots": 2000,
   "p_cx": 0.01,
   "readout": 0.03,
-  "wall_time_s": 350.1,
+  "generated": "2026-09-18T20:17:55.172909+00:00",
+  "commit": "8934bfe7616f",
+  "environment": {
+    "generated": "2026-09-18T20:17:57.460615+00:00",
+    "git_sha": "8934bfe7616f",
+    "python": "3.11.9",
+    "os": "Windows 10 AMD64",
+    "cpu": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+    "dependencies": {
+      "qiskit": "2.5.2",
+      "numpy": "2.4.6"
+    }
+  },
+  "wall_time_s": 346.1,
   "results": [
     {
       "family": "ghz",

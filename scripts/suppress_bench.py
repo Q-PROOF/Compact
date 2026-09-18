@@ -30,12 +30,23 @@ from __future__ import annotations
 import json
 import sys
 import time
+from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
 
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO))
+
+
+def git_sha():
+    import subprocess
+    try:
+        return subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True,
+                              text=True, cwd=str(REPO)).stdout.strip()[:12]
+    except Exception:
+        return "unknown"
+
 
 from compactq import Circuit, Gate, optimize_search, benchmarks  # noqa: E402
 from compactq.noise import NoiseModel  # noqa: E402
@@ -379,6 +390,8 @@ def main() -> int:
     dt = time.perf_counter() - t0
     doc = {"schema": "qproof-suppress/3", "twirl_variants": K_twirl,
            "gate": "full pipeline factor > 1.0 in every scenario",
+           "generated": datetime.now(timezone.utc).isoformat(),
+           "commit": git_sha(),
            "wall_time_s": round(dt, 1), "results": all_rows}
     (REPO / "suppress_results.json").write_text(json.dumps(doc, indent=2) + chr(10),
                                                 encoding="utf-8")
@@ -452,7 +465,9 @@ def dd_sequence_comparison() -> int:
                 print(f"  {family:4s} n={n}: raw={raw_p:.4f} {cells} {verdict}",
                       flush=True)
     (Path(__file__).resolve().parents[1] / "dd_sequence_results.json").write_text(
-        json.dumps({"schema": "qproof-ddseq/1", "results": all_rows},
+        json.dumps({"schema": "qproof-ddseq/1",
+                    "generated": datetime.now(timezone.utc).isoformat(),
+                    "commit": git_sha(), "results": all_rows},
                    indent=2) + "\n", encoding="utf-8")
     if failures:
         print(f"SEQUENCE GATE FAILED: {failures}")

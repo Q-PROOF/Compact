@@ -27,6 +27,18 @@ from pathlib import Path
 import numpy as np
 
 REPO = Path(__file__).resolve().parents[1]
+
+
+def git_sha():
+    import subprocess
+    try:
+        return subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True,
+                              text=True, cwd=str(REPO)).stdout.strip()[:12]
+    except Exception:
+        return "unknown"
+
+
+from datetime import datetime, timezone  # noqa: E402
 sys.path.insert(0, str(REPO))
 sys.path.insert(0, str(REPO / "scripts"))
 
@@ -173,6 +185,8 @@ def main() -> int:
         print(f"  {s:12s} raw={r/cnt:.4f} qiskit-O3={q/cnt:.4f} "
               f"compact-full={c/cnt:.4f}")
     doc = {"schema": "qproof-headtohead/1", "twirl_variants": K,
+           "generated": datetime.now(timezone.utc).isoformat(),
+           "commit": git_sha(),
            "wall_time_s": round(dt, 1), "results": rows,
            "aggregates": {s: {"raw": r / sum(1 for row in rows if row["scenario"] == s),
                               "qiskit-o3": q / sum(1 for row in rows if row["scenario"] == s),

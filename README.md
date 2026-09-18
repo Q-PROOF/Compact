@@ -16,9 +16,12 @@
 **Current evidence** — 43 QASMBench circuits + 44 MQT Bench circuits refereed
 by Qiskit's `Operator`; a 1,018-check end-to-end gauntlet; 93 test functions;
 **0 incorrect Compact outputs** in any refereed set; measured Qiskit L3 /
-pytket / Cirq / **BQSKit** comparisons; scalability proven 4→256Q;
-hardware-error objectives, SABRE-lite routing, and an open error-suppression
-stack.
+pytket / Cirq / **BQSKit** comparisons; stability **demonstrated across the
+tested scalability workload suite through 256Q** (tiered verification:
+algebraic at any width for Clifford, dense ≤ 8q, compositional where
+applicable — formal equivalence at large widths remains
+workload- and structure-dependent); hardware-error objectives, SABRE-lite
+routing, and an open error-suppression stack.
 **Current limitation:** hardware-mapped benchmarking is still being expanded
 (`results/`, roadmap).
 
@@ -785,19 +788,24 @@ cannot silently drift from the artifacts it describes.)
 
 | release | theme | contents |
 |---|---|---|
-| **0.1.x (shipped)** | **Scalable + first head-to-head** | 4→256Q scalability gauntlet (time/memory/correctness tiers), randomized large-circuit testing, scalable Clifford verification, **BQSKit measured (10/19/3, geomean 1.16×)**, T4 prototype + certificates |
-| **0.2 — Scalable+** | T4 maturation | compositional verification beyond disjoint blocks (matching windows), strict 1,000-cases-per-width protocol |
-| **0.3 — Synthesis** | Higher arity | 3Q/4Q local synthesis, bounded higher-Q block optimization, random SU(3)/SU(4)/SU(5) benchmark |
+| **0.1.x (shipped)** | **Scalable + first head-to-head** | 4→256Q scalability gauntlet (time/memory/correctness tiers), randomized large-circuit testing, scalable Clifford verification, **BQSKit measured (10/19/3, geomean 1.16×)**, T4 + T4.1 prototype + certificates, blocking provenance gate |
+| **0.2 — Trust productionization** | T4 maturation | certificate segments + composition + tamper detection + independently executable verifier; **T4.2 interaction-window verification for connected/entangled circuits** (interaction graph → small-width windows → local proofs → composition); strict 1,000-cases-per-width protocol |
+| **0.3 — Synthesis** | Higher arity | 3Q/4Q local synthesis, bounded higher-Q block optimization, random SU(3)/SU(4)/SU(5) benchmark, Hamiltonian/Trotter engine (Pauli grouping, basis-change cancellation, evolution fusion) |
 | **0.4 — Hardware** | Native compilation | heavy-hex / linear / grid / all-to-all routing benchmark, native gate sets, calibration-aware cost, duration/error estimation |
 | **0.5 — Verified compiler** | The moat | certificate format everywhere, compositional proofs, independently executable verifier, verification report, CI verification gate |
 | **1.0 — Compact compiler** | Full stack | Qiskit/TKET/BQSKit/QASM in → optimize/synthesize/route/schedule/verify/certify → hardware |
 
 Priority research order: 1. scalability frontier (✅ shipped 0.1.3/0.1.5) ·
-2. **T4 compositional verification** (✅ prototype shipped 0.1.4/0.1.5) ·
+2. **T4 compositional verification** (✅ prototype shipped 0.1.4/0.1.5;
+next leap: **T4.2 interaction-window verification for connected circuits**
+— the strongest long-term target is optimizing substantial connected
+circuits at 100–1000Q and independently verifying the transformations
+without constructing any 2ⁿ unitary) ·
 3. **BQSKit head-to-head** (✅ measured 0.1.5: 10/19/3, geomean 1.16×) ·
 4. Trotter/Hamiltonian optimizer (256Q runtime bottleneck fixed 0.1.5;
 the remaining gap is gate-count quality — basis_trotter_n4) · 5. 3Q/4Q
-local synthesis · 6. hardware-native benchmark · 7. calibration-aware
+local synthesis (the identified BQSKit gap: small dense unitary blocks) ·
+6. hardware-native benchmark · 7. calibration-aware
 objective · 8. certificate + verifier ecosystem · 9. Rust pass engine ·
 10. fault-tolerant/QEC compilation (watch: FTCircuitBench separates
 logical/QEC compilation from NISQ — a second branch for Compact), and

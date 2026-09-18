@@ -22,6 +22,7 @@ import json
 import random
 import sys
 import time
+from datetime import datetime, timezone
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
@@ -130,8 +131,12 @@ def main() -> int:
                   f"aware={aware_p:.4f} aware+mem={mem_p:.4f} {verdict}",
                   flush=True)
 
+    from provenance import environment
     doc = {"schema": "qproof-scale/1", "shots": SHOTS,
            "p_cx": P_CX, "readout": RO,
+           "generated": datetime.now(timezone.utc).isoformat(),
+           "commit": __import__("provenance").git_sha(),
+           "environment": environment(),
            "wall_time_s": round(time.perf_counter() - t0, 1),
            "results": rows}
     (REPO / "scale_results.json").write_text(

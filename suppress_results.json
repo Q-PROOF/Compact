@@ -2,6 +2,8 @@
   "schema": "qproof-suppress/3",
   "twirl_variants": 8,
   "gate": "full pipeline factor > 1.0 in every scenario",
+  "generated": "2026-09-18T20:22:16.324837+00:00",
+  "commit": "8934bfe7616f",
   "wall_time_s": 3.0,
   "results": [
     {
