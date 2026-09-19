@@ -58,9 +58,25 @@ def test_verify_tier_coverage_documented():
     import compactq
     tiers = compactq.VERIFICATION_TIERS
     assert set(tiers) == {0, 1, 2, 3, 4, 5}
+    # guarantee vocabulary: exact-proven / verified-randomized / unverified
+    assert tiers[0] == "unverified"
+    assert tiers[1] == "verified-randomized"
+    assert tiers[2].startswith("exact-proven")
+    assert tiers[3].startswith("exact-proven")
     # T4 is SHIPPED (compositional) — it must not be marked roadmap
-    assert tiers[4] == "compositional_certificates"
+    assert tiers[4] == "exact-proven (compositional certificates)"
     assert "roadmap" in tiers[5]
+
+
+def test_proof_status_tier_mapping():
+    import compactq
+    from compactq.verify import proof_status_tier
+    assert proof_status_tier("exact-unitary") == 2
+    assert proof_status_tier("compositional") == 4
+    assert proof_status_tier("randomized-exact") == 1
+    assert proof_status_tier("unverified") == 0
+    assert proof_status_tier("approximate") == 0
+    assert proof_status_tier("unknown-status") == 0
 
 
 ALL = [

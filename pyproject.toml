@@ -1,6 +1,6 @@
 [project]
 name = "compactq"
-version = "0.1.8"
+version = "0.2.0"
 description = "Q-PROOF Compact: the verified quantum circuit optimizer. Smaller circuits, proven. Error suppression included."
 readme = "README.md"
 requires-python = ">=3.9"

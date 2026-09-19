@@ -89,14 +89,21 @@ verdict **and** the evidence tier:
  'global_phase_ignored': True, 'runtime_ms': 1}
 ```
 
-| tier | evidence grade | status |
-|---|---|---|
-| 0 | none / prover unavailable | today |
-| 1 | randomized state sampling | today (numpy) |
-| 2 | full-unitary numerical equivalence | today (≤ 8q) |
-| 3 | local algebraic certificate (tableau) | today (Clifford) |
-| 4 | compositional certificates — **disjoint-block decomposition shipped**: wide block-structured circuits are proven block-by-block at each block's own width | **today (prototype)** |
-| 5 | formal proof | roadmap |
+| tier | guarantee | evidence | status |
+|---|---|---|---|
+| 0 | unverified | — | today |
+| 1 | verified-randomized | K random-state sampling (numpy) | today |
+| 2 | exact-proven | full-unitary numerical certificate | today (≤ 8q) |
+| 3 | exact-proven | algebraic tableau certificate (Clifford, any width) | today |
+| 4 | exact-proven (compositional) | per-block certificates composed (disjoint blocks; sequential segments) | **today (prototype)** |
+| 5 | formal-proof | proof-assistant / decision-diagram grade | roadmap |
+
+"Exact-proven" means a machine-checked certificate of unitary
+equivalence up to global phase — it is **not** a formal
+proof-assistant certificate (that is tier 5).  The evidence is
+cross-checked by three independent referees: Qiskit's `Operator`,
+PyZX ZX-tensor reduction (`results/pyzx_referee.json`) and MQT QCEC
+decision diagrams (`results/qcec_referee.json`).
 
 Tier 4 soundness: if the active qubits partition into disjoint components,
 the unitary factorizes as a tensor product — so per-component dense proofs

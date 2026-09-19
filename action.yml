@@ -1,0 +1,45 @@
+name: "Q-PROOF Compact — verified circuit check"
+description: >
+  Independently verify that an optimized quantum circuit is equivalent to
+  its original, and emit a machine-checkable compilation certificate.
+  Fails the calling workflow when the circuits are inequivalent.
+branding:
+  icon: "check-circle"
+  color: "purple"
+
+inputs:
+  original:
+    description: "Path to the original OpenQASM 2.0 file"
+    required: true
+  optimized:
+    description: "Path to the optimized OpenQASM 2.0 file"
+    required: true
+  output:
+    description: "Where to write the certificate JSON (default: certificate.json)"
+    required: false
+    default: "certificate.json"
+  version:
+    description: "compactq version to install from PyPI"
+    required: false
+    default: ">=0.2.0"
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+    - name: Install compactq
+      shell: bash
+      run: pip install --no-cache-dir "compactq${{ inputs.version }}"
+    - name: Independent verification
+      shell: bash
+      run: |
+        compactq verify "${{ inputs.original }}" "${{ inputs.optimized }}" \
+          -o "${{ inputs.output }}"
+        cat "${{ inputs.output }}"
+    - name: Upload certificate
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.output }}
+        path: ${{ inputs.output }}

@@ -237,6 +237,32 @@ TOOL_RUNNERS = {"compact": compact_run, "qiskit": qiskit_run,
                 "pytket": pytket_run, "cirq": cirq_run}
 
 
+def pyzx_run(inp: QuantumCircuit):
+    import pyzx
+    t0 = time.perf_counter()
+    circ = pyzx.Circuit.from_qasm(qasm2.dumps(inp))
+    graph = circ.to_graph()
+    pyzx.full_reduce(graph, quiet=True)
+    out_qasm = pyzx.extract_circuit(graph.copy()).to_qasm()
+    dt = time.perf_counter() - t0
+    return QuantumCircuit.from_qasm_str(out_qasm), dt
+
+
+def bqskit_run(inp: QuantumCircuit):
+    import bqskit
+    from bqskit import compile as bqskit_compile
+    t0 = time.perf_counter()
+    bqs = bqskit.Circuit.from_qasm(qasm2.dumps(inp))
+    compiled = bqskit_compile(bqs)
+    out = compiled.to_qiskit()
+    dt = time.perf_counter() - t0
+    return out, dt
+
+
+TOOL_RUNNERS["pyzx"] = pyzx_run
+TOOL_RUNNERS["bqskit"] = bqskit_run
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="same-input reproduction harness")
     ap.add_argument("--tools", default="compact,qiskit,pytket,cirq")

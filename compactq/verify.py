@@ -18,6 +18,13 @@ Tier 4 (compositional certificates — disjoint-block decomposition, and
 sequential segments via `verify_segmented`) ships today; tier 5 (formal
 proof) is roadmap.  The tier field is part of the stable API so callers
 can require a minimum grade.
+
+Guarantee vocabulary (used by VERIFICATION_TIERS and the CLI): tier 2/3
+are **exact-proven** (numerical full-unitary / algebraic tableau
+certificates); tier 1 is **verified-randomized** (probabilistically
+exact K-state sampling); tier 0 is **unverified**.  "Exact-proven" here
+means a machine-checked certificate of unitary equivalence up to global
+phase — it is NOT a formal proof-assistant certificate (that is tier 5).
 """
 from __future__ import annotations
 
@@ -25,16 +32,31 @@ import time
 
 from .circuit import Circuit
 
-__all__ = ["verify", "VERIFICATION_TIERS"]
+__all__ = ["verify", "VERIFICATION_TIERS", "proof_status_tier"]
 
 VERIFICATION_TIERS = {
-    0: "none",
-    1: "randomized_sampling",
-    2: "full_unitary",
-    3: "clifford_tableau",
-    4: "compositional_certificates",
-    5: "formal_proof (roadmap)",
+    0: "unverified",
+    1: "verified-randomized",
+    2: "exact-proven (numerical full-unitary)",
+    3: "exact-proven (algebraic tableau)",
+    4: "exact-proven (compositional certificates)",
+    5: "formal-proof (roadmap)",
 }
+
+# CLI proof-status strings -> verification tier (see compactq.cli)
+_STATUS_TIER = {
+    "exact-unitary": 2,
+    "compositional": 4,
+    "randomized-exact": 1,
+    "approximate": 0,
+    "unverified": 0,
+    "verification-rejected (original returned)": 0,
+}
+
+
+def proof_status_tier(status: str) -> int:
+    """Map a CLI proof-status string to its verification tier (0-4)."""
+    return _STATUS_TIER.get(status, 0)
 
 
 def verify(original: Circuit, optimized: Circuit) -> dict:

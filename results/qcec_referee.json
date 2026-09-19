@@ -1,0 +1,338 @@
+{
+  "generated": "2026-09-19T06:06:44.355344+00:00",
+  "commit": "b4f56296bad5",
+  "referee": "MQT QCEC: DD-based equivalence checking with simulation and ZX-calculus strategies",
+  "environment": {
+    "generated": "2026-09-19T06:06:44.380353+00:00",
+    "git_sha": "b4f56296bad5",
+    "python": "3.11.9",
+    "os": "Windows 10 AMD64",
+    "cpu": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+    "dependencies": {
+      "qiskit": "2.5.2",
+      "numpy": "2.4.6",
+      "mqt.qcec": "unknown"
+    }
+  },
+  "count": 42,
+  "ok": 11,
+  "inequivalent": 0,
+  "records": [
+    {
+      "circuit": "adder_n10",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.equivalent",
+      "equivalent": true,
+      "status": "OK"
+    },
+    {
+      "circuit": "adder_n4",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.equivalent_up_to_global_phase",
+      "equivalent": null,
+      "status": "inconclusive"
+    },
+    {
+      "circuit": "basis_change_n3",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.equivalent_up_to_global_phase",
+      "equivalent": null,
+      "status": "inconclusive"
+    },
+    {
+      "circuit": "basis_trotter_n4",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.no_information",
+      "equivalent": null,
+      "status": "inconclusive"
+    },
+    {
+      "circuit": "bb84_n8",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "status": "skipped"
+    },
+    {
+      "circuit": "bell_n4",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.equivalent_up_to_global_phase",
+      "equivalent": null,
+      "status": "inconclusive"
+    },
+    {
+      "circuit": "cat_state_n4",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.equivalent",
+      "equivalent": true,
+      "status": "OK"
+    },
+    {
+      "circuit": "deutsch_n2",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.equivalent",
+      "equivalent": true,
+      "status": "OK"
+    },
+    {
+      "circuit": "dnn_n2",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.no_information",
+      "equivalent": null,
+      "status": "inconclusive"
+    },
+    {
+      "circuit": "dnn_n8",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.no_information",
+      "equivalent": null,
+      "status": "inconclusive"
+    },
+    {
+      "circuit": "error_correctiond3_n5",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.equivalent_up_to_global_phase",
+      "equivalent": null,
+      "status": "inconclusive"
+    },
+    {
+      "circuit": "fredkin_n3",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.equivalent",
+      "equivalent": true,
+      "status": "OK"
+    },
+    {
+      "circuit": "grover_n2",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.equivalent_up_to_global_phase",
+      "equivalent": null,
+      "status": "inconclusive"
+    },
+    {
+      "circuit": "hhl_n10",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "status": "skipped"
+    },
+    {
+      "circuit": "hhl_n7",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.not_equivalent",
+      "operator_fidelity": 1.0,
+      "equivalent": true,
+      "status": "referee-disagreement (Operator equivalent within 1e-6; QCEC tolerance stricter)"
+    },
+    {
+      "circuit": "hs4_n4",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.equivalent",
+      "equivalent": true,
+      "status": "OK"
+    },
+    {
+      "circuit": "inverseqft_n4",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "status": "skipped"
+    },
+    {
+      "circuit": "ipea_n2",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "status": "skipped"
+    },
+    {
+      "circuit": "ising_n10",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.equivalent_up_to_global_phase",
+      "equivalent": null,
+      "status": "inconclusive"
+    },
+    {
+      "circuit": "iswap_n2",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.equivalent_up_to_global_phase",
+      "equivalent": null,
+      "status": "inconclusive"
+    },
+    {
+      "circuit": "linearsolver_n3",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.equivalent_up_to_global_phase",
+      "equivalent": null,
+      "status": "inconclusive"
+    },
+    {
+      "circuit": "lpn_n5",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.equivalent",
+      "equivalent": true,
+      "status": "OK"
+    },
+    {
+      "circuit": "pea_n5",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.equivalent_up_to_global_phase",
+      "equivalent": null,
+      "status": "inconclusive"
+    },
+    {
+      "circuit": "qaoa_n3",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "status": "skipped"
+    },
+    {
+      "circuit": "qaoa_n6",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.equivalent_up_to_global_phase",
+      "equivalent": null,
+      "status": "inconclusive"
+    },
+    {
+      "circuit": "qec_en_n5",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.equivalent",
+      "equivalent": true,
+      "status": "OK"
+    },
+    {
+      "circuit": "qec_sm_n5",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "status": "skipped"
+    },
+    {
+      "circuit": "qft_n4",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.equivalent_up_to_global_phase",
+      "equivalent": null,
+      "status": "inconclusive"
+    },
+    {
+      "circuit": "qpe_n9",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "status": "skipped"
+    },
+    {
+      "circuit": "qrng_n4",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.equivalent",
+      "equivalent": true,
+      "status": "OK"
+    },
+    {
+      "circuit": "quantumwalks_n2",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.not_equivalent",
+      "operator_fidelity": 0.999999999972,
+      "equivalent": true,
+      "status": "referee-disagreement (Operator equivalent within 1e-6; QCEC tolerance stricter)"
+    },
+    {
+      "circuit": "sat_n7",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.equivalent_up_to_global_phase",
+      "equivalent": null,
+      "status": "inconclusive"
+    },
+    {
+      "circuit": "shor_n5",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "status": "skipped"
+    },
+    {
+      "circuit": "simon_n6",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.equivalent",
+      "equivalent": true,
+      "status": "OK"
+    },
+    {
+      "circuit": "teleportation_n3",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.equivalent_up_to_global_phase",
+      "equivalent": null,
+      "status": "inconclusive"
+    },
+    {
+      "circuit": "toffoli_n3",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.equivalent",
+      "equivalent": true,
+      "status": "OK"
+    },
+    {
+      "circuit": "variational_n4",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.no_information",
+      "equivalent": null,
+      "status": "inconclusive"
+    },
+    {
+      "circuit": "vqe_n4",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.equivalent_up_to_global_phase",
+      "equivalent": null,
+      "status": "inconclusive"
+    },
+    {
+      "circuit": "vqe_uccsd_n4",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "status": "skipped"
+    },
+    {
+      "circuit": "vqe_uccsd_n6",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "status": "skipped"
+    },
+    {
+      "circuit": "vqe_uccsd_n8",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "status": "skipped"
+    },
+    {
+      "circuit": "wstate_n3",
+      "tool": "compactq",
+      "referee": "mqt-qcec",
+      "qcec_criterion": "EquivalenceCriterion.equivalent",
+      "equivalent": true,
+      "status": "OK"
+    }
+  ]
+}

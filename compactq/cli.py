@@ -252,9 +252,15 @@ def main(argv=None) -> int:
         from compactq.native import rebase
         out = rebase(out, args.native)
 
+    from compactq.verify import proof_status_tier, VERIFICATION_TIERS
+    tier = proof_status_tier(status)
+    guarantee = VERIFICATION_TIERS[tier]
+
     result = {
         "version": compactq.__version__,
         "status": status,
+        "verification_tier": tier,
+        "verification_guarantee": guarantee,
         "num_qubits": circ.num_qubits,
         "dense_proof_limit": dense_limit,
         "native": args.native,
@@ -275,7 +281,8 @@ def main(argv=None) -> int:
         else:
             sys.stdout.write(qasm)
 
-    print(f"compactq: proof status: {status}", file=sys.stderr)
+    print(f"compactq: proof status: {status} "
+          f"(tier {tier}: {guarantee})", file=sys.stderr)
     if args.stats:
         print(f"before: {circ.stats()}", file=sys.stderr)
         print(f"after : {out.stats()}", file=sys.stderr)

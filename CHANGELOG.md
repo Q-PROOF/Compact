@@ -2,6 +2,48 @@
 
 All notable changes to Q-PROOF Compact are documented here.
 
+## [0.2.0] — 2026-09-19
+
+### Changed (API)
+- **Guarantee vocabulary** (breaking for string comparisons):
+  `VERIFICATION_TIERS` now uses the precise ladder —
+  `unverified` / `verified-randomized` /
+  `exact-proven (numerical full-unitary | algebraic tableau |
+  compositional certificates)` / `formal-proof (roadmap)`.  "Exact-proven"
+  means a machine-checked certificate of unitary equivalence up to
+  global phase; it is explicitly NOT a formal proof-assistant
+  certificate.
+- The CLI now prints the tier and guarantee on every result and reports
+  `verification_tier` / `verification_guarantee` in `--json` output
+  (`compactq.verify.proof_status_tier` maps proof statuses to tiers).
+
+### Added
+- **Independent referees (beyond Qiskit's Operator)**:
+  `results/pyzx_referee.json` — PyZX ZX-graph reduction + tensor
+  comparison (27/27 verified, 0 inequivalent; 2 circuits skipped for
+  PyZX qasm-parser phase quirks, recorded as errors); and
+  `scripts/referee_qcec.py` → `results/qcec_referee.json` — MQT QCEC
+  decision-diagram verification of the input-vs-optimized pairs.
+- **Same-input reproduction harness** gained PyZX and BQSKit runners
+  (`--tools compact,qiskit,pytket,cirq,pyzx,bqskit`).
+- **DevOps**: `Dockerfile` (zero-dependency image with build-time proof
+  smoke test) + GHCR publish workflow on releases; **proof-gate GitHub
+  Action** (`action.yml`) — any repo can add
+  `uses: Q-PROOF/Compact@v0.2.0` with `original:`/`optimized:` inputs to
+  fail their CI on inequivalent circuits; `docs/preprint_outline.md`
+  (arXiv skeleton with claims-to-evidence mapping).
+- Fault-tolerant track scoped in the roadmap (T-count/Clifford+T
+  synthesis with certified error bounds, PPM/Litinski-style lowering
+  interoperable with Qiskit 2.3+, resource-estimation output),
+  Lean/Coq extraction for the algebraic fragment, PennyLane/QDMI
+  plugins.
+
+### Fixed
+- `from_qiskit` no longer crashes on multi-controlled X gates with
+  non-contiguous controls: mcx/mcp are expanded at the bridge boundary
+  via the exact parity-network expansion (found by the reproduction
+  harness; grover_5-class circuits now import and optimize cleanly).
+
 ## [0.1.8] — 2026-09-19
 
 ### Added
