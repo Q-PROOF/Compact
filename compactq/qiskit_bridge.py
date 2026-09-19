@@ -71,6 +71,7 @@ def from_qiskit(qc) -> Circuit:
             # to gate construction, which will raise a precise error
             pass
     circ = Circuit(qc.num_qubits, [])
+    from .mcx import expand_gate
     for inst in qc.data:
         name = inst.operation.name
         if name == "barrier":
@@ -82,7 +83,16 @@ def from_qiskit(qc) -> Circuit:
                 params.append(float(p))
             except (TypeError, ValueError):
                 pass
-        circ.append(Gate(name, tuple(params), qubits))
+        g = Gate(name, tuple(params), qubits)
+        # multi-controlled gates are expanded to the core gate set right at
+        # the boundary: exact, and the optimizer never sees an mcx it lacks
+        # a unitary rule for
+        expansion = expand_gate(g)
+        if expansion is not None:
+            out_ops = circ.ops
+            out_ops.extend(expansion)
+        else:
+            circ.append(g)
     return circ
 
 

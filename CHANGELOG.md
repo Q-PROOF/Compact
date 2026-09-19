@@ -2,6 +2,31 @@
 
 All notable changes to Q-PROOF Compact are documented here.
 
+## [0.1.8] — 2026-09-19
+
+### Added
+- **Same-input, same-gate-set reproduction harness**
+  (`scripts/repro_harness.py`), built from an external audit of this
+  repository: every tool receives identical qiskit-native inputs across
+  10 workload families, every output is lowered to u3+cx before
+  counting, and every output is refereed by qiskit's Operator.  Emits
+  `results/repro.json` + `results/repro.md`.  First measured run:
+  compact mean 2q cut 10.2% (median 21 ms, proof included), qiskit L3
+  14.6% (4 ms), pytket 25.0%, cirq 2.8%; compact vs qiskit 2q W/T/L
+  2/12/1, with Heisenberg wins at exactly half of L3's 2q count.
+- README: gate-set dependence stated openly (QAOA/QFT reductions are
+  2-qubit-arity counts; CX-native hardware shrinks phase-ladder gains
+  to parity — confirmed by the external audit's 0/34/3 measurement);
+  suppression gains documented as noise-model-dependent (external
+  decoherence-dominated runs measured ×1.04–1.09); project history
+  lists every 0.1.x release.
+
+### Fixed
+- `from_qiskit` no longer crashes when optimizing multi-controlled X
+  gates with non-contiguous controls ("no unitary rule for 'mcx'"):
+  mcx/mcp are expanded to the core gate set at the bridge boundary via
+  the exact parity-network expansion.
+
 ## [0.1.7] — 2026-09-19
 
 ### Added

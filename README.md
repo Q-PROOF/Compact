@@ -226,6 +226,38 @@ Capability matrix (✅ shipped · ◐ partial · ❌ not claimed):
 (The cross-compiler reference point is the Benchpress suite — Qiskit, TKET,
 BQSKit, Cirq, Staq and others.)
 
+**Same-input, same-gate-set reproduction harness (shipped 0.1.8** —
+`scripts/repro_harness.py`, born from an external audit of this repo):
+every tool receives **identical** qiskit-native inputs across 10 workload
+families (QFT, QAOA, QPE-like, Grover, Heisenberg, Clifford, Clifford+T,
+adder, VQE, redundancy stress), every output is **lowered to u3+cx before
+counting**, and every output is refereed.  First measured run — 17
+circuits, all refereed, `results/repro.md`:
+
+| tool | mean 2q cut | median wall (proof incl. for compact) |
+|---|---:|---:|
+| Compact | 10.2% | 21 ms |
+| Qiskit L3 | 14.6% | 4 ms |
+| pytket | 25.0% | 175 ms |
+| Cirq | 2.8% | 51 ms |
+
+compact vs qiskit 2q head-to-head: **2 W / 12 T / 1 L**.  Compact's
+flagship wins on this suite are Heisenberg evolution (18 vs 36 and 30 vs
+60 2-qubit gates — half of Qiskit L3); its measured loss is grover_5
+(386 vs 144) where the bridge's wide-MCX parity expansion is expensive.
+On this CX-lowered suite, ties dominate — which is exactly why the
+QAOA/QFT claims below are stated as 2-qubit-arity (CP-native) results.
+
+**Gate-set dependence, stated openly.**  The QAOA/QFT "2q halving"
+claims are 2-qubit-**arity** counts: a `cp` gate counts as one 2-qubit
+gate.  On strictly CX-native hardware each `cp` lowers to two CX, and
+those particular phase-ladder gains shrink to parity with the input —
+confirmed by an independent external audit (0 W / 34 T / 3 L vs Qiskit
+on CX-lowered independently generated circuits).  This is why every
+benchmark in this repo now reports **CX-equivalents alongside arity
+counts**, and why the reproduction harness lowers everything to the
+same gate set before comparing.
+
 **BQSKit head-to-head (32 QASMBench small circuits — a measured
 comparison, not a universal ranking**; BQSKit 1.2.1, its documented
 `bqskit.compile` pipeline, same normalized inputs, every output
@@ -406,6 +438,13 @@ ones — Mundada et al. randomized compiling, XY4 decoupling, tensored
 readout inversion). What we add is what no closed service can offer:
 per-layer exactness proofs, benefit gating with a no-net-loss argument,
 and a protocol anyone can re-run.
+
+**Noise-model dependence, stated openly:** the multiplied gains above
+come from *our* coherent-overrotation-heavy models.  Independent
+external runs with different, decoherence-dominated models measured
+smaller gains (×1.04–1.09 on GHZ/BV cases).  The regime — not just the
+seed — determines the gain: expect model dependence, and always report
+your own noise model with your results.
 
 **Scope of claims.** Suppression competes in a different ecosystem (Q-CTRL
 Fire Opal, Mitiq, Qiskit Runtime, Superstaq), where the correct benchmark is
@@ -751,6 +790,23 @@ via `from_qiskit` are boundary-decomposed automatically.
   produced the engine; those internal numbers are retired and the git
   history keeps the full trail.
 
+- **0.1.1** — multi-objective optimization (`2q` / `depth` /
+  `gate_count` / `weighted` / `latency`).
+- **0.1.2** — verification tiers T0–T4 in the public API
+  (`compactq.verify`), compilation certificates, coupling presets
+  (line / grid / heavy-hex / all-to-all), compositional proofs,
+  scalability frontier measured to 256Q.
+- **0.1.3** — scalability gauntlet artifact (112 records, tiered
+  verification, three measured ceilings).
+- **0.1.4** — trust layer release: blocking provenance groundwork,
+  BQSKit-measured roadmap.
+- **0.1.5** — BQSKit head-to-head executed (10/19/3, geomean 1.16×),
+  T4 API consistency, T4.1 sequential-segment proofs, 256Q runtime fix.
+- **0.1.6** — evidence integrity: provenance embedded in every
+  artifact, reproducibility gate, runtime-tier classes.
+- **0.1.7** — provenance gate blocking in CI, strict-SHA mode,
+  full-artifact regeneration on a single SHA.
+
 ## The certificate — the trust artifact
 
 Every Compact compilation can ship with a machine-checkable certificate:
@@ -788,7 +844,7 @@ cannot silently drift from the artifacts it describes.)
 
 | release | theme | contents |
 |---|---|---|
-| **0.1.x (shipped)** | **Scalable + first head-to-head** | 4→256Q scalability gauntlet (time/memory/correctness tiers), randomized large-circuit testing, scalable Clifford verification, **BQSKit measured (10/19/3, geomean 1.16×)**, T4 + T4.1 prototype + certificates, blocking provenance gate |
+| **0.1.x (shipped)** | **Scalable + first head-to-heads** | 4→256Q scalability gauntlet (time/memory/correctness tiers), randomized large-circuit testing, scalable Clifford verification, **BQSKit measured (10/19/3, geomean 1.16×)**, T4 + T4.1 prototype + certificates, blocking provenance gate, same-gate-set reproduction harness |
 | **0.2 — Trust productionization** | T4 maturation | certificate segments + composition + tamper detection + independently executable verifier; **T4.2 interaction-window verification for connected/entangled circuits** (interaction graph → small-width windows → local proofs → composition); strict 1,000-cases-per-width protocol |
 | **0.3 — Synthesis** | Higher arity | 3Q/4Q local synthesis, bounded higher-Q block optimization, random SU(3)/SU(4)/SU(5) benchmark, Hamiltonian/Trotter engine (Pauli grouping, basis-change cancellation, evolution fusion) |
 | **0.4 — Hardware** | Native compilation | heavy-hex / linear / grid / all-to-all routing benchmark, native gate sets, calibration-aware cost, duration/error estimation |
@@ -813,6 +869,11 @@ compiler *runtime at scale* is itself becoming a research frontier
 (npj-scale parallel compilation, 2026).
 
 ### Current roadmap detail
+
+- **Wide-MCX expansion quality** (identified by the reproduction
+  harness): the bridge's parity expansion of a 4+-control MCX is
+  gate-heavy — grover_5 measured 386 2q vs Qiskit's 144.  Adopt a
+  qiskit-style MCX synthesis (cmdline/relative-phase) for wide controls.
 
 **Research order** (post-release review, 2026-09-17): 1. Trotter/Hamiltonian
 optimization → 2. scalable verification → 3. BQSKit benchmark

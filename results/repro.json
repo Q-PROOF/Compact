@@ -1,0 +1,806 @@
+{
+  "generated": "2026-09-19T04:51:21.444447+00:00",
+  "commit": "d9caa68dec81",
+  "method": "same input for every tool; every output lowered to u3+cx before counting; every output refereed by qiskit.quantum_info.Operator",
+  "suite": [
+    "adder_4",
+    "adder_6",
+    "clifford_5",
+    "cliffordt_5",
+    "grover_3",
+    "grover_5",
+    "heisenberg_4",
+    "heisenberg_6",
+    "qaoa_4",
+    "qaoa_6",
+    "qaoa_8",
+    "qft_4",
+    "qft_6",
+    "qft_8",
+    "qpe_4",
+    "qpe_6",
+    "redundant_4",
+    "redundant_6",
+    "vqe_4",
+    "vqe_6"
+  ],
+  "summary": {
+    "compact": {
+      "mean_2q_cut_pct": 10.2,
+      "median_wall_ms": 21
+    },
+    "qiskit": {
+      "mean_2q_cut_pct": 14.6,
+      "median_wall_ms": 4
+    },
+    "pytket": {
+      "mean_2q_cut_pct": 25.0,
+      "median_wall_ms": 175
+    },
+    "cirq": {
+      "mean_2q_cut_pct": 2.8,
+      "median_wall_ms": 51
+    },
+    "compact_vs_qiskit_2q_WTL": [
+      2,
+      12,
+      1
+    ]
+  },
+  "records": [
+    {
+      "circuit": "qft_4",
+      "qubits": 4,
+      "input_2q_cx_lowered": 18,
+      "input_2q_cp_native": 6,
+      "compact": {
+        "gates": 40,
+        "two_qubit": 18,
+        "depth": 26,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 26
+      },
+      "qiskit": {
+        "gates": 34,
+        "two_qubit": 12,
+        "depth": 23,
+        "output_fidelity": 0.25,
+        "status": "INEQUIVALENT",
+        "wall_ms": 6
+      },
+      "pytket": {
+        "gates": 25,
+        "two_qubit": 12,
+        "depth": 19,
+        "output_fidelity": 0.25,
+        "status": "INEQUIVALENT",
+        "wall_ms": 144
+      },
+      "cirq": {
+        "gates": 91,
+        "two_qubit": 18,
+        "depth": 43,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 39
+      }
+    },
+    {
+      "circuit": "qft_6",
+      "qubits": 6,
+      "input_2q_cx_lowered": 39,
+      "input_2q_cp_native": 15,
+      "compact": {
+        "gates": 90,
+        "two_qubit": 39,
+        "depth": 42,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 30
+      },
+      "qiskit": {
+        "gates": 81,
+        "two_qubit": 30,
+        "depth": 39,
+        "output_fidelity": 0.125,
+        "status": "INEQUIVALENT",
+        "wall_ms": 5
+      },
+      "pytket": {
+        "gates": 61,
+        "two_qubit": 30,
+        "depth": 33,
+        "output_fidelity": 0.125,
+        "status": "INEQUIVALENT",
+        "wall_ms": 369
+      },
+      "cirq": {
+        "gates": 192,
+        "two_qubit": 39,
+        "depth": 68,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 66
+      }
+    },
+    {
+      "circuit": "qft_8",
+      "qubits": 8,
+      "input_2q_cx_lowered": 68,
+      "input_2q_cp_native": 28,
+      "compact": {
+        "gates": 160,
+        "two_qubit": 68,
+        "depth": 58,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 3
+      },
+      "qiskit": {
+        "gates": 148,
+        "two_qubit": 56,
+        "depth": 55,
+        "output_fidelity": 0.0625,
+        "status": "INEQUIVALENT",
+        "wall_ms": 5
+      },
+      "pytket": {
+        "gates": 113,
+        "two_qubit": 56,
+        "depth": 47,
+        "output_fidelity": 0.0625,
+        "status": "INEQUIVALENT",
+        "wall_ms": 708
+      },
+      "cirq": {
+        "gates": 330,
+        "two_qubit": 68,
+        "depth": 94,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 118
+      }
+    },
+    {
+      "circuit": "qaoa_4",
+      "qubits": 4,
+      "input_2q_cx_lowered": 12,
+      "input_2q_cp_native": 0,
+      "compact": {
+        "gates": 42,
+        "two_qubit": 12,
+        "depth": 28,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 49
+      },
+      "qiskit": {
+        "gates": 26,
+        "two_qubit": 12,
+        "depth": 17,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 4
+      },
+      "pytket": {
+        "gates": 24,
+        "two_qubit": 12,
+        "depth": 17,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 150
+      },
+      "cirq": {
+        "gates": 56,
+        "two_qubit": 12,
+        "depth": 31,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 27
+      }
+    },
+    {
+      "circuit": "qaoa_6",
+      "qubits": 6,
+      "input_2q_cx_lowered": 20,
+      "input_2q_cp_native": 0,
+      "compact": {
+        "gates": 70,
+        "two_qubit": 20,
+        "depth": 40,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 64
+      },
+      "qiskit": {
+        "gates": 42,
+        "two_qubit": 20,
+        "depth": 23,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 4
+      },
+      "pytket": {
+        "gates": 40,
+        "two_qubit": 20,
+        "depth": 23,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 272
+      },
+      "cirq": {
+        "gates": 92,
+        "two_qubit": 20,
+        "depth": 43,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 39
+      }
+    },
+    {
+      "circuit": "qaoa_8",
+      "qubits": 8,
+      "input_2q_cx_lowered": 28,
+      "input_2q_cp_native": 0,
+      "compact": {
+        "gates": 98,
+        "two_qubit": 28,
+        "depth": 52,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 10
+      },
+      "qiskit": {
+        "gates": 58,
+        "two_qubit": 28,
+        "depth": 29,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 4
+      },
+      "pytket": {
+        "gates": 56,
+        "two_qubit": 28,
+        "depth": 29,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 407
+      },
+      "cirq": {
+        "gates": 128,
+        "two_qubit": 28,
+        "depth": 55,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 57
+      }
+    },
+    {
+      "circuit": "qpe_4",
+      "qubits": 4,
+      "input_2q_cx_lowered": 11,
+      "input_2q_cp_native": 4,
+      "compact": {
+        "gates": 23,
+        "two_qubit": 9,
+        "depth": 19,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 25
+      },
+      "qiskit": {
+        "gates": 25,
+        "two_qubit": 8,
+        "depth": 20,
+        "output_fidelity": 0.5,
+        "status": "INEQUIVALENT",
+        "wall_ms": 4
+      },
+      "pytket": {
+        "gates": 17,
+        "two_qubit": 6,
+        "depth": 13,
+        "output_fidelity": 0.5,
+        "status": "INEQUIVALENT",
+        "wall_ms": 105
+      },
+      "cirq": {
+        "status": "error ValueError: operands could not be broadcast together with shapes (16,16) (8,8) "
+      }
+    },
+    {
+      "circuit": "qpe_6",
+      "qubits": 6,
+      "input_2q_cx_lowered": 23,
+      "input_2q_cp_native": 10,
+      "compact": {
+        "gates": 38,
+        "two_qubit": 14,
+        "depth": 30,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 23
+      },
+      "qiskit": {
+        "gates": 57,
+        "two_qubit": 20,
+        "depth": 44,
+        "output_fidelity": 0.5,
+        "status": "INEQUIVALENT",
+        "wall_ms": 4
+      },
+      "pytket": {
+        "gates": 27,
+        "two_qubit": 11,
+        "depth": 21,
+        "output_fidelity": 0.5,
+        "status": "INEQUIVALENT",
+        "wall_ms": 200
+      },
+      "cirq": {
+        "status": "error ValueError: operands could not be broadcast together with shapes (64,64) (16,16) "
+      }
+    },
+    {
+      "circuit": "grover_3",
+      "qubits": 3,
+      "input_2q_cx_lowered": 24,
+      "input_2q_cp_native": 0,
+      "compact": {
+        "gates": 61,
+        "two_qubit": 24,
+        "depth": 51,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 19
+      },
+      "qiskit": {
+        "gates": 75,
+        "two_qubit": 24,
+        "depth": 49,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 4
+      },
+      "pytket": {
+        "gates": 39,
+        "two_qubit": 14,
+        "depth": 28,
+        "output_fidelity": 0.5,
+        "status": "INEQUIVALENT",
+        "wall_ms": 142
+      },
+      "cirq": {
+        "gates": 178,
+        "two_qubit": 32,
+        "depth": 113,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 92
+      }
+    },
+    {
+      "circuit": "grover_5",
+      "qubits": 5,
+      "input_2q_cx_lowered": 144,
+      "input_2q_cp_native": 0,
+      "compact": {
+        "gates": 899,
+        "two_qubit": 386,
+        "depth": 686,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 205
+      },
+      "qiskit": {
+        "gates": 328,
+        "two_qubit": 144,
+        "depth": 268,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 6
+      },
+      "pytket": {
+        "gates": 313,
+        "two_qubit": 144,
+        "depth": 253,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 2060
+      },
+      "cirq": {
+        "gates": 665,
+        "two_qubit": 144,
+        "depth": 455,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 404
+      }
+    },
+    {
+      "circuit": "heisenberg_4",
+      "qubits": 4,
+      "input_2q_cx_lowered": 36,
+      "input_2q_cp_native": 0,
+      "compact": {
+        "gates": 63,
+        "two_qubit": 18,
+        "depth": 35,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 44
+      },
+      "qiskit": {
+        "gates": 102,
+        "two_qubit": 36,
+        "depth": 65,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 4
+      },
+      "pytket": {
+        "gates": 56,
+        "two_qubit": 18,
+        "depth": 31,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 240
+      },
+      "cirq": {
+        "gates": 94,
+        "two_qubit": 18,
+        "depth": 47,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 41
+      }
+    },
+    {
+      "circuit": "heisenberg_6",
+      "qubits": 6,
+      "input_2q_cx_lowered": 60,
+      "input_2q_cp_native": 0,
+      "compact": {
+        "gates": 101,
+        "two_qubit": 30,
+        "depth": 47,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 40
+      },
+      "qiskit": {
+        "gates": 170,
+        "two_qubit": 60,
+        "depth": 91,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 4
+      },
+      "pytket": {
+        "gates": 94,
+        "two_qubit": 30,
+        "depth": 43,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 435
+      },
+      "cirq": {
+        "gates": 156,
+        "two_qubit": 30,
+        "depth": 65,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 61
+      }
+    },
+    {
+      "circuit": "clifford_5",
+      "qubits": 5,
+      "input_2q_cx_lowered": 20,
+      "input_2q_cp_native": 20,
+      "compact": {
+        "gates": 46,
+        "two_qubit": 19,
+        "depth": 28,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 17
+      },
+      "qiskit": {
+        "gates": 48,
+        "two_qubit": 19,
+        "depth": 29,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 5
+      },
+      "pytket": {
+        "gates": 40,
+        "two_qubit": 17,
+        "depth": 25,
+        "output_fidelity": 0.25,
+        "status": "INEQUIVALENT",
+        "wall_ms": 331
+      },
+      "cirq": {
+        "gates": 103,
+        "two_qubit": 19,
+        "depth": 63,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 58
+      }
+    },
+    {
+      "circuit": "cliffordt_5",
+      "qubits": 5,
+      "input_2q_cx_lowered": 0,
+      "input_2q_cp_native": 0,
+      "compact": {
+        "gates": 0,
+        "two_qubit": 0,
+        "depth": 0,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 0
+      },
+      "qiskit": {
+        "gates": 0,
+        "two_qubit": 0,
+        "depth": 0,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 3
+      },
+      "pytket": {
+        "gates": 0,
+        "two_qubit": 0,
+        "depth": 0,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 1
+      },
+      "cirq": {
+        "gates": 0,
+        "two_qubit": 0,
+        "depth": 0,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 8
+      }
+    },
+    {
+      "circuit": "adder_4",
+      "qubits": 4,
+      "input_2q_cx_lowered": 14,
+      "input_2q_cp_native": 2,
+      "compact": {
+        "gates": 32,
+        "two_qubit": 14,
+        "depth": 25,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 19
+      },
+      "qiskit": {
+        "gates": 32,
+        "two_qubit": 14,
+        "depth": 22,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 4
+      },
+      "pytket": {
+        "gates": 29,
+        "two_qubit": 14,
+        "depth": 22,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 125
+      },
+      "cirq": {
+        "gates": 89,
+        "two_qubit": 16,
+        "depth": 50,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 45
+      }
+    },
+    {
+      "circuit": "adder_6",
+      "qubits": 6,
+      "input_2q_cx_lowered": 26,
+      "input_2q_cp_native": 2,
+      "compact": {
+        "gates": 62,
+        "two_qubit": 26,
+        "depth": 45,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 30
+      },
+      "qiskit": {
+        "gates": 62,
+        "two_qubit": 26,
+        "depth": 40,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 4
+      },
+      "pytket": {
+        "gates": 55,
+        "two_qubit": 26,
+        "depth": 40,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 235
+      },
+      "cirq": {
+        "gates": 167,
+        "two_qubit": 30,
+        "depth": 92,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 79
+      }
+    },
+    {
+      "circuit": "vqe_4",
+      "qubits": 4,
+      "input_2q_cx_lowered": 3,
+      "input_2q_cp_native": 3,
+      "compact": {
+        "gates": 11,
+        "two_qubit": 3,
+        "depth": 5,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 3
+      },
+      "qiskit": {
+        "gates": 11,
+        "two_qubit": 3,
+        "depth": 5,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 5
+      },
+      "pytket": {
+        "gates": 11,
+        "two_qubit": 3,
+        "depth": 5,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 82
+      },
+      "cirq": {
+        "gates": 19,
+        "two_qubit": 3,
+        "depth": 11,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 18
+      }
+    },
+    {
+      "circuit": "vqe_6",
+      "qubits": 6,
+      "input_2q_cx_lowered": 5,
+      "input_2q_cp_native": 5,
+      "compact": {
+        "gates": 17,
+        "two_qubit": 5,
+        "depth": 7,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 5
+      },
+      "qiskit": {
+        "gates": 17,
+        "two_qubit": 5,
+        "depth": 7,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 4
+      },
+      "pytket": {
+        "gates": 17,
+        "two_qubit": 5,
+        "depth": 7,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 141
+      },
+      "cirq": {
+        "gates": 31,
+        "two_qubit": 5,
+        "depth": 17,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 24
+      }
+    },
+    {
+      "circuit": "redundant_4",
+      "qubits": 4,
+      "input_2q_cx_lowered": 24,
+      "input_2q_cp_native": 24,
+      "compact": {
+        "gates": 0,
+        "two_qubit": 0,
+        "depth": 0,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 1
+      },
+      "qiskit": {
+        "gates": 0,
+        "two_qubit": 0,
+        "depth": 0,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 4
+      },
+      "pytket": {
+        "gates": 0,
+        "two_qubit": 0,
+        "depth": 0,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 1
+      },
+      "cirq": {
+        "status": "error ValueError: operands could not be broadcast together with shapes (16,16) (8,8) "
+      }
+    },
+    {
+      "circuit": "redundant_6",
+      "qubits": 6,
+      "input_2q_cx_lowered": 40,
+      "input_2q_cp_native": 40,
+      "compact": {
+        "gates": 0,
+        "two_qubit": 0,
+        "depth": 0,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 2
+      },
+      "qiskit": {
+        "gates": 0,
+        "two_qubit": 0,
+        "depth": 0,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 4
+      },
+      "pytket": {
+        "gates": 0,
+        "two_qubit": 0,
+        "depth": 0,
+        "output_fidelity": 1.0,
+        "status": "OK",
+        "wall_ms": 2
+      },
+      "cirq": {
+        "status": "error ValueError: operands could not be broadcast together with shapes (64,64) (32,32) "
+      }
+    }
+  ],
+  "environment": {
+    "generated": "2026-09-19T04:51:21.466043+00:00",
+    "git_sha": "d9caa68dec81",
+    "python": "3.11.9",
+    "os": "Windows 10 AMD64",
+    "cpu": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+    "dependencies": {
+      "qiskit": "2.5.2",
+      "numpy": "2.4.6",
+      "pytket": "2.18.1",
+      "cirq": "1.7.0",
+      "bqskit": "1.2.1"
+    }
+  }
+}

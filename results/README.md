@@ -13,7 +13,8 @@ No claim without a producer script; no number without a raw artifact.
 | `../suppress_results.json` | `python scripts/suppress_bench.py` | suppression pipeline vs raw execution, per scenario |
 | `../dd_sequence_results.json` | `python scripts/suppress_bench.py` | DD sequence family comparison (xy4/xy8/xzx/pdd4/auto) |
 | `../scale_results.json` | `python scripts/scale_bench.py` | CHP stabilizer simulator scaling (n=16..24) |
-| `scalability.json` + `scalability.md` | `python scripts/scale_gauntlet.py` | per-width correctness/stability/runtime/memory ceilings, 4 → 128 qubits × 8 workload families, tiered verification (independent Qiskit referee / algebraic tableau at any width / never-grow policy + determinism) |
+| `scalability.json` + `scalability.md` | `python scripts/scale_gauntlet.py` | per-width correctness/stability/runtime/memory ceilings, 4 → 256 qubits × 8 workload families, tiered verification (independent Qiskit referee / algebraic tableau at any width / never-grow policy + determinism) |
+| `repro.json` + `repro.md` | `python scripts/repro_harness.py` | same-input, same-gate-set comparison: Compact vs Qiskit L3 vs pytket vs Cirq on independently generated circuits, every output lowered to u3+cx and refereed |
 | `pytket_referee.json` | `python scripts/referee_pytket.py` | per-circuit referee records for pytket default + safe modes: version, mode, output fidelity, status, metrics — the raw evidence behind the inequivalence claims |
 | `bqskit.json` | `python scripts/bqskit_bench.py` | **BQSKit 1.2.1 measured head-to-head** (documented `bqskit.compile` pipeline): per-circuit gates/2q/CX-equivalent/depth/fidelity/status on the QASMBench small suite |
 | `../volumetric_report.md` | `python scripts/volumetric_report.py` | QED-C-style width/depth tables |
