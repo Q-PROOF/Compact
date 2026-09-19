@@ -9,6 +9,8 @@
   <a href="https://github.com/Q-PROOF/Compact/releases"><img alt="Release" src="https://img.shields.io/github/v/release/Q-PROOF/Compact"></a>
   <a href="https://github.com/Q-PROOF/Compact/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/pypi/l/compactq"></a>
   <a href="https://github.com/Q-PROOF/Compact/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/Q-PROOF/Compact/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://github.com/Q-PROOF/Compact/actions/workflows/codeql.yml"><img alt="CodeQL" src="https://github.com/Q-PROOF/Compact/actions/workflows/codeql.yml/badge.svg"></a>
+  <a href="https://coderabbit.ai"><img alt="CodeRabbit" src="https://img.shields.io/badge/CodeRabbit-PR%20reviews-blue"></a>
 </p>
 
 **The verified quantum circuit optimizer.** Smaller circuits, proven. Compact takes a quantum circuit and returns an equivalent one that is smaller and shallower — with verification attached to every answer: exact algebraic proofs where the circuit structure allows them, and a numerical whole-unitary certificate otherwise. On any doubt, your input is returned unchanged.

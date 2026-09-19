@@ -1,0 +1,27 @@
+language: "en-US"
+early_access: false
+
+# Free OSS tier: AI code reviews on every PR. Keep the profile chill —
+# Compact's correctness gates are enforced by tests/gauntlet, not by
+# review nits.
+reviews:
+  profile: "chill"
+  request_changes_workflow: false
+  high_level_summary: true
+  review_status: true
+  commit_status: true
+  auto_review:
+    enabled: true
+    auto_incremental_review: true
+    drafts: false
+
+# generated artifacts, vendored code and release outputs are not reviewable
+path_filters:
+  - "!third_party/**"
+  - "!results/**"
+  - "!release_dist/**"
+  - "!build_dist/**"
+  - "!docs/agent-notes/**"
+
+chat:
+  auto_reply: true

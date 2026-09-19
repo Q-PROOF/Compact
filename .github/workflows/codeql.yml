@@ -1,0 +1,28 @@
+# CodeQL security scanning — free for public repositories.
+# Static analysis of the Python core; results appear under the
+# repository's Security > Code scanning alerts.
+name: CodeQL
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "31 3 * * 1"
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: python
+      - uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:python"
