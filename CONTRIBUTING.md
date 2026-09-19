@@ -49,6 +49,24 @@ used, the version (`compactq.__version__`), and — critically — **the
 proof status reported**. A circuit that comes out inequivalent is a
 release blocker; report it even if you already found the workaround.
 
+## Commit and tag signing
+
+Commits and release tags in this repository are **signed** (SSH signing;
+the signature is what makes GitHub show the "Verified" badge on tags).
+To set up locally:
+
+```bash
+ssh-keygen -t ed25519 -C "your-email" -f ~/.ssh/id_ed25519
+git config --global gpg.format ssh
+git config --global user.signingkey ~/.ssh/id_ed25519.pub
+git config --global commit.gpgsign true
+git config --global tag.gpgsign true
+```
+
+Then upload the **public** key at GitHub → Settings → SSH and GPG keys →
+New SSH key → **Key type: Signing Key**. Unsigned commits are accepted
+from contributors, but release tags are always signed.
+
 ## Security
 
 See `SECURITY.md` for reporting policy.
