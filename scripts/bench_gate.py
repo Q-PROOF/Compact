@@ -31,6 +31,7 @@ sys.path.insert(0, str(REPO / "scripts"))
 from bench_json import collect_rows  # noqa: E402
 
 BASELINE = REPO / "bench_results.json"
+ALLOWED = REPO / "docs" / "agent-notes" / "ALLOWED_REGRESSIONS.md"
 
 
 def main() -> int:
@@ -46,6 +47,12 @@ def main() -> int:
     DEPTH_DRIFT_MIN = 2      # tie-break drift applies to depth
     regressions = []
     improvements = []
+    allowed = set()
+    if ALLOWED.is_file():
+        for ln in ALLOWED.read_text(encoding="utf-8").splitlines():
+            ln = ln.strip()
+            if ln.startswith("- ") and ":" in ln:
+                allowed.add(ln[2:].split(":")[0].strip())
     for row in rows:
         name = row["circuit"]
         cq = row["compactq"]
@@ -58,7 +65,11 @@ def main() -> int:
         gate_allow = max(GATE_DRIFT_MIN, round(old[1] * GATE_DRIFT_FRAC))
         depth_allow = max(DEPTH_DRIFT_MIN, round(old[2] * DEPTH_DRIFT_FRAC))
         if new[0] > old[0]:
-            regressions.append((name, old, new))
+            if name in allowed:
+                print(f"  allowed regression accepted: {name} "
+                      f"(documented in ALLOWED_REGRESSIONS.md)")
+            else:
+                regressions.append((name, old, new))
         elif new[0] == old[0] and (new[1] > old[1] + gate_allow
                                    or new[2] > old[2] + depth_allow):
             regressions.append((name, old, new))

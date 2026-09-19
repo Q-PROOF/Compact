@@ -1,0 +1,284 @@
+{
+  "generated": "2026-09-19T08:12:23.742532+00:00",
+  "commit": "371ce35e9c78",
+  "compactq_version": "0.2.0",
+  "protocol": "trivial layout both arms; compact: optimize_search + route_aware(restore=True) + native translation; qiskit: L3 trivial layout + sabre routing, seed_transpiler=42; swaps included in counts; both outputs refereed",
+  "wins": 0,
+  "ties": 4,
+  "losses": 9,
+  "records": [
+    {
+      "topology": "line_5",
+      "circuit": "ghz_5",
+      "compact": {
+        "gates": 31,
+        "two_qubit": 4,
+        "swaps": 0,
+        "depth": 19
+      },
+      "qiskit_l3": {
+        "gates": 27,
+        "two_qubit": 4,
+        "swaps": 0,
+        "depth": 14
+      },
+      "compact_ms": 4,
+      "qiskit_ms": 10,
+      "fidelity_compact": 1.0,
+      "fidelity_qiskit": 1.0,
+      "winner_2q": "tie"
+    },
+    {
+      "topology": "line_5",
+      "circuit": "qaoa_ring_5",
+      "compact": {
+        "gates": 192,
+        "two_qubit": 16,
+        "swaps": 0,
+        "depth": 98
+      },
+      "qiskit_l3": {
+        "gates": 103,
+        "two_qubit": 16,
+        "swaps": 0,
+        "depth": 50
+      },
+      "compact_ms": 52,
+      "qiskit_ms": 7,
+      "fidelity_compact": 1.0,
+      "fidelity_qiskit": 1.0,
+      "winner_2q": "tie"
+    },
+    {
+      "topology": "line_5",
+      "circuit": "qft_5",
+      "compact": {
+        "gates": 365,
+        "two_qubit": 80,
+        "swaps": 0,
+        "depth": 182
+      },
+      "qiskit_l3": {
+        "gates": 174,
+        "two_qubit": 36,
+        "swaps": 0,
+        "depth": 110
+      },
+      "compact_ms": 25,
+      "qiskit_ms": 7,
+      "fidelity_compact": 1.0,
+      "fidelity_qiskit": 0.25,
+      "winner_2q": "qiskit"
+    },
+    {
+      "topology": "line_5",
+      "circuit": "heisenberg_5",
+      "compact": {
+        "gates": 421,
+        "two_qubit": 24,
+        "swaps": 0,
+        "depth": 172
+      },
+      "qiskit_l3": {
+        "gates": 166,
+        "two_qubit": 24,
+        "swaps": 0,
+        "depth": 69
+      },
+      "compact_ms": 50,
+      "qiskit_ms": 8,
+      "fidelity_compact": 1.0,
+      "fidelity_qiskit": 1.0,
+      "winner_2q": "tie"
+    },
+    {
+      "topology": "line_5",
+      "circuit": "vqe_5",
+      "compact": {
+        "gates": 159,
+        "two_qubit": 12,
+        "swaps": 0,
+        "depth": 50
+      },
+      "qiskit_l3": {
+        "gates": 94,
+        "two_qubit": 12,
+        "swaps": 0,
+        "depth": 36
+      },
+      "compact_ms": 6,
+      "qiskit_ms": 6,
+      "fidelity_compact": 1.0,
+      "fidelity_qiskit": 1.0,
+      "winner_2q": "tie"
+    },
+    {
+      "topology": "grid_4x4",
+      "circuit": "ghz_5",
+      "compact": {
+        "gates": 85,
+        "two_qubit": 22,
+        "swaps": 0,
+        "depth": 52
+      },
+      "qiskit_l3": {
+        "gates": 48,
+        "two_qubit": 11,
+        "swaps": 0,
+        "depth": 21
+      },
+      "compact_ms": 1,
+      "qiskit_ms": 6,
+      "fidelity_compact": 1.0,
+      "fidelity_qiskit": 0.125,
+      "winner_2q": "qiskit"
+    },
+    {
+      "topology": "grid_4x4",
+      "circuit": "qaoa_ring_5",
+      "compact": {
+        "gates": 282,
+        "two_qubit": 46,
+        "swaps": 0,
+        "depth": 171
+      },
+      "qiskit_l3": {
+        "gates": 127,
+        "two_qubit": 25,
+        "swaps": 0,
+        "depth": 66
+      },
+      "compact_ms": 52,
+      "qiskit_ms": 9,
+      "fidelity_compact": 1.0,
+      "fidelity_qiskit": 0.125,
+      "winner_2q": "qiskit"
+    },
+    {
+      "topology": "grid_4x4",
+      "circuit": "qft_5",
+      "compact": {
+        "gates": 401,
+        "two_qubit": 92,
+        "swaps": 0,
+        "depth": 243
+      },
+      "qiskit_l3": {
+        "gates": 172,
+        "two_qubit": 38,
+        "swaps": 0,
+        "depth": 102
+      },
+      "compact_ms": 25,
+      "qiskit_ms": 6,
+      "fidelity_compact": 1.0,
+      "fidelity_qiskit": 0.25,
+      "winner_2q": "qiskit"
+    },
+    {
+      "topology": "grid_4x4",
+      "circuit": "heisenberg_5",
+      "compact": {
+        "gates": 547,
+        "two_qubit": 66,
+        "swaps": 0,
+        "depth": 283
+      },
+      "qiskit_l3": {
+        "gates": 235,
+        "two_qubit": 43,
+        "swaps": 0,
+        "depth": 119
+      },
+      "compact_ms": 47,
+      "qiskit_ms": 6,
+      "fidelity_compact": 1.0,
+      "fidelity_qiskit": 0.125,
+      "winner_2q": "qiskit"
+    },
+    {
+      "topology": "grid_4x4",
+      "circuit": "vqe_5",
+      "compact": {
+        "gates": 285,
+        "two_qubit": 54,
+        "swaps": 0,
+        "depth": 131
+      },
+      "qiskit_l3": {
+        "gates": 150,
+        "two_qubit": 31,
+        "swaps": 0,
+        "depth": 69
+      },
+      "compact_ms": 6,
+      "qiskit_ms": 6,
+      "fidelity_compact": 1.0,
+      "fidelity_qiskit": 0.125,
+      "winner_2q": "qiskit"
+    },
+    {
+      "topology": "grid_4x4",
+      "circuit": "ghz_16",
+      "compact": {
+        "gates": 324,
+        "two_qubit": 87,
+        "swaps": 0,
+        "depth": 119
+      },
+      "qiskit_l3": {
+        "gates": 181,
+        "two_qubit": 44,
+        "swaps": 0,
+        "depth": 83
+      },
+      "compact_ms": 12520,
+      "qiskit_ms": 9,
+      "fidelity_compact": null,
+      "fidelity_qiskit": null,
+      "winner_2q": "qiskit"
+    },
+    {
+      "topology": "grid_4x4",
+      "circuit": "qaoa_8_on_grid",
+      "compact": {
+        "gates": 420,
+        "two_qubit": 58,
+        "swaps": 0,
+        "depth": 202
+      },
+      "qiskit_l3": {
+        "gates": 217,
+        "two_qubit": 40,
+        "swaps": 0,
+        "depth": 91
+      },
+      "compact_ms": 20,
+      "qiskit_ms": 9,
+      "fidelity_compact": 1.0,
+      "fidelity_qiskit": 0.25,
+      "winner_2q": "qiskit"
+    },
+    {
+      "topology": "grid_4x4",
+      "circuit": "qft_8_on_grid",
+      "compact": {
+        "gates": 824,
+        "two_qubit": 164,
+        "swaps": 0,
+        "depth": 426
+      },
+      "qiskit_l3": {
+        "gates": 437,
+        "two_qubit": 92,
+        "swaps": 0,
+        "depth": 209
+      },
+      "compact_ms": 114,
+      "qiskit_ms": 11,
+      "fidelity_compact": 1.0,
+      "fidelity_qiskit": 0.015625,
+      "winner_2q": "qiskit"
+    }
+  ]
+}
