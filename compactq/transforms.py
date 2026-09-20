@@ -170,54 +170,108 @@ def _cz_rewrite(pair, accum):
     return out
 
 
+class _GNode:
+    """Doubly-linked gate-list node (sentinel-framed)."""
+    __slots__ = ("g", "prev", "next")
+
+    def __init__(self, g=None):
+        self.g = g
+        self.prev = None
+        self.next = None
+
+
 def commute_cancel(circ: Circuit) -> Circuit:
-    """Cancel self-inverse CX/CZ pairs across provably-commuting gates."""
-    ops = circ.ops
+    """Cancel self-inverse CX/CZ pairs across provably-commuting gates.
+
+    Runs on a doubly-linked gate list: a cancellation splices its rewrite
+    in O(segment) instead of rebuilding the whole op list (the previous
+    slice-and-concat made deep circuits quadratic).  The scan order and
+    the restart-after-every-match discipline are exactly the original
+    pass's; tests pin new-vs-reference output equality on random circuits.
+    """
+    head = _GNode()
+    tail = _GNode()
+    head.next = tail
+    tail.prev = head
+    cur = head
+    for g in circ.ops:
+        node = _GNode(g)
+        cur.next = node
+        node.prev = cur
+        cur = node
+    cur.next = tail
+    tail.prev = cur
+
     changed = True
     while changed:
         changed = False
-        for i in range(len(ops)):
-            g = ops[i]
-            if g.name not in ("cx", "cz"):
-                continue
-            c, t = g.qubits
-            accum = []
-            j = i + 1
-            matched = False
-            while j < len(ops):
-                h = ops[j]
-                if len(h.qubits) == 1:
-                    q = h.qubits[0]
-                    if q == c and g.name == "cx":
-                        if is_diagonal(h) or h.name == "x":
-                            accum.append(h); j += 1; continue
-                        break
-                    if q == t and g.name == "cx":
-                        if h.name in ("x", "rx"):
-                            accum.append(h); j += 1; continue
-                        break
-                    if g.name == "cz":
-                        if h.name == "x" or is_diagonal(h):
-                            accum.append(h); j += 1; continue
-                        break
-                    accum.append(h); j += 1; continue  # unrelated wire
-                hq = set(h.qubits)
-                if len(hq) == 2:
-                    if h.name == "cz" and hq == {c, t} and g.name == "cz":
-                        matched = True
-                        break
-                    # CX must match in the SAME direction; a reversed CX pair
-                    # composes to SWAP, not identity.
-                    if h.name == "cx" and g.name == "cx" and h.qubits == g.qubits:
-                        matched = True
-                        break
-                break
-            if matched:
-                rewrite = _cx_rewrite((c, t), accum) if g.name == "cx" else _cz_rewrite((c, t), accum)
-                ops = ops[:i] + rewrite + ops[j + 1:]
-                changed = True
-                break
-    return Circuit(circ.num_qubits, ops)
+        node = head.next
+        while node is not tail:
+            g = node.g
+            if g.name in ("cx", "cz"):
+                c, t = g.qubits
+                accum = []
+                j = node.next
+                matched = False
+                while j is not tail:
+                    h = j.g
+                    if len(h.qubits) == 1:
+                        q = h.qubits[0]
+                        if q == c and g.name == "cx":
+                            if is_diagonal(h) or h.name == "x":
+                                accum.append(h)
+                                j = j.next
+                                continue
+                            break
+                        if q == t and g.name == "cx":
+                            if h.name in ("x", "rx"):
+                                accum.append(h)
+                                j = j.next
+                                continue
+                            break
+                        if g.name == "cz":
+                            if h.name == "x" or is_diagonal(h):
+                                accum.append(h)
+                                j = j.next
+                                continue
+                            break
+                        accum.append(h)
+                        j = j.next
+                        continue  # unrelated wire
+                    hq = set(h.qubits)
+                    if len(hq) == 2:
+                        if h.name == "cz" and hq == {c, t} \
+                                and g.name == "cz":
+                            matched = True
+                            break
+                        # CX must match in the SAME direction; a reversed
+                        # CX pair composes to SWAP, not identity.
+                        if h.name == "cx" and g.name == "cx" \
+                                and h.qubits == g.qubits:
+                            matched = True
+                            break
+                    break
+                if matched:
+                    rewrite = _cx_rewrite((c, t), accum) if g.name == "cx" \
+                        else _cz_rewrite((c, t), accum)
+                    before = node.prev
+                    after = j.next
+                    for gate in rewrite:
+                        new = _GNode(gate)
+                        before.next = new
+                        new.prev = before
+                        before = new
+                    before.next = after
+                    after.prev = before
+                    changed = True
+                    break  # restart from the head, as the reference pass does
+            node = node.next
+    out = []
+    node = head.next
+    while node is not tail:
+        out.append(node.g)
+        node = node.next
+    return Circuit(circ.num_qubits, out)
 
 
 # ----------------------------------------------------------- 1q phase slide
@@ -230,26 +284,33 @@ def slide_1q(circ: Circuit) -> Circuit:
 
     This pulls redundant phases out of 2-qubit blocks so `peephole` can
     absorb them into neighbouring runs.
+
+    Implementation: bubble discipline — after a transposition the moved
+    gate is re-checked against the next gate to its left before the
+    forward scan resumes, reaching the same fixpoint as the previous
+    restart-from-zero loop without rescanning the prefix (tests pin
+    new-vs-reference output equality on random circuits).
     """
     ops = list(circ.ops)
-    changed = True
-    while changed:
-        changed = False
-        for i in range(len(ops) - 1):
-            g, h = ops[i], ops[i + 1]
-            if len(h.qubits) != 1:
-                continue
-            if g.name == "cx":
-                c, t = g.qubits
-                if (h.qubits[0] == c and is_diagonal(h)) or \
-                   (h.qubits[0] == t and h.name in ("x", "rx")):
-                    ops[i], ops[i + 1] = h, g
-                    changed = True
-                    break
-            elif g.name == "cz" and is_diagonal(h) and h.qubits[0] in g.qubits:
-                ops[i], ops[i + 1] = h, g
-                changed = True
-                break
+    i = 1
+    while i < len(ops):
+        g, h = ops[i - 1], ops[i]
+        if len(h.qubits) != 1:
+            i += 1
+            continue
+        hop = False
+        if g.name == "cx":
+            c, t = g.qubits
+            if (h.qubits[0] == c and is_diagonal(h)) or \
+               (h.qubits[0] == t and h.name in ("x", "rx")):
+                hop = True
+        elif g.name == "cz" and is_diagonal(h) and h.qubits[0] in g.qubits:
+            hop = True
+        if hop:
+            ops[i - 1], ops[i] = h, g
+            i = i - 1 if i > 1 else 1      # re-check the moved gate leftward
+        else:
+            i += 1
     return Circuit(circ.num_qubits, ops)
 
 

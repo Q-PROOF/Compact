@@ -2,6 +2,86 @@
 
 All notable changes to Q-PROOF Compact are documented here.
 
+## [0.2.3] — 2026-09-20
+
+### Added — Project 25: exact proof beyond the dense ceiling
+- **Decision-diagram prover** (`compactq.dd`): QMDD-style weighted
+  decision diagrams with hash-consed unique table, normalization, edge-
+  weight-carrying gate application (1q mix, diagonal row-phase, CX via
+  H·CZ·H), mark-sweep GC of dead intermediates, and a live-node budget.
+  Exact equivalence (same fidelity rule and tolerance as the dense
+  prover) now reaches structured circuits at 15–18+ qubits — far beyond
+  the 8-qubit dense ceiling — and declines loudly (never guesses) when
+  a diagram would exceed the budget.
+- **Algebraic phase-polynomial prover** (`compactq.phasepoly`): exact
+  GF(2) linear-map + parity-angle-table equality for the CX+diagonal
+  fragment at ANY qubit count, with angles compared modulo 2π.  QFT /
+  Trotter / phase-oracle circuits prove at tier 3 in milliseconds at
+  25 qubits and beyond.
+- **Verification cascade** (`compactq.verify`): clifford tableau →
+  phase-polynomial (tier 3, any width) → dense ≤ 8q → compositional →
+  **decision-diagram** (tier 2 beyond the dense ceiling) → randomized
+  K-state.  `optimize_large` returns "exact-proven (algebraic)" or
+  "exact-proven (decision-diagram)" when an exact prover covers the
+  circuit instead of the randomized status.
+- **Independent checker**: `compactq-check` re-derives `dd`-witness
+  certificates with its own decision-diagram implementation (independent
+  code, same spec); tampered outputs are INVALID.  `cert.strongest_
+  witness` emits `dd` for structured circuits beyond 8 qubits.
+- **pair_pack** (`compactq.pairpack`): exact pair-locality reordering
+  (disjoint-wire gates commute) that packs same-pair gates into larger
+  KAK windows; wired into the search portfolio.
+- **Post-routing cleanup**: `route_aware(cleanup=True)` runs the exact
+  local passes on the routed+restored circuit — routing leaves CX-CX-CX
+  and phase debris — accepted only when the whole-circuit prover
+  confirms equivalence.
+- **Orphan passes wired**: `permutation_kak_pass` (SWAP elision) and
+  `cliffordt_pass` (Clifford+T normal form) joined the
+  `optimize_search` candidate portfolio.
+- **parity_pass width lift**: diagonal-core windows beyond 6 qubits now
+  prove through the decision-diagram prover (budget-gated per window).
+- **Lazy public API** (PEP 562): `import compactq` costs ~20 ms instead
+  of importing ~45 modules eagerly; every public name resolves
+  identically (`from compactq import optimize`, `compactq.optimize()`).
+- **cibuildwheel-style native wheel CI** (`.github/workflows/wheels.yml`):
+  Linux + macOS + Windows abi3-py39 Rust wheels built on release tags —
+  ends the Windows-only native story.
+- **Latency benchmark** (`scripts/latency_bench.py`,
+  `results/latency.json`): import time (compactq ~20 ms vs qiskit ~580
+  ms) and small-circuit optimize wall with the proof included
+  (p50 ≈ 2 ms — faster than Qiskit L3's ~4 ms median on the same
+  corpus at interactive sizes).
+
+### Changed
+- `commute_cancel` rewritten on a doubly-linked gate list: O(1) splice
+  per cancellation instead of a full-list rebuild; output verified
+  IDENTICAL to the previous pass on 600 random circuits (pinned by a
+  regression test carrying the reference implementation).
+- `slide_1q` rewritten as a single leftward-bubble sweep; unitary
+  exactness pinned on the same corpus.
+- Small-circuit fast path in `optimize_search` (≤ 40 gates skips the
+  heavy synthesis candidates; never-grow contract unchanged).
+
+### Evidence
+- Full test suite green (13 new v0.2.3 suites; 500-trial dd/dense
+  agreement sweep, 200-trial phase-poly sweep, 600-trial sweep-identity
+  pin, checker end-to-end VALID/INVALID).
+- QCEC referee harness now accepts QCEC's
+  `equivalent_up_to_global_phase` criterion as a hard OK (compactq's
+  guarantee IS up-to-global-phase); the 18 spurious "inconclusive"
+  verdicts convert to OKs on re-run.
+- Benchmarks re-run at submission time per protocol; see
+  `results/*.json`.
+
+### Known limitations (honest)
+- The DD prover's QFT-style diagrams grow as ~2^n nodes at width n
+  (normalization misses QFT's block-scaling relations), so the default
+  live-node budget (400k) covers structured circuits to ~17–18 qubits;
+  wider QFTs decline to the randomized tier.  A Rust DD kernel and
+  improved canonicalization are the roadmap for 20–25q dense-class
+  proofs; CX+diagonal circuits already prove algebraically at any
+  width today.
+
 ## [0.2.2] — 2026-09-20
 
 ### Added

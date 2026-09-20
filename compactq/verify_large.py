@@ -120,16 +120,44 @@ def states_agree(circ_a, circ_b, k: int = 32, tol: float = 1e-8, seed: int = 0):
 
 
 def optimize_large(circ, k: int = 32, tol: float = 1e-8, max_qubits: int = 30):
-    """optimize_search without the dense prover, then randomized verification.
+    """optimize_search without the dense prover, then the strongest
+    available proof: exact algebraic (phase-polynomial), exact
+    decision-diagram, and finally randomized K-state verification.
 
-    Returns (circuit, status): "exact" means the optimized circuit passed
-    K-state randomized verification; "rejected" means it failed and the
-    ORIGINAL circuit is returned instead (never ship unproven).
+    Returns (circuit, status): "exact-proven (algebraic)" and
+    "exact-proven (decision-diagram)" are machine-checked exact proofs;
+    "exact" means K-state randomized verification passed;
+    "rejected" means verification failed and the ORIGINAL circuit is
+    returned instead (never ship unproven).
     """
     from . import optimize_search
+    from .optimize import _UNVERIFIED
     if circ.num_qubits > max_qubits:
         raise ValueError(f"optimize_large supports <= {max_qubits} qubits")
-    out = optimize_search(circ, verify=False)
+    out = optimize_search(circ, verify=_UNVERIFIED)
+
+    # exact tier 3: CX+diagonal fragment -> algebraic proof, any width
+    from .phasepoly import phasepoly_equal
+    try:
+        pp = phasepoly_equal(circ, out)
+    except Exception:
+        pp = None
+    if pp is True:
+        return out, "exact-proven (algebraic)"
+    if pp is False:
+        return circ, "rejected"
+
+    # exact tier 2: decision-diagram proof (node-budgeted; a blowup is
+    # a decline, never a wrong answer)
+    from .dd import check_equivalent_dd, dd_fidelity
+    try:
+        if check_equivalent_dd(circ, out):
+            return out, "exact-proven (decision-diagram)"
+        if dd_fidelity(circ, out) < 1.0 - 1e-7:
+            return circ, "rejected"
+    except Exception:
+        pass  # budget exhausted / unsupported gate: fall to randomized
+
     if states_agree(circ, out, k=k, tol=tol):
         return out, "exact"
     return circ, "rejected"

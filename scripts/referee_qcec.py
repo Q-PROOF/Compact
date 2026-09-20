@@ -63,6 +63,13 @@ def main() -> int:
             if eq == EquivalenceCriterion.equivalent:
                 rec["equivalent"] = True
                 rec["status"] = "OK"
+            elif eq == EquivalenceCriterion.equivalent_up_to_global_phase:
+                # compactq's guarantee IS equivalence up to global phase,
+                # so QCEC's phase-insensitive verdict is a hard OK (this
+                # converted 18 spurious "inconclusive" verdicts)
+                rec["equivalent"] = True
+                rec["global_phase_only"] = True
+                rec["status"] = "OK (up to global phase)"
             elif eq == EquivalenceCriterion.not_equivalent:
                 # cross-check the dispute against the Qiskit Operator
                 # referee before accepting a not-equivalent verdict: the
@@ -89,7 +96,7 @@ def main() -> int:
         (tmp / f"_qcec_in_{d.name}.qasm").unlink(missing_ok=True)
         (tmp / f"_qcec_out_{d.name}.qasm").unlink(missing_ok=True)
 
-    ok = sum(1 for r in records if r.get("status") == "OK")
+    ok = sum(1 for r in records if str(r.get("status", "")).startswith("OK"))
     bad = sum(1 for r in records if r.get("status") == "INEQUIVALENT")
     other = len(records) - ok - bad
     print(f"qcec referee: {ok} OK, {bad} INEQUIVALENT, {other} other")

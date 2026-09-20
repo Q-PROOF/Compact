@@ -171,9 +171,12 @@ def _optimize_dispatch(circ, approx, verify, objective="2q"):
     try:
         from compactq.verify_large import optimize_large
         out, st = optimize_large(circ)
+        if st.startswith("exact-proven"):
+            # machine-checked exact proof (algebraic / decision-diagram)
+            return out, st, dense_limit
         if st == "exact":
             return out, "randomized-exact", dense_limit
-        # randomized verification rejected the optimized circuit: the
+        # verification rejected the optimized circuit: the
         # original is returned unoptimized rather than shipping unproven
         return out, "verification-rejected (original returned)", dense_limit
     except ValueError:

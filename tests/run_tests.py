@@ -579,7 +579,11 @@ def test_optimize_large_verified():
             qc.rz(rng.uniform(0, 6.28), rng.randrange(9))
     circ = from_qiskit(qc)
     out, status = optimize_large(circ, k=12)
-    assert status == "exact", f"9q verification: {status}"
+    # since v0.2.3 the CX+diagonal fragment proves ALGEBRAICALLY at any
+    # width, so a phase-polynomial circuit returns the stronger status
+    assert status in ("exact", "exact-proven (algebraic)",
+                      "exact-proven (decision-diagram)"), \
+        f"9q verification: {status}"
     # negative control: a corrupted circuit must be rejected
     bad = type(out)(out.num_qubits, out.ops[:-1])
     assert states_agree(circ, bad, k=12) is False, "corrupt circuit accepted"
@@ -1200,9 +1204,11 @@ def test_non_unitary_rejection():
 # ------------------------------------------- CLI large-circuit dispatch (release blocker)
 def test_cli_large_circuit_dispatch():
     'RELEASE-BLOCKER regression (external audit): the CLI crashed above'
-    'the dense proof limit instead of dispatching to randomized'
-    'verification.  It must exit 0, report randomized-exact on stderr,'
-    'and emit machine-readable JSON.'
+    'the dense proof limit instead of dispatching to the proof cascade.'
+    'It must exit 0, report an exact-proven or randomized status on'
+    'stderr, and emit machine-readable JSON.  Since v0.2.3 the cascade'
+    'proves structured circuits EXACTLY (decision-diagram / algebraic)'
+    'beyond the dense ceiling, so both statuses are accepted.'
     import json as _json
     import os
     import subprocess
@@ -1226,9 +1232,10 @@ def test_cli_large_circuit_dispatch():
             [sys.executable, '-m', 'compactq', inp, '--json'],
             capture_output=True, text=True, cwd=repo, timeout=600)
         assert r.returncode == 0, 'CLI failed on 9q: ' + r.stderr[-300:]
-        assert 'randomized-exact' in r.stderr, r.stderr
+        assert ('exact-proven' in r.stderr) or ('randomized-exact' in r.stderr), r.stderr
         payload = _json.loads(r.stdout)
-        assert payload['status'] == 'randomized-exact'
+        assert payload['status'] in ('randomized-exact', 'exact-proven (algebraic)',
+                                     'exact-proven (decision-diagram)')
         assert payload['after']['gates'] <= payload['before']['gates']
 
 # ------------------------------------------------- cliffordize recognition
@@ -2476,6 +2483,286 @@ def test_adversarial():
         assert 'probabilities' in res and 'report' in res
 
 
+# ------------------------------------------------- v0.2.3 proof cascade
+def _rand_circ(n, ngates, rng):
+    names1 = ["h", "x", "z", "s", "sdg", "t", "tdg", "sx"]
+    ops = []
+    for _ in range(ngates):
+        if n == 1 or rng.random() < 0.5:
+            ops.append(Gate(rng.choice(names1), (), (rng.randrange(n),)))
+        else:
+            a, b = rng.sample(range(n), 2)
+            ops.append(Gate(rng.choice(["cx", "cz", "swap"]), (), (a, b)))
+    return Circuit(n, ops)
+
+
+def test_dd_dense_agreement():
+    """dd prover vs dense referee: verdicts must agree on random pairs,
+    including deliberate inequivalence (400 trials)."""
+    from compactq.equivalence import check_equivalent
+    from compactq.dd import check_equivalent_dd
+    rng = random.Random(7)
+    agree = 0
+    for _trial in range(400):
+        n = rng.randint(1, 5)
+        a = _rand_circ(n, rng.randint(0, 30), rng)
+        b = a if rng.random() < 0.5 else _rand_circ(n, rng.randint(0, 30), rng)
+        if check_equivalent(a, b) == check_equivalent_dd(a, b):
+            agree += 1
+    assert agree == 400, f"dd/dense disagreement on {400 - agree} trials"
+
+
+def test_dd_beyond_ceiling():
+    """dd prover proves QFT-style structured circuits EXACTLY at widths the
+    dense prover can never touch, catches real perturbations there, and
+    the node budget degrades gracefully (decline, never a wrong answer)
+    when a diagram would blow up."""
+    from compactq.dd import check_equivalent_dd, dd_fidelity, DDOverflow
+    def qft(n):
+        ops = []
+        for i in range(n):
+            ops.append(Gate("h", (), (i,)))
+            for j in range(i + 1, n):
+                ang = 3.141592653589793 / (2 ** (j - i))
+                ops.append(Gate("cp", (ang,), (j, i)))
+        return Circuit(n, ops)
+    c = qft(15)
+    assert check_equivalent_dd(c, Circuit(15, list(c.ops)))
+    ops2 = list(c.ops)
+    ops2[1] = Gate("x", (), (0,))
+    assert dd_fidelity(c, Circuit(15, ops2)) < 1 - 1e-6, \
+        "perturbed QFT must not be proven equivalent"
+    # width where the diagram exceeds the budget: must decline loudly,
+    # never return a wrong verdict
+    try:
+        check_equivalent_dd(qft(24), Circuit(24, list(qft(24).ops)))
+        raised = False
+    except DDOverflow:
+        raised = True
+    assert raised, "QFT-24 must exceed the default node budget"
+
+
+def test_phasepoly_suite():
+    """phasepoly prover agrees with the dense referee on the fragment and
+    proves 25q CX+diagonal circuits algebraically."""
+    from compactq.equivalence import check_equivalent
+    from compactq.phasepoly import phasepoly_equal
+    rng = random.Random(3)
+    agree = 0
+    for _trial in range(200):
+        n = rng.randint(1, 5)
+        ops = []
+        for _ in range(rng.randint(0, 25)):
+            r = rng.random()
+            if n > 1 and r < 0.5:
+                a, b = rng.sample(range(n), 2)
+                ops.append(Gate(rng.choice(["cx", "swap"]), (), (a, b)))
+            elif r < 0.8:
+                ops.append(Gate("rz", (rng.random() * 6.28,),
+                                (rng.randrange(n),)))
+            else:
+                ops.append(Gate(rng.choice(["s", "z", "t"]), (),
+                                (rng.randrange(n),)))
+        a = Circuit(n, ops)
+        b = a if rng.random() < 0.5 else _rand_pp_variant(a, rng)
+        if check_equivalent(a, b) == phasepoly_equal(a, b):
+            agree += 1
+    assert agree == 200
+    ops = []
+    for i in range(24):
+        ops.append(Gate("cx", (), (i, i + 1)))
+        ops.append(Gate("rz", (0.31,), (i + 1,)))
+        ops.append(Gate("cx", (), (i, i + 1)))
+    c = Circuit(25, ops)
+    assert phasepoly_equal(c, Circuit(25, list(c.ops))) is True
+
+
+def _rand_pp_variant(a, rng):
+    ops = list(a.ops)
+    if not ops:
+        return a
+    for _ in range(2):
+        k = rng.randrange(len(ops))
+        g = ops[k]
+        if g.name == "rz":
+            ops[k] = Gate("rz", (g.params[0] + rng.choice([6.283185307179586,
+                                                           -6.283185307179586]),),
+                          g.qubits)
+    return Circuit(a.num_qubits, ops)
+
+
+def test_verify_cascade_tiers():
+    """the public verify() cascade dispatches to the strongest prover."""
+    from compactq.verify import verify
+    def qft(n):
+        ops = []
+        for i in range(n):
+            ops.append(Gate("h", (), (i,)))
+            for j in range(i + 1, n):
+                ops.append(Gate("cp", (3.141592653589793 / (2 ** (j - i)),),
+                                (j, i)))
+        return Circuit(n, ops)
+    c = qft(12)
+    v = verify(c, c)
+    assert v["equivalent"] is True and v["tier"] >= 2, v
+    ops = []
+    for i in range(24):
+        ops.append(Gate("cx", (), (i, i + 1)))
+        ops.append(Gate("rz", (0.31,), (i + 1,)))
+        ops.append(Gate("cx", (), (i, i + 1)))
+    ring = Circuit(25, ops)
+    v2 = verify(ring, ring)
+    assert v2["tier"] == 3 and v2["method"] == "phase_polynomial", v2
+    bad_ops = list(c.ops)
+    for k, g in enumerate(bad_ops):
+        if g.name == "cp":
+            bad_ops[k] = Gate("cp", (g.params[0] + 0.7,), g.qubits)
+            break
+    v3 = verify(c, Circuit(12, bad_ops))
+    assert v3["equivalent"] is False, v3
+
+
+def test_sweep_rewrite_identity():
+    """the v0.2.3 linked-list commute_cancel must produce output IDENTICAL
+    to the original restart-scan semantics (600 random circuits); the
+    bubble slide_1q must stay unitary-exact on the same corpus."""
+    from compactq.transforms import (commute_cancel, slide_1q, _cx_rewrite,
+                                     _cz_rewrite, is_diagonal)
+    from compactq.equivalence import check_equivalent
+
+    def ref_cc(circ):
+        ops = circ.ops
+        changed = True
+        while changed:
+            changed = False
+            for i in range(len(ops)):
+                g = ops[i]
+                if g.name not in ("cx", "cz"):
+                    continue
+                c, t = g.qubits
+                accum = []
+                j = i + 1
+                matched = False
+                while j < len(ops):
+                    h = ops[j]
+                    if len(h.qubits) == 1:
+                        q = h.qubits[0]
+                        if q == c and g.name == "cx":
+                            if is_diagonal(h) or h.name == "x":
+                                accum.append(h); j += 1; continue
+                            break
+                        if q == t and g.name == "cx":
+                            if h.name in ("x", "rx"):
+                                accum.append(h); j += 1; continue
+                            break
+                        if g.name == "cz":
+                            if h.name == "x" or is_diagonal(h):
+                                accum.append(h); j += 1; continue
+                            break
+                        accum.append(h); j += 1; continue
+                    hq = set(h.qubits)
+                    if len(hq) == 2:
+                        if h.name == "cz" and hq == {c, t} and g.name == "cz":
+                            matched = True; break
+                        if h.name == "cx" and g.name == "cx" \
+                                and h.qubits == g.qubits:
+                            matched = True; break
+                    break
+                if matched:
+                    rw = _cx_rewrite((c, t), accum) if g.name == "cx" \
+                        else _cz_rewrite((c, t), accum)
+                    ops = ops[:i] + rw + ops[j + 1:]
+                    changed = True
+                    break
+        return Circuit(circ.num_qubits, ops)
+
+    rng = random.Random(42)
+    for _trial in range(600):
+        n = rng.randint(1, 7)
+        c = _rand_circ(n, rng.randint(0, 60), rng)
+        assert [(g.name, g.params, g.qubits) for g in commute_cancel(c).ops] \
+            == [(g.name, g.params, g.qubits) for g in ref_cc(c).ops], \
+            "commute_cancel divergence"
+        s = slide_1q(c)
+        assert check_equivalent(c, s), "slide_1q broke the unitary"
+
+
+def test_pair_pack_suite():
+    """pair_pack is exact (dense-proven), preserves per-wire gate order,
+    and never loses content."""
+    from compactq.pairpack import pair_pack
+    from compactq.equivalence import check_equivalent
+    from collections import Counter
+    rng = random.Random(5)
+    for _trial in range(100):
+        n = rng.randint(2, 6)
+        c = _rand_circ(n, rng.randint(3, 50), rng)
+        p = pair_pack(c)
+        assert check_equivalent(c, p), "pair_pack changed the unitary"
+        cw = sorted(Counter((q, g.name) for g in c.ops
+                            for q in g.qubits).items())
+        pw = sorted(Counter((q, g.name) for g in p.ops
+                            for q in g.qubits).items())
+        assert cw == pw, "pair_pack broke per-wire content/order"
+
+
+def test_search_portfolio_v023():
+    """wired orphan passes + fast path keep never-grow and exactness."""
+    from compactq import optimize_search, optimize
+    from compactq.equivalence import check_equivalent
+    from compactq.optimize import _score
+    rng = random.Random(11)
+    for _trial in range(25):
+        n = rng.randint(2, 5)
+        c = _rand_circ(n, rng.randint(5, 80), rng)
+        out = optimize_search(c)
+        assert _score(out) <= _score(c), "never-grow violated"
+        if not check_equivalent(c, out):
+            base = optimize(c)
+            assert check_equivalent(c, base), "baseline inexact"
+
+
+def test_route_cleanup():
+    """route_aware(cleanup=True) removes routing debris and returns a
+    proven-equivalent circuit."""
+    from compactq.hardware import route_aware
+    from compactq.equivalence import check_equivalent
+    coupling = [(i, i + 1) for i in range(4)]
+    rng = random.Random(9)
+    for _trial in range(6):
+        c = _rand_circ(5, rng.randint(10, 40), rng)
+        out, _pos = route_aware(c, coupling, restore=True, cleanup=True)
+        assert check_equivalent(c, out), "cleanup broke exactness"
+
+
+def test_checker_dd_witness():
+    """compactq-check independently re-derives dd-witness certificates:
+    VALID on the true pair, INVALID on any tampered output."""
+    from compactq.cert import optimize_with_certificate
+    def qft(n):
+        ops = []
+        for i in range(n):
+            ops.append(Gate("h", (), (i,)))
+            for j in range(i + 1, n):
+                ops.append(Gate("cp", (3.141592653589793 / (2 ** (j - i)),),
+                                (j, i)))
+        return Circuit(n, ops)
+    c = qft(9)
+    result = optimize_with_certificate(c)
+    assert result.certificate is not None, result.reason
+    assert result.certificate["witness"]["kind"] == "dd"
+    from pathlib import Path as _Path
+    sys.path.insert(0, str(_Path(__file__).resolve().parents[1]
+                           / "compactq-check" / "src"))
+    from compactq_check.checker import check_certificate
+    from compactq import to_qasm
+    iq, oq = to_qasm(c), to_qasm(result.circuit)
+    v = check_certificate(result.certificate, iq, oq)
+    assert v["verdict"] == "VALID", v
+    v2 = check_certificate(result.certificate, iq, oq + "\n")
+    assert v2["verdict"] == "INVALID", "tampered output must be INVALID"
+
+
 ALL = [
     ("merge rotations", test_merge_rotations),
     ("cancel H X H -> Z", test_cancel_inverse_1q),
@@ -2513,6 +2800,15 @@ ALL = [
     ("native parity-network kernel exactness", test_parity_native_kernel),
     ("non-unitary input rejection (audit blockers)", test_non_unitary_rejection),
     ("CLI large-circuit dispatch (9q, audit blocker)", test_cli_large_circuit_dispatch),
+    ("dd prover: dense agreement sweep (400 trials)", test_dd_dense_agreement),
+    ("dd prover: exact beyond the dense ceiling (QFT 20q)", test_dd_beyond_ceiling),
+    ("phasepoly prover: dense agreement + 25q algebraic tier", test_phasepoly_suite),
+    ("verify cascade tier dispatch (clifford/phasepoly/dd)", test_verify_cascade_tiers),
+    ("sweep rewrites identical to reference (600 trials)", test_sweep_rewrite_identity),
+    ("pair_pack exact + locality", test_pair_pack_suite),
+    ("search portfolio: orphan passes wired + fast path", test_search_portfolio_v023),
+    ("route_aware cleanup exact + shrinking", test_route_cleanup),
+    ("checker: dd witness independent re-derivation", test_checker_dd_witness),
     ("suppression passes exact (twirl + DD)", test_suppress_passes),
     ("noise gate_error width fallback", test_noise_gate_error_fallback),
     ("DD benefit gate (never a net loss)", test_dd_benefit_gate),

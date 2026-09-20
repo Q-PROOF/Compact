@@ -6,9 +6,14 @@ evidence backs the answer:
 
   tier 3  clifford_tableau     both circuits are Clifford: exact algebraic
                                tableau proof, any qubit count
+  tier 3  phase_polynomial     both circuits are CX+diagonal: exact GF(2)
+                               parity-table proof, any qubit count
   tier 2  full_unitary         dense |Tr(U+V)|/d comparison within the
                                prover's qubit limit (8 with the native
                                kernels, 6 without)
+  tier 2  dd_full_unitary      decision-diagram |Tr(U+V)|/d beyond the
+                               dense ceiling (structured circuits to 25+
+                               qubits; node-budgeted, declines on blowup)
   tier 1  randomized_sampling  K random product states (needs numpy;
                                probabilistically exact to 1e-8)
   tier 0  none                 prover unavailable (e.g. numpy missing on a
@@ -46,6 +51,8 @@ VERIFICATION_TIERS = {
 # CLI proof-status strings -> verification tier (see compactq.cli)
 _STATUS_TIER = {
     "exact-unitary": 2,
+    "exact-proven (algebraic)": 3,
+    "exact-proven (decision-diagram)": 2,
     "compositional": 4,
     "randomized-exact": 1,
     "approximate": 0,
@@ -97,6 +104,16 @@ def verify(original: Circuit, optimized: Circuit) -> dict:
     except Exception:
         pass  # fall through to the numerical provers
 
+    # tier 3: CX+diagonal fragment -> exact GF(2) parity-table proof,
+    # any width (decisive in both directions when both are in fragment)
+    from .phasepoly import phasepoly_equal
+    try:
+        pp = phasepoly_equal(original, optimized)
+        if pp is not None:
+            return pack(pp, 3, "phase_polynomial")
+    except Exception:
+        pass  # fall through on numerical doubt
+
     # tier 2: dense unitary comparison within the prover's limit
     from .equivalence import check_equivalent, _MAX_QUBITS
     if original.num_qubits <= _MAX_QUBITS:
@@ -116,6 +133,17 @@ def verify(original: Circuit, optimized: Circuit) -> dict:
         if not comp["equivalent"]:
             extra["failing_block_qubits"] = comp["failing_block_qubits"]
         return pack(comp["equivalent"], 4, comp["method"], extra)
+
+    # tier 2: decision-diagram proof beyond the dense ceiling — structured
+    # circuits prove exactly to 25+ qubits; the node budget makes a
+    # blowup a decline (fall through), never a wrong answer
+    from .dd import DD_MAX_QUBITS, check_equivalent_dd, DDOverflow
+    if original.num_qubits <= DD_MAX_QUBITS:
+        try:
+            return pack(bool(check_equivalent_dd(original, optimized)),
+                        2, "dd_full_unitary")
+        except Exception:
+            pass  # budget exhausted / unsupported gate: fall through
 
     # tier 1: randomized K-state sampling (numpy optional)
     try:

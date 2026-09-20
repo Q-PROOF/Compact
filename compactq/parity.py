@@ -196,11 +196,48 @@ def _parity_network(terms: dict, n: int, max_states: int = 4_000):
 def parity_pass(circ: Circuit) -> Circuit:
     """Re-synthesize diagonal cores with parity networks (exact, verified).
 
-    Windows are only replaced when the circuit has <= 6 qubits so the
-    replacement can be proven with a full-unitary fidelity check.
+    Each replacement is proven against its window's own unitary.  Windows
+    up to 8 qubits prove with the dense prover; wider windows (structured
+    MCX/QFT-shaped cores) prove with the decision-diagram prover when it
+    stays within budget, so the pass now reaches large circuits — a
+    blown DD budget just declines that window (never a wrong rewrite).
     """
     if circ.num_qubits > 6:
-        return circ
+        from .dd import check_equivalent_dd
+        windows = collect_parity_windows(circ)
+        if not windows:
+            return circ
+        ops = circ.ops
+        out = []
+        prev = 0
+        changed = False
+        for (start, end, terms, _n) in windows:
+            out.extend(ops[prev:start])
+            prev = end
+            block_circ = Circuit(circ.num_qubits, ops[start:end])
+            synth = _parity_network(dict(terms), circ.num_qubits)
+            if synth is None:
+                out.extend(ops[start:end])
+                continue
+            cand = Circuit(circ.num_qubits, synth)
+            try:
+                proven = check_equivalent_dd(block_circ, cand)
+            except Exception:
+                proven = False  # decline the window on any prover doubt
+            if not proven:
+                out.extend(ops[start:end])
+                continue
+            if ((cand.two_qubit_count(), len(cand), cand.depth())
+                    < (block_circ.two_qubit_count(), len(block_circ),
+                       block_circ.depth())):
+                out.extend(synth)
+                changed = True
+            else:
+                out.extend(ops[start:end])
+        out.extend(ops[prev:])
+        if not changed:
+            return circ
+        return Circuit(circ.num_qubits, out)
     windows = collect_parity_windows(circ)
     if not windows:
         return circ

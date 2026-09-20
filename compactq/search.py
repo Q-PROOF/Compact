@@ -26,6 +26,12 @@ _SEARCH_OBJECTIVES = _OBJECTIVES + ("weighted",)
 # Small benchmark circuits (QASMBench small max ~500 gates) are unaffected.
 _HEAVY_GATE_LIMIT = 1200
 
+# Small-circuit fast path: below this gate count the candidate portfolio
+# rarely pays for itself (measured on the latency bench) — the safe
+# pipeline + deep round + u3 fold are run, the heavy synthesis
+# candidates are skipped to keep interactive latency low.
+_FAST_PATH_GATES = 20
+
 # weighted-mode cost: NISQ-oriented — the 2-qubit count dominates, depth and
 # total gates are secondary penalties.  Hardware-error weighting (per-pair
 # fidelities) lives in compactq.target.optimize_for.
@@ -161,6 +167,15 @@ def optimize_search(circ: Circuit, verify: bool | None = None, depth: int = 2,
             return best
         best, best_score = deep, _score(deep, objective)
 
+    # small-circuit fast path: interactive latency beats marginal
+    # synthesis candidates — one u3 fold, then done
+    if len(circ.ops) <= _FAST_PATH_GATES:
+        cand = u3_fold(best)
+        if _score(cand, objective) < best_score:
+            if not verify or check_equivalent(circ, cand):
+                best, best_score = cand, _score(cand, objective)
+        return best
+
     # NOTE: an older revision had a "reversed-gate-order" candidate here
     # (optimize the reversed circuit, then reverse back).  It was UNSOUND:
     # reversing a gate list does not preserve the operator, so whenever
@@ -233,12 +248,50 @@ def optimize_search(circ: Circuit, verify: bool | None = None, depth: int = 2,
     if _score(cand, objective) < best_score:
         if not verify or check_equivalent(circ, cand):
             best, best_score = cand, _score(cand, objective)
+
+    # candidate 6: permutation-aware KAK - per-block free SWAP orientation
+    # with the residual permutation paid once as SWAPs (SWAP elision, the
+    # Qiskit-L3 trick).  Verified per block inside the pass.
+    if not heavy:
+        from .permkak import permutation_kak_pass
+        pk = permutation_kak_pass(best)
+        if pk is not None:
+            cand = optimize(pk, verify=_UNVERIFIED, objective=pipe_obj)
+            if _score(cand, objective) < best_score:
+                if not verify or check_equivalent(circ, cand):
+                    best, best_score = cand, _score(cand, objective)
+
+    # candidate 6b: pair-locality packing - exact reordering (disjoint-wire
+    # gates commute) that packs same-pair gates into contiguous windows so
+    # KAK resynthesis sees bigger blocks.  Verified whole-circuit below.
+    if not heavy:
+        from .pairpack import pair_pack
+        packed = pair_pack(best)
+        if len(packed.ops) and [ (g.name, g.qubits) for g in packed.ops ] != \
+               [ (g.name, g.qubits) for g in best.ops ]:
+            cand = optimize(packed, verify=_UNVERIFIED, objective=pipe_obj)
+            cand = kak_pass(cand, force=False)
+            cand = optimize(cand, verify=_UNVERIFIED, objective=pipe_obj)
+            if _score(cand, objective) < best_score:
+                if not verify or check_equivalent(circ, cand):
+                    best, best_score = cand, _score(cand, objective)
+
+    # candidate 7: Clifford+T normal form - factors the circuit into
+    # Clifford layers (tableau-exact) + shared parity phase layers;
+    # whole-circuit-verified inside the pass and only accepted when the
+    # 2q count strictly drops.
+    if not heavy and feats.get("clifford_fraction", 0.0) > 0.3:
+        from .cliffordt import cliffordt_pass
+        cand = cliffordt_pass(best)
+        if cand is not None:
+            cand = optimize(cand, verify=_UNVERIFIED, objective=pipe_obj)
+            if _score(cand, objective) < best_score:
+                if not verify or check_equivalent(circ, cand):
+                    best, best_score = cand, _score(cand, objective)
+
     # final polish: fold 1q runs into single-u3 form (exact, gate-count only).
     # Runs LAST because u3 gates are opaque to the commutation passes.
     cand = u3_fold(best)
-    if _score(cand, objective) < best_score:
-        if not verify or check_equivalent(circ, cand):
-            best, best_score = cand, _score(cand, objective)
     if _score(cand, objective) < best_score:
         if not verify or check_equivalent(circ, cand):
             best, best_score = cand, _score(cand, objective)

@@ -8,6 +8,9 @@ QASM circuits:
        unitary           — dense rebuild of both unitaries (≤ 8 qubits)
        stabilizer        — fresh Clifford canonical forms, any width
        phase_polynomial  — fresh parity→angle tables, any width
+       dd                — fresh decision-diagram overlap (≤ 32 qubits,
+                           node-budgeted; the checker declines, never
+                           guesses, when its budget is exhausted)
 
 Verdicts: VALID / INVALID (well-formed but false or unprovable) —
 MALFORMED is raised as ValueError by the loader for unparseable inputs.
@@ -16,10 +19,11 @@ from __future__ import annotations
 
 import hashlib
 
-from .ops import (build_unitary, clifford_equal, fidelity,
+from .ops import (build_unitary, clifford_equal, dd_equal, fidelity,
                   is_clifford_ops, phasepoly_canonical, phasepoly_equal)
 
-WITNESS_LIMITS = {"unitary": 8, "stabilizer": None, "phase_polynomial": None}
+WITNESS_LIMITS = {"unitary": 8, "stabilizer": None, "phase_polynomial": None,
+                  "dd": 32}
 
 
 def check_certificate(cert: dict, input_qasm: str, output_qasm: str,
@@ -82,6 +86,14 @@ def check_certificate(cert: dict, input_qasm: str, output_qasm: str,
                             "polynomial circuits")
         equivalent = phasepoly_equal(ops_in, ops_out, n_in, tol)
         method = "phase_polynomial_table_equality"
+    elif kind == "dd":
+        eq = dd_equal(ops_in, ops_out, n_in, tol)
+        if eq is None:
+            return _verdict("INVALID",
+                            "dd witness exceeds the checker's own node "
+                            "budget — cannot be independently re-derived")
+        equivalent = eq
+        method = "decision_diagram_overlap"
 
     if equivalent is True:
         return {"verdict": "VALID", "equivalent": True, "tier_kind": kind,

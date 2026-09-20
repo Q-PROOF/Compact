@@ -202,7 +202,7 @@ def _all_pairs_dist(coupling, n):
 
 
 def route_aware(circ: Circuit, coupling, target=None, restore: bool = False,
-                passes: int = 2):
+                passes: int = 2, cleanup: bool = True):
     """SABRE-lite routing: insert SWAPs choosing, at each step, the edge whose
     swap minimizes the sum of post-swap endpoint distances for the current
     gate plus a one-gate look-ahead, weighted by each edge's error rate when
@@ -213,6 +213,12 @@ def route_aware(circ: Circuit, coupling, target=None, restore: bool = False,
     logical qubit to the physical qubit it ends on (apply it to your
     measurements).  With restore=True the routed circuit is verified for
     <= 6 qubits against the relabeled original.
+
+    With cleanup=True (default) the routed+restored circuit goes through
+    the exact local passes (swap template, commutative cancellation, 1q
+    sliding/folding) — routing leaves CX-CX-CX and phase debris the
+    optimizer would otherwise never see — and the cleaned circuit is
+    accepted only when the whole-circuit prover confirms equivalence.
     """
     coupling_l = [tuple(e) for e in coupling if e[0] != e[1]]
     edges = {frozenset(e) for e in coupling_l}
@@ -343,7 +349,21 @@ def route_aware(circ: Circuit, coupling, target=None, restore: bool = False,
             for (a, b) in seq:
                 restore_ops.append(Gate("swap", (), (a, b)))
 
-    return Circuit(n, (ops + restore_ops) if restore else ops), final_pos
+    full = (ops + restore_ops) if restore else ops
+    if cleanup and restore and restore_ops:
+        from .transforms import commute_cancel, peephole, slide_1q, swap_template
+        cleaned = peephole(slide_1q(commute_cancel(swap_template(
+            Circuit(n, full)))))
+        from .equivalence import check_equivalent, _MAX_QUBITS
+        if n <= _MAX_QUBITS:
+            try:
+                if check_equivalent(circ, cleaned):
+                    return cleaned, final_pos
+            except Exception:
+                pass  # numerical doubt: ship the uncleaned route
+        # beyond the prover's width the cleanup cannot be proven -> declined
+        return Circuit(n, full), final_pos
+    return Circuit(n, full), final_pos
 
 
 def exact_placement(circ: Circuit, coupling, noise=None):

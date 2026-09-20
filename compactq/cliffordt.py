@@ -28,6 +28,7 @@ import math
 from .circuit import Circuit, Gate
 from .stabilizer import Tableau
 from .parity import _parity_network
+from .clifford import _synth_gates_from_tableau
 
 _Q4 = math.pi / 4
 _TOL = 1e-9

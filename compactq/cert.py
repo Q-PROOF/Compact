@@ -75,8 +75,14 @@ def strongest_witness(circ: Circuit):
     if _is_phase_polynomial(circ):
         return "phase_polynomial", {
             "note": "parity/angle table equality, any width"}
+    from .dd import DD_MAX_QUBITS
+    if circ.num_qubits <= DD_MAX_QUBITS:
+        return "dd", {"note": "decision-diagram overlap re-derived "
+                              "independently by compactq-check (node-"
+                              "budgeted; the checker declines, never "
+                              "guesses)"}
     return None, ("circuit exceeds the dense prover and is neither "
-                  "Clifford nor phase-polynomial")
+                  "Clifford, phase-polynomial, nor DD-covered")
 
 
 def build_certificate(original: Circuit, optimized: Circuit,

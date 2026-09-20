@@ -1,0 +1,65 @@
+name: wheels
+
+# Native Rust wheels for every platform: abi3-py39 means one wheel per
+# platform covers all Python >= 3.9.  Without a wheel, non-Windows users
+# silently fall back to the pure-Python pass engine (~4x slower KAK).
+# Runs on tag push (release) and manually to conserve Actions minutes.
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - name: Build sdist + abi3 wheels
+        uses: PyO3/maturin-action@v1
+        with:
+          working-directory: native
+          command: build
+          args: --release --out dist --find-interpreter
+          sccache: true
+      - name: Build free-threaded wheel (linux)
+        if: matrix.os == 'ubuntu-latest'
+        uses: PyO3/maturin-action@v1
+        with:
+          working-directory: native
+          command: build
+          args: --release --out dist --interpreter python3.13t
+          sccache: true
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheels-${{ matrix.os }}
+          path: native/dist
+
+  release:
+    needs: [build]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+          path: dist
+      - name: Attach wheels to the GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*

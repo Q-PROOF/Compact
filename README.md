@@ -16,14 +16,15 @@
 **The verified quantum circuit optimizer.** Smaller circuits, proven. Compact takes a quantum circuit and returns an equivalent one that is smaller and shallower — with verification attached to every answer: exact algebraic proofs where the circuit structure allows them, and a numerical whole-unitary certificate otherwise. On any doubt, your input is returned unchanged.
 
 **Current evidence** — 43 QASMBench circuits + 44 MQT Bench circuits refereed
-by Qiskit's `Operator`; a 1,018-check end-to-end gauntlet; 93 test functions;
+by Qiskit's `Operator`; a 1,018-check end-to-end gauntlet; 100+ test functions;
 **0 incorrect Compact outputs** in any refereed set; measured Qiskit L3 /
 pytket / Cirq / **BQSKit** comparisons; stability **demonstrated across the
 tested scalability workload suite through 256Q** (tiered verification:
-algebraic at any width for Clifford, dense ≤ 8q, compositional where
-applicable — formal equivalence at large widths remains
-workload- and structure-dependent); hardware-error objectives, SABRE-lite
-routing, and an open error-suppression stack.
+algebraic at any width for Clifford and for CX+diagonal circuits,
+**decision-diagram exact proofs for structured circuits to ~18q** (v0.2.3),
+dense ≤ 8q, compositional where applicable — formal equivalence at large
+widths remains workload- and structure-dependent); hardware-error
+objectives, SABRE-lite routing, and an open error-suppression stack.
 **Current limitation:** hardware-mapped benchmarking is still being expanded
 (`results/`, roadmap).
 
@@ -95,10 +96,32 @@ verdict **and** the evidence tier:
 |---|---|---|---|
 | 0 | unverified | — | today |
 | 1 | verified-randomized | K random-state sampling (numpy) | today |
-| 2 | exact-proven | full-unitary numerical certificate | today (≤ 8q) |
-| 3 | exact-proven | algebraic tableau certificate (Clifford, any width) | today |
+| 2 | exact-proven | full-unitary numerical certificate | today (≤ 8q dense; **≤ 32q decision-diagram, structured circuits**) |
+| 3 | exact-proven | algebraic certificate (Clifford tableau **and CX+diagonal phase-polynomial tables**, any width) | today |
 | 4 | exact-proven (compositional) | per-block certificates composed (disjoint blocks; sequential segments) | **today (prototype)** |
-| 5 | formal-proof | proof-assistant / decision-diagram grade | roadmap |
+| 5 | formal-proof | proof-assistant grade | roadmap |
+
+**Beyond the 8-qubit dense ceiling (v0.2.3).**  The proof cascade now
+carries two more exact provers:
+
+- **Decision-diagram prover** (`compactq.dd`): QMDD-style weighted
+  decision diagrams with a live-node budget prove structured circuits
+  (QFT, adders, Grover shapes, Trotter rings) exactly at 15–18+ qubits —
+  widths where no dense matrix can exist — and decline loudly (fall to
+  the next tier, never guess) when a diagram would exceed the budget.
+- **Phase-polynomial prover** (`compactq.phasepoly`): circuits over
+  CX + diagonal rotations prove ALGEBRAICALLY at any width — exact GF(2)
+  linear-map + parity-angle table equality — so 25-qubit Trotter/phase
+  circuits verify in milliseconds at tier 3.
+
+`optimize_large` returns `"exact-proven (algebraic)"` or
+`"exact-proven (decision-diagram)"` when an exact prover covers the
+circuit, instead of the randomized status.  Certificates carry the
+strongest witness (`dd` certificates are re-derived independently by
+`compactq-check`).  And the interactive story got faster: `import
+compactq` is ~20 ms (lazy public API) and small circuits optimize with
+proof in ~1–2 ms (`results/latency.json`) — vs Qiskit's ~580 ms import
+and ~4 ms unproven optimize on the same laptop.
 
 "Exact-proven" means a machine-checked certificate of unitary
 equivalence up to global phase — it is **not** a formal

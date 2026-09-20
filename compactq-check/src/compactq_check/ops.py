@@ -280,3 +280,223 @@ def phasepoly_equal(ops_a, ops_b, n, tol=1e-7):
         if abs(_mod(va - vb)) > tol:
             return False
     return True
+
+
+# ------------------------------------------------ decision-diagram witness
+# Independent QMDD-style re-derivation for "dd" certificates: weighted
+# hash-consed diagrams, first-nonzero-slot normalization, verdict from
+# the memoized overlap |Tr(A+ B)|/d at the certificate tolerance.
+# Written against the certificate spec; shares no producer code.
+
+_DD_EPS = 1e-14
+
+
+class _DDB:
+    __slots__ = ("nodes", "table", "addmemo")
+
+    def __init__(self):
+        self.nodes = []   # id-1 -> (level, w0,c0, w1,c1, w2,c2, w3,c3)
+        self.table = {}
+        self.addmemo = {}
+
+    def mk(self, level, slots):
+        pivot = None
+        for w in slots[0::2]:
+            if abs(w) > _DD_EPS:
+                pivot = w
+                break
+        if pivot is None:
+            return (0.0 + 0.0j, 0)
+        f = 1.0 / pivot
+        k = [0.0 + 0.0j if abs(w * f) <= _DD_EPS else w * f
+             for w in slots[0::2]]
+        cs = [c if abs(w) > _DD_EPS else 0
+              for w, c in zip(k, slots[1::2])]
+        key = (level, round(k[0].real, 12), round(k[0].imag, 12), cs[0],
+               round(k[1].real, 12), round(k[1].imag, 12), cs[1],
+               round(k[2].real, 12), round(k[2].imag, 12), cs[2],
+               round(k[3].real, 12), round(k[3].imag, 12), cs[3])
+        nid = self.table.get(key)
+        if nid is None:
+            nid = len(self.nodes) + 1
+            self.nodes.append((level, k[0], cs[0], k[1], cs[1],
+                               k[2], cs[2], k[3], cs[3]))
+            self.table[key] = nid
+        return (pivot, nid)
+
+    def add(self, a, b):
+        wa, ia = a
+        wb, ib = b
+        if abs(wa) <= _DD_EPS:
+            return b
+        if abs(wb) <= _DD_EPS:
+            return a
+        if ia == ib:
+            return (wa + wb, ia)
+        na = self.nodes[ia - 1]
+        nb = self.nodes[ib - 1]
+        la, lb = na[0], nb[0]
+        if la < 0 and lb < 0:
+            return (wa + wb, 0)
+        if la < 0 or lb < 0:
+            raise ValueError("dd level mismatch in checker add")
+        ch = []
+        for s in range(4):
+            ch.append(self.add((wa * na[1 + 2 * s], na[2 + 2 * s]),
+                               (wb * nb[1 + 2 * s], nb[2 + 2 * s])))
+        res = self.mk(la, [x for p in ch for x in p])
+        return res
+
+    def apply_1q(self, a, wire, m):
+        w, nid = a
+        if nid == 0 or abs(w) <= _DD_EPS:
+            return (0.0 + 0.0j, 0)
+        nd = self.nodes[nid - 1]
+        s = [(nd[1], nd[2]), (nd[3], nd[4]), (nd[5], nd[6]), (nd[7], nd[8])]
+        if nd[0] == wire:
+            n00 = self.add((m[0] * s[0][0], s[0][1]),
+                           (m[1] * s[2][0], s[2][1]))
+            n01 = self.add((m[0] * s[1][0], s[1][1]),
+                           (m[1] * s[3][0], s[3][1]))
+            n10 = self.add((m[2] * s[0][0], s[0][1]),
+                           (m[3] * s[2][0], s[2][1]))
+            n11 = self.add((m[2] * s[1][0], s[1][1]),
+                           (m[3] * s[3][0], s[3][1]))
+        else:
+            def down(pair):
+                r = self.apply_1q((1.0 + 0.0j, pair[1]), wire, m)
+                return (r[0] * pair[0], r[1])
+            n00, n01 = down(s[0]), down(s[1])
+            n10, n11 = down(s[2]), down(s[3])
+        res = self.mk(nd[0], [x for p in (n00, n01, n10, n11) for x in p])
+        return (res[0] * w, res[1])
+
+    def apply_cz(self, a, hi, lo, phase):
+        w, nid = a
+        if nid == 0 or abs(w) <= _DD_EPS:
+            return (0.0 + 0.0j, 0)
+        nd = self.nodes[nid - 1]
+
+        def negrows(pair):
+            wt, cid = pair
+            if cid == 0 or abs(wt) <= _DD_EPS:
+                return pair
+            m = self.nodes[cid - 1]
+            if m[0] == lo:
+                ch = [(m[1], m[2]), (m[3], m[4]),
+                      (phase * m[5], m[6]), (phase * m[7], m[8])]
+                r = self.mk(m[0], [x for p in ch for x in p])
+            else:
+                ch = [negrows((m[1], m[2])), negrows((m[3], m[4])),
+                      negrows((m[5], m[6])), negrows((m[7], m[8]))]
+                r = self.mk(m[0], [x for p in ch for x in p])
+            return (r[0] * wt, r[1])
+
+        if nd[0] == hi:
+            ch = [(nd[1], nd[2]), (nd[3], nd[4]),
+                  negrows((nd[5], nd[6])), negrows((nd[7], nd[8]))]
+        else:
+            def down(pair):
+                wt, cid = pair
+                if cid == 0 or abs(wt) <= _DD_EPS:
+                    return pair
+                r = self.apply_cz((1.0 + 0.0j, cid), hi, lo, phase)
+                return (r[0] * wt, r[1])
+            ch = [down((nd[1], nd[2])), down((nd[3], nd[4])),
+                  down((nd[5], nd[6])), down((nd[7], nd[8]))]
+        res = self.mk(nd[0], [x for p in ch for x in p])
+        return (res[0] * w, res[1])
+
+    def overlap(self, a, b, memo):
+        wa, ia = a
+        wb, ib = b
+        if abs(wa) <= _DD_EPS or abs(wb) <= _DD_EPS:
+            return 0.0 + 0.0j
+        key = (ia, ib)
+        hit = memo.get(key)
+        if hit is not None:
+            return hit * wa.conjugate() * wb
+        la = self.nodes[ia - 1][0] if ia else -1
+        if la < 0:
+            struct = 1.0 + 0.0j
+        else:
+            na = self.nodes[ia - 1]
+            nb = self.nodes[ib - 1]
+            struct = 0.0 + 0.0j
+            for s in range(4):
+                wa_s, ia_s = na[1 + 2 * s], na[2 + 2 * s]
+                wb_s, ib_s = nb[1 + 2 * s], nb[2 + 2 * s]
+                if abs(wa_s) <= _DD_EPS or abs(wb_s) <= _DD_EPS:
+                    continue
+                struct += self.overlap((wa_s, ia_s), (wb_s, ib_s), memo)
+        memo[key] = struct
+        return struct * wa.conjugate() * wb
+
+
+def _dd_ops_unitary(b, ops, n):
+    cur = _ddb_identity(b, n)
+    for (name, params, qubits) in ops:
+        if len(qubits) == 1:
+            g = gate_matrix(name, params)
+            # the checker stores matrices nested 2x2; the diagram wants
+            # a flat (m00, m01, m10, m11)
+            if isinstance(g[0], (list, tuple)):
+                m = (g[0][0], g[0][1], g[1][0], g[1][1])
+            else:
+                m = (g[0], g[1], g[2], g[3])
+            cur = b.apply_1q(cur, qubits[0], m)
+        elif len(qubits) == 2:
+            if name == "cx":
+                cur = _ddb_cx(b, cur, qubits[0], qubits[1])
+            elif name == "cz":
+                hi, lo = max(qubits), min(qubits)
+                cur = b.apply_cz(cur, hi, lo, -1.0 + 0.0j)
+            elif name in ("cp", "cu1"):
+                hi, lo = max(qubits), min(qubits)
+                lam = params[0] if params else 0.0
+                cur = b.apply_cz(cur, hi, lo,
+                                 complex(math.cos(lam), math.sin(lam)))
+            elif name == "swap":
+                for c, t in ((qubits[0], qubits[1]),
+                             (qubits[1], qubits[0]),
+                             (qubits[0], qubits[1])):
+                    cur = _ddb_cx(b, cur, c, t)
+            else:
+                raise ValueError(f"dd witness: unsupported gate {name!r}")
+        else:
+            raise ValueError(f"dd witness: unsupported gate {name!r}")
+    return cur
+
+
+def _ddb_identity(b, n):
+    cur = (1.0 + 0.0j, 0)
+    for lv in range(n):
+        cur = b.mk(lv, (1.0 + 0.0j, cur[1], 0.0 + 0.0j, 0,
+                        0.0 + 0.0j, 0, 1.0 + 0.0j, cur[1]))
+    return cur
+
+
+def _ddb_cx(b, a, c, t):
+    h = (complex(0.0, 0.7071067811865476), complex(0.0, 0.7071067811865476),
+         complex(0.0, 0.7071067811865476), complex(0.0, -0.7071067811865476))
+    a = b.apply_1q(a, t, h)
+    a = b.apply_cz(a, max(c, t), min(c, t), -1.0 + 0.0j)
+    a = b.apply_1q(a, t, h)
+    return a
+
+
+def dd_equal(ops_a, ops_b, n, tol=1e-7, max_nodes=400_000):
+    """Exact equivalence up to global phase via independent decision
+    diagrams.  Returns None when the diagram exceeds the checker's own
+    node budget (the checker never guesses)."""
+    b = _DDB()
+    try:
+        ra = _dd_ops_unitary(b, ops_a, n)
+        rb = _dd_ops_unitary(b, ops_b, n)
+    except RecursionError:
+        return None
+    if len(b.nodes) > max_nodes:
+        return None
+    val = b.overlap(ra, rb, {})
+    d = 1 << n
+    return abs(val) / d >= 1.0 - tol

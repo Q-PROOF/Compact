@@ -1,6 +1,6 @@
 {
-  "generated": "2026-09-19T04:51:21.444447+00:00",
-  "commit": "d9caa68dec81",
+  "generated": "2026-09-20T16:57:08.300416+00:00",
+  "commit": "daa1a1b504a5",
   "method": "same input for every tool; every output lowered to u3+cx before counting; every output refereed by qiskit.quantum_info.Operator",
   "suite": [
     "adder_4",
@@ -27,19 +27,19 @@
   "summary": {
     "compact": {
       "mean_2q_cut_pct": 10.2,
-      "median_wall_ms": 21
+      "median_wall_ms": 30
     },
     "qiskit": {
       "mean_2q_cut_pct": 14.6,
-      "median_wall_ms": 4
+      "median_wall_ms": 5
     },
     "pytket": {
       "mean_2q_cut_pct": 25.0,
-      "median_wall_ms": 175
+      "median_wall_ms": 199
     },
     "cirq": {
       "mean_2q_cut_pct": 2.8,
-      "median_wall_ms": 51
+      "median_wall_ms": 62
     },
     "compact_vs_qiskit_2q_WTL": [
       2,
@@ -59,7 +59,7 @@
         "depth": 26,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 26
+        "wall_ms": 37
       },
       "qiskit": {
         "gates": 34,
@@ -67,7 +67,7 @@
         "depth": 23,
         "output_fidelity": 0.25,
         "status": "INEQUIVALENT",
-        "wall_ms": 6
+        "wall_ms": 7
       },
       "pytket": {
         "gates": 25,
@@ -75,7 +75,7 @@
         "depth": 19,
         "output_fidelity": 0.25,
         "status": "INEQUIVALENT",
-        "wall_ms": 144
+        "wall_ms": 148
       },
       "cirq": {
         "gates": 91,
@@ -83,7 +83,7 @@
         "depth": 43,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 39
+        "wall_ms": 41
       }
     },
     {
@@ -97,7 +97,7 @@
         "depth": 42,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 30
+        "wall_ms": 37
       },
       "qiskit": {
         "gates": 81,
@@ -105,7 +105,7 @@
         "depth": 39,
         "output_fidelity": 0.125,
         "status": "INEQUIVALENT",
-        "wall_ms": 5
+        "wall_ms": 6
       },
       "pytket": {
         "gates": 61,
@@ -113,7 +113,7 @@
         "depth": 33,
         "output_fidelity": 0.125,
         "status": "INEQUIVALENT",
-        "wall_ms": 369
+        "wall_ms": 397
       },
       "cirq": {
         "gates": 192,
@@ -121,7 +121,7 @@
         "depth": 68,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 66
+        "wall_ms": 71
       }
     },
     {
@@ -135,7 +135,7 @@
         "depth": 58,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 3
+        "wall_ms": 44
       },
       "qiskit": {
         "gates": 148,
@@ -151,7 +151,7 @@
         "depth": 47,
         "output_fidelity": 0.0625,
         "status": "INEQUIVALENT",
-        "wall_ms": 708
+        "wall_ms": 781
       },
       "cirq": {
         "gates": 330,
@@ -159,7 +159,7 @@
         "depth": 94,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 118
+        "wall_ms": 112
       }
     },
     {
@@ -189,7 +189,7 @@
         "depth": 17,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 150
+        "wall_ms": 154
       },
       "cirq": {
         "gates": 56,
@@ -211,7 +211,7 @@
         "depth": 40,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 64
+        "wall_ms": 69
       },
       "qiskit": {
         "gates": 42,
@@ -219,7 +219,7 @@
         "depth": 23,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 4
+        "wall_ms": 5
       },
       "pytket": {
         "gates": 40,
@@ -227,7 +227,7 @@
         "depth": 23,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 272
+        "wall_ms": 344
       },
       "cirq": {
         "gates": 92,
@@ -235,7 +235,7 @@
         "depth": 43,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 39
+        "wall_ms": 42
       }
     },
     {
@@ -249,7 +249,7 @@
         "depth": 52,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 10
+        "wall_ms": 96
       },
       "qiskit": {
         "gates": 58,
@@ -257,7 +257,7 @@
         "depth": 29,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 4
+        "wall_ms": 5
       },
       "pytket": {
         "gates": 56,
@@ -265,7 +265,7 @@
         "depth": 29,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 407
+        "wall_ms": 460
       },
       "cirq": {
         "gates": 128,
@@ -273,7 +273,7 @@
         "depth": 55,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 57
+        "wall_ms": 61
       }
     },
     {
@@ -287,7 +287,7 @@
         "depth": 19,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 25
+        "wall_ms": 2
       },
       "qiskit": {
         "gates": 25,
@@ -295,7 +295,7 @@
         "depth": 20,
         "output_fidelity": 0.5,
         "status": "INEQUIVALENT",
-        "wall_ms": 4
+        "wall_ms": 5
       },
       "pytket": {
         "gates": 17,
@@ -303,7 +303,7 @@
         "depth": 13,
         "output_fidelity": 0.5,
         "status": "INEQUIVALENT",
-        "wall_ms": 105
+        "wall_ms": 124
       },
       "cirq": {
         "status": "error ValueError: operands could not be broadcast together with shapes (16,16) (8,8) "
@@ -320,7 +320,7 @@
         "depth": 30,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 23
+        "wall_ms": 2
       },
       "qiskit": {
         "gates": 57,
@@ -328,7 +328,7 @@
         "depth": 44,
         "output_fidelity": 0.5,
         "status": "INEQUIVALENT",
-        "wall_ms": 4
+        "wall_ms": 5
       },
       "pytket": {
         "gates": 27,
@@ -336,7 +336,7 @@
         "depth": 21,
         "output_fidelity": 0.5,
         "status": "INEQUIVALENT",
-        "wall_ms": 200
+        "wall_ms": 227
       },
       "cirq": {
         "status": "error ValueError: operands could not be broadcast together with shapes (64,64) (16,16) "
@@ -353,7 +353,7 @@
         "depth": 51,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 19
+        "wall_ms": 22
       },
       "qiskit": {
         "gates": 75,
@@ -361,7 +361,7 @@
         "depth": 49,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 4
+        "wall_ms": 5
       },
       "pytket": {
         "gates": 39,
@@ -369,7 +369,7 @@
         "depth": 28,
         "output_fidelity": 0.5,
         "status": "INEQUIVALENT",
-        "wall_ms": 142
+        "wall_ms": 171
       },
       "cirq": {
         "gates": 178,
@@ -377,7 +377,7 @@
         "depth": 113,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 92
+        "wall_ms": 107
       }
     },
     {
@@ -391,7 +391,7 @@
         "depth": 686,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 205
+        "wall_ms": 251
       },
       "qiskit": {
         "gates": 328,
@@ -399,7 +399,7 @@
         "depth": 268,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 6
+        "wall_ms": 7
       },
       "pytket": {
         "gates": 313,
@@ -407,7 +407,7 @@
         "depth": 253,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 2060
+        "wall_ms": 2319
       },
       "cirq": {
         "gates": 665,
@@ -415,7 +415,7 @@
         "depth": 455,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 404
+        "wall_ms": 369
       }
     },
     {
@@ -429,7 +429,7 @@
         "depth": 35,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 44
+        "wall_ms": 37
       },
       "qiskit": {
         "gates": 102,
@@ -437,7 +437,7 @@
         "depth": 65,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 4
+        "wall_ms": 5
       },
       "pytket": {
         "gates": 56,
@@ -445,7 +445,7 @@
         "depth": 31,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 240
+        "wall_ms": 287
       },
       "cirq": {
         "gates": 94,
@@ -453,7 +453,7 @@
         "depth": 47,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 41
+        "wall_ms": 47
       }
     },
     {
@@ -467,7 +467,7 @@
         "depth": 47,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 40
+        "wall_ms": 58
       },
       "qiskit": {
         "gates": 170,
@@ -475,7 +475,7 @@
         "depth": 91,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 4
+        "wall_ms": 5
       },
       "pytket": {
         "gates": 94,
@@ -483,7 +483,7 @@
         "depth": 43,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 435
+        "wall_ms": 515
       },
       "cirq": {
         "gates": 156,
@@ -491,7 +491,7 @@
         "depth": 65,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 61
+        "wall_ms": 67
       }
     },
     {
@@ -505,7 +505,7 @@
         "depth": 28,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 17
+        "wall_ms": 23
       },
       "qiskit": {
         "gates": 48,
@@ -521,7 +521,7 @@
         "depth": 25,
         "output_fidelity": 0.25,
         "status": "INEQUIVALENT",
-        "wall_ms": 331
+        "wall_ms": 387
       },
       "cirq": {
         "gates": 103,
@@ -529,7 +529,7 @@
         "depth": 63,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 58
+        "wall_ms": 63
       }
     },
     {
@@ -551,7 +551,7 @@
         "depth": 0,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 3
+        "wall_ms": 4
       },
       "pytket": {
         "gates": 0,
@@ -567,7 +567,7 @@
         "depth": 0,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 8
+        "wall_ms": 98
       }
     },
     {
@@ -581,7 +581,7 @@
         "depth": 25,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 19
+        "wall_ms": 23
       },
       "qiskit": {
         "gates": 32,
@@ -597,7 +597,7 @@
         "depth": 22,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 125
+        "wall_ms": 148
       },
       "cirq": {
         "gates": 89,
@@ -605,7 +605,7 @@
         "depth": 50,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 45
+        "wall_ms": 51
       }
     },
     {
@@ -619,7 +619,7 @@
         "depth": 45,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 30
+        "wall_ms": 40
       },
       "qiskit": {
         "gates": 62,
@@ -635,7 +635,7 @@
         "depth": 40,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 235
+        "wall_ms": 265
       },
       "cirq": {
         "gates": 167,
@@ -643,7 +643,7 @@
         "depth": 92,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 79
+        "wall_ms": 90
       }
     },
     {
@@ -657,7 +657,7 @@
         "depth": 5,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 3
+        "wall_ms": 2
       },
       "qiskit": {
         "gates": 11,
@@ -673,7 +673,7 @@
         "depth": 5,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 82
+        "wall_ms": 96
       },
       "cirq": {
         "gates": 19,
@@ -681,7 +681,7 @@
         "depth": 11,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 18
+        "wall_ms": 21
       }
     },
     {
@@ -695,7 +695,7 @@
         "depth": 7,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 5
+        "wall_ms": 6
       },
       "qiskit": {
         "gates": 17,
@@ -711,7 +711,7 @@
         "depth": 7,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 141
+        "wall_ms": 168
       },
       "cirq": {
         "gates": 31,
@@ -719,7 +719,7 @@
         "depth": 17,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 24
+        "wall_ms": 28
       }
     },
     {
@@ -749,7 +749,7 @@
         "depth": 0,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 1
+        "wall_ms": 2
       },
       "cirq": {
         "status": "error ValueError: operands could not be broadcast together with shapes (16,16) (8,8) "
@@ -766,7 +766,7 @@
         "depth": 0,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 2
+        "wall_ms": 3
       },
       "qiskit": {
         "gates": 0,
@@ -774,7 +774,7 @@
         "depth": 0,
         "output_fidelity": 1.0,
         "status": "OK",
-        "wall_ms": 4
+        "wall_ms": 5
       },
       "pytket": {
         "gates": 0,
@@ -790,8 +790,8 @@
     }
   ],
   "environment": {
-    "generated": "2026-09-19T04:51:21.466043+00:00",
-    "git_sha": "d9caa68dec81",
+    "generated": "2026-09-20T16:57:08.325768+00:00",
+    "git_sha": "daa1a1b504a5",
     "python": "3.11.9",
     "os": "Windows 10 AMD64",
     "cpu": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
