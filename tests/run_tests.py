@@ -2684,7 +2684,11 @@ def test_sweep_rewrite_identity():
             == [(g.name, g.params, g.qubits) for g in ref_cc(c).ops], \
             "commute_cancel divergence"
         s = slide_1q(c)
-        assert check_equivalent(c, s), "slide_1q broke the unitary"
+        # the dense referee caps at 6q on native-free CI (8q with the
+        # optional kernel): check exactness only within its reach
+        from compactq.equivalence import check_equivalent, _MAX_QUBITS
+        if n <= _MAX_QUBITS:
+            assert check_equivalent(c, s), "slide_1q broke the unitary"
 
 
 def test_pair_pack_suite():
