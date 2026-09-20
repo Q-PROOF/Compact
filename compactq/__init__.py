@@ -47,7 +47,7 @@ from .solvers import maxcut_qaoa, brute_force_maxcut
 from .simulate import statevector, exact_probabilities
 from . import benchmarks
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 __all__ = ["Circuit", "Gate", "optimize", "optimize_deep", "optimize_search", "is_clifford", "clifford_equal", "approximate", "Target", "optimize_for", "approximate_for_target", "from_qasm3", "expand_mcx", "expand_mcp", "template_pass", "from_qasm", "to_qasm",
            "to_qasm3", "benchmarks", "__version__", "param", "bind",
             "structure_optimize", "optimize_large", "states_agree", "verify",

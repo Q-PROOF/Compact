@@ -2,6 +2,26 @@
 
 All notable changes to Q-PROOF Compact are documented here.
 
+## [0.2.2] — 2026-09-20
+
+### Added
+- Four-lens implementation: certificates (`compactq.cert`), the
+  `compactq-check` independent checker package (EXPERIMENTAL — see
+  known-issues), heavy-circuit guardrail, T-merge pass,
+  `python -m compactq.referee` CLI, `from_cirq`/`from_pytket` bridges,
+  Dockerfile + GHCR publish workflow, proof-gate GitHub Action,
+  preprint outline, agent-notes scaffold, full-transpilation benchmark,
+  comparator dispositions (Quarl/Quasar NOT_RUNNABLE).
+- BQSKit head-to-head executed (10/19/3, geomean 1.16×); PyZX referee
+  27/27 verified; MQT QCEC referee 11 OK + 2 tolerance disputes
+  cross-checked at Operator fidelity 1.0/0.99999999997.
+
+### Known issues
+- `compactq-check`'s dense unitary path has a wire-convention bug on
+  multi-qubit prefixes (marked EXPERIMENTAL; stabilizer and
+  phase-polynomial paths are correct). Fix queued as the top priority
+  for 0.2.3.
+
 ## [0.2.1] — 2026-09-19
 
 ### Added
