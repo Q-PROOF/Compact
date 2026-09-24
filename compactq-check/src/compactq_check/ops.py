@@ -149,6 +149,60 @@ def build_unitary(ops, n):
     return U
 
 
+def active_wires(ops):
+    """Sorted wires a gate list actually touches (idle wires carry
+    identity and are factored out of dense re-derivations)."""
+    ws = set()
+    for (_name, _params, qubits) in ops:
+        ws.update(qubits)
+    return sorted(ws)
+
+
+def active_components(ops):
+    """Split `ops` into per-component gate lists over disjoint wire sets
+    (union-find over gate qubits; op order preserved within a
+    component; components sorted by their sorted wire lists).  Mirrors
+    compactq.compositional.active_components so the checker re-derives
+    the producer's block structure independently."""
+    if not ops:
+        return []
+    parent = {q: q for g in ops for q in g[2]}
+
+    def find(x):
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    for g in ops:
+        r0 = find(g[2][0])
+        for q in g[2][1:]:
+            parent[find(q)] = r0
+    groups = {}
+    for g in ops:
+        groups.setdefault(find(g[2][0]), []).append(g)
+    comps = []
+    for _root, gops in groups.items():
+        ws = sorted({q for g in gops for q in g[2]})
+        remap = {w: i for i, w in enumerate(ws)}
+        comps.append((ws, [(g[0], g[1], tuple(remap[q] for q in g[2]))
+                           for g in gops]))
+    comps.sort(key=lambda t: t[0])
+    return comps
+
+
+def build_unitary_active(ops, n):
+    """(active_wires, unitary-on-active-width) for `ops` over `n` wires:
+    idle wires are dropped and the touched wires remapped compactly."""
+    ws = active_wires(ops)
+    if not ws:
+        return [], [[1.0]]
+    remap = {w: i for i, w in enumerate(ws)}
+    compact = [(name, params, tuple(remap[w] for w in qubits))
+               for (name, params, qubits) in ops]
+    return ws, build_unitary(compact, len(ws))
+
+
 def fidelity(A, B):
     d = len(A)
     acc = 0j

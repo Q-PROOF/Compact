@@ -41,6 +41,10 @@ jobs:
         run: python tests/test_adversarial_v024.py
       - name: Tier-boundary suite
         run: python tests/test_tier_boundaries.py
+      - name: Checker-independence suite
+        run: python tests/test_checker_independence.py
+      - name: Compositional-certificate suite
+        run: python tests/test_compositional_certs.py
       - name: Build sdist and wheel
         run: |
           pip install build twine

@@ -2,6 +2,50 @@
 
 All notable changes to Q-PROOF Compact are documented here.
 
+## [0.2.5] — 2026-09-24
+
+### Added — T4 maturation: compositional certificates, end to end
+
+- **Disjoint-blocks compositional certificates**
+  (`composition: disjoint_blocks_v1`): circuits whose active wires
+  partition into disjoint components can now be CERTIFIED at any total
+  width — e.g. a 40-qubit circuit of eight 5-qubit non-Clifford blocks
+  gets a machine-checkable certificate where no whole-circuit witness
+  exists.  `optimize_with_certificate` walks the ladder: whole-circuit
+  witness first, disjoint-blocks composition second.
+- **Sequential-segments certificates**
+  (`composition: sequential_segments_v1`) via
+  `compactq.cert.build_certificate_segments(original, optimized,
+  cuts_a, cuts_b)`: for callers with a rewrite correspondence (layer
+  boundaries, barrier splits), per-segment dense proofs compose into a
+  whole-circuit certificate.
+- **Independent checker support**: `compactq-check` validates both new
+  compositions — and for `disjoint_blocks_v1` it RE-DERIVES the
+  component structure from the two provided full circuits itself
+  (union-find over gate wires), never trusting the certificate's
+  declared pieces: declared components that disagree with the
+  re-derived structure are ignored, tampering with the provided
+  circuits trips the hash pins or a component proof.  For
+  `sequential_segments_v1` the checker requires the segments to tile
+  the provided circuits op-for-op before re-proving each pair.
+- `docs/CERTIFICATE_SPEC.md` documents both compositions; new suite
+  `tests/test_compositional_certs.py` (end-to-end + mutation kills) is
+  CI-registered.
+
+### Researched — wide-MCX synthesis (roadmap note, deferred to 0.3)
+
+- The measured grover_5 loss (compactq's MCX expansion costs
+  ~m·2^m CX from the subset-parity construction) was investigated for
+  this cycle.  The competing constructions (qiskit's default MCX for
+  ≥4 controls) are the Vale–Meoli–Tornow (2024) no-ancilla v-chain
+  synthesis (`synth_mcx_noaux_v24`) and its MCPhase recursion — exact,
+  O(k²) CX, patent-grade recent work.  A quick double-MCP relative-
+  phase identity was derived and REJECTED numerically (residual error
+  1 − 2^−k is not correctable by single-qubit phases; the correction
+  is itself a multi-controlled diagonal — the recursion the paper
+  solves).  Deferred to 0.3 with this baseline recorded; grover_5
+  stays an honest measured loss until then.
+
 ## [0.2.4] — 2026-09-23
 
 ### Added — externally checkable claims, wider proof net, in-toolchain passes
