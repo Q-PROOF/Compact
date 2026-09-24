@@ -321,7 +321,44 @@ def main() -> int:
         log(_fmt_row(row))
 
     _summary(rows)
+
+    # machine-readable artifact: every claim in results/ is backed by a
+    # committed raw file (v0.2.4 scorecard contract)
+    import json as _json
+    from provenance import environment
+    doc = {
+        "generated": _utcnow(),
+        "protocol": ("MQT Bench algorithm-level circuits, trailing "
+                     "measurement stripped, level-0 normalized to the "
+                     "shared basis, single flattened register; metrics "
+                     "total/2q/depth + wall ms + referee fidelity "
+                     "(qiskit Operator, circuits <= 8q); compactq's "
+                     "time includes its whole-circuit proof"),
+        "tool_versions": _versions(),
+        "environment": environment(extra_deps=("pytket", "cirq")),
+        "circuits": len(rows),
+        "records": rows,
+    }
+    out = REPO / "results" / "mqtbench.json"
+    out.write_text(_json.dumps(doc, indent=2) + "\n", encoding="utf-8")
+    md = ["# MQT Bench four-way comparison (generated)", "",
+          f"Generated {doc['generated']} | {len(rows)} circuits | "
+          f"referee: qiskit Operator (<= 8q)", "",
+          "| circuit | nq | in t/2q/d | compactq | qiskit L3 | pytket | cirq |",
+          "|---|---:|---|---|---|---|---|"]
+    for r in rows:
+        md.append(f"| {r['name']} | {r['nq']} | {r['in'][0]}/{r['in'][1]}/"
+                  f"{r['in'][2]} | {_fmt_cell(r, 'qz')} | {_fmt_cell(r, 'qk')}"
+                  f" | {_fmt_cell(r, 'pt')} | {_fmt_cell(r, 'cq')} |")
+    (REPO / "results" / "mqtbench.md").write_text(
+        "\n".join(md) + "\n", encoding="utf-8")
+    log(f"wrote {out} + mqtbench.md")
     return 0
+
+
+def _utcnow():
+    from datetime import datetime, timezone
+    return datetime.now(timezone.utc).isoformat()
 
 
 def _versions():

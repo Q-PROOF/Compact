@@ -1,0 +1,21 @@
+circuit,qubits,input_2q_cx_lowered,input_2q_cp_native,compact_gates,compact_2q,compact_depth,compact_fidelity,compact_status,compact_wall_ms,qiskit_gates,qiskit_2q,qiskit_depth,qiskit_fidelity,qiskit_status,qiskit_wall_ms,pytket_gates,pytket_2q,pytket_depth,pytket_fidelity,pytket_status,pytket_wall_ms,cirq_gates,cirq_2q,cirq_depth,cirq_fidelity,cirq_status,cirq_wall_ms
+qft_4,4,18,6,40,18,26,1.0,OK,3,34,12,23,0.25,INEQUIVALENT,24,25,12,19,0.25,INEQUIVALENT,320,91,18,43,1.0,OK,95
+qft_6,6,39,15,90,39,42,1.0,OK,45,81,30,39,0.125,INEQUIVALENT,7,61,30,33,0.125,INEQUIVALENT,584,192,39,68,1.0,OK,172
+qft_8,8,68,28,160,68,58,1.0,OK,55,148,56,55,0.0625,INEQUIVALENT,74,113,56,47,0.0625,INEQUIVALENT,1096,330,68,94,1.0,OK,149
+qaoa_4,4,12,0,42,12,28,1.0,OK,57,26,12,17,1.0,OK,4,24,12,17,1.0,OK,187,56,12,31,1.0,OK,51
+qaoa_6,6,20,0,70,20,40,1.0,OK,135,42,20,23,1.0,OK,6,40,20,23,1.0,OK,407,92,20,43,1.0,OK,42
+qaoa_8,8,28,0,98,28,52,1.0,OK,99,58,28,29,1.0,OK,6,56,28,29,1.0,OK,672,128,28,55,1.0,OK,113
+qpe_4,4,11,4,23,9,19,1.0,OK,2,25,8,20,0.5,INEQUIVALENT,7,17,6,13,0.5,INEQUIVALENT,179,,,,,"error ValueError: operands could not be broadcast together with shapes (16,16) (8,8) ",
+qpe_6,6,23,10,38,14,30,1.0,OK,2,57,20,44,0.5,INEQUIVALENT,65,27,11,21,0.5,INEQUIVALENT,310,,,,,"error ValueError: operands could not be broadcast together with shapes (64,64) (16,16) ",
+grover_3,3,24,0,61,24,51,1.0,OK,22,75,24,49,1.0,OK,76,39,14,28,0.5,INEQUIVALENT,224,178,32,113,1.0,OK,108
+grover_5,5,144,0,899,386,686,1.0,OK,410,328,144,268,1.0,OK,9,313,144,253,1.0,OK,3351,665,144,455,1.0,OK,449
+heisenberg_4,4,36,0,63,18,35,1.0,OK,66,102,36,65,1.0,OK,7,56,18,31,1.0,OK,476,94,18,47,1.0,OK,114
+heisenberg_6,6,60,0,101,30,47,1.0,OK,66,170,60,91,1.0,OK,5,94,30,43,1.0,OK,681,156,30,65,1.0,OK,260
+clifford_5,5,20,20,46,19,28,1.0,OK,22,48,19,29,1.0,OK,9,40,17,25,0.25,INEQUIVALENT,502,103,19,63,1.0,OK,72
+cliffordt_5,5,0,0,0,0,0,1.0,OK,0,0,0,0,1.0,OK,4,0,0,0,1.0,OK,1,0,0,0,1.0,OK,8
+adder_4,4,14,2,32,14,25,1.0,OK,23,32,14,22,1.0,OK,7,29,14,22,1.0,OK,271,89,16,50,1.0,OK,73
+adder_6,6,26,2,62,26,45,1.0,OK,46,62,26,40,1.0,OK,6,55,26,40,1.0,OK,570,167,30,92,1.0,OK,112
+vqe_4,4,3,3,11,3,5,1.0,OK,2,11,3,5,1.0,OK,59,11,3,5,1.0,OK,119,19,3,11,1.0,OK,27
+vqe_6,6,5,5,17,5,7,1.0,OK,13,17,5,7,1.0,OK,47,17,5,7,1.0,OK,183,31,5,17,1.0,OK,102
+redundant_4,4,24,24,0,0,0,1.0,OK,1,0,0,0,1.0,OK,5,0,0,0,1.0,OK,2,,,,,"error ValueError: operands could not be broadcast together with shapes (16,16) (8,8) ",
+redundant_6,6,40,40,0,0,0,1.0,OK,2,0,0,0,1.0,OK,5,0,0,0,1.0,OK,3,,,,,"error ValueError: operands could not be broadcast together with shapes (64,64) (32,32) ",

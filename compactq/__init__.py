@@ -18,7 +18,7 @@ interactive latency; explicit imports (`from compactq import optimize`,
 """
 from .circuit import Circuit, Gate
 
-__version__ = "0.2.3"
+__version__ = "0.2.4"
 
 _EXPORTS = {
     "optimize": ".optimize",

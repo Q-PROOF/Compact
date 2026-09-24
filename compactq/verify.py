@@ -1,5 +1,4 @@
 """Public verification API — the evidence layer of verified compilation.
-
 `verify(original, optimized)` independently checks that two circuits
 implement the same unitary (up to global phase) and reports WHICH grade of
 evidence backs the answer:
@@ -64,6 +63,12 @@ _STATUS_TIER = {
 def proof_status_tier(status: str) -> int:
     """Map a CLI proof-status string to its verification tier (0-4)."""
     return _STATUS_TIER.get(status, 0)
+
+
+def _dd_check(a, b, deadline_s):
+    from .dd import dd_fidelity, default_max_nodes
+    return dd_fidelity(a, b, max_nodes=default_max_nodes(),
+                       deadline_s=deadline_s) > 1.0 - 1e-7
 
 
 def verify(original: Circuit, optimized: Circuit) -> dict:
@@ -136,19 +141,34 @@ def verify(original: Circuit, optimized: Circuit) -> dict:
 
     # tier 2: decision-diagram proof beyond the dense ceiling — structured
     # circuits prove exactly to 25+ qubits; the node budget makes a
-    # blowup a decline (fall through), never a wrong answer
-    from .dd import DD_MAX_QUBITS, check_equivalent_dd, DDOverflow
+    # blowup a decline (fall through), never a wrong answer.  A
+    # wall-clock deadline bounds the decline latency: a diagram that
+    # would take minutes to overflow declines in seconds instead — same
+    # loud fall-through, never a partial-diagram verdict.  Override with
+    # $COMPACTQ_DD_DEADLINE_S (seconds; empty = unbounded).
+    from .dd import DD_MAX_QUBITS, check_equivalent_dd
     if original.num_qubits <= DD_MAX_QUBITS:
+        import os
+        raw = os.environ.get("COMPACTQ_DD_DEADLINE_S", "120")
+        deadline = float(raw) if raw.strip() else None
         try:
-            return pack(bool(check_equivalent_dd(original, optimized)),
+            return pack(bool(_dd_check(original, optimized, deadline)),
                         2, "dd_full_unitary")
         except Exception:
-            pass  # budget exhausted / unsupported gate: fall through
+            pass  # budget / deadline exhausted / unsupported gate: fall through
 
-    # tier 1: randomized K-state sampling (numpy optional)
-    try:
-        from .verify_large import states_agree
-        return pack(bool(states_agree(original, optimized)),
-                    1, "randomized_sampling")
-    except ImportError:
-        return pack(None, 0, "prover_unavailable")
+    # tier 1: randomized K-state sampling (numpy optional).  Widths above
+    # the ~30q statevector ceiling decline to tier 0 rather than thrash.
+    from .verify_large import RAND_MAX_QUBITS
+    if original.num_qubits <= RAND_MAX_QUBITS:
+        import os
+        raw = os.environ.get("COMPACTQ_VERIFY_DEADLINE_S", "120")
+        rand_deadline = float(raw) if raw.strip() else None
+        try:
+            from .verify_large import states_agree
+            return pack(bool(states_agree(original, optimized,
+                                          deadline_s=rand_deadline)),
+                        1, "randomized_sampling")
+        except (ImportError, ValueError, MemoryError):
+            pass  # numpy missing / width refusal / deadline / OOM: decline
+    return pack(None, 0, "prover_unavailable")

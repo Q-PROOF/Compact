@@ -14,3 +14,5 @@ build_dist/
 release_dist/
 .e2e/
 .mimosa/
+third_party/benchpress/
+third_party/feynman/

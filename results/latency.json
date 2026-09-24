@@ -1,10 +1,10 @@
 {
-  "generated": "2026-09-20T16:59:47.308708+00:00",
-  "commit": "daa1a1b504a5",
+  "generated": "2026-09-23T15:32:04.088395+00:00",
+  "commit": "ccde0ec41dd8",
   "protocol": "import time: best-of-5 fresh-process spawns; optimize wall: 200 calls on a fixed 3q/12-gate circuit, proof included",
-  "compactq_import_ms": 20.57,
-  "optimize_ms_p50": 0.992,
-  "optimize_ms_p95": 1.307,
-  "version": "0.2.3",
-  "qiskit_import_ms": 590.5
+  "compactq_import_ms": 26.48,
+  "optimize_ms_p50": 1.211,
+  "optimize_ms_p95": 2.155,
+  "version": "0.2.4",
+  "qiskit_import_ms": 1049.44
 }

@@ -1,6 +1,6 @@
 [project]
 name = "compactq"
-version = "0.2.3"
+version = "0.2.4"
 description = "Q-PROOF Compact: the verified quantum circuit optimizer. Smaller circuits, proven. Error suppression included."
 readme = "README.md"
 requires-python = ">=3.9"
@@ -24,6 +24,10 @@ dependencies = []
 [project.optional-dependencies]
 bench = ["qiskit>=1.0"]
 dev = ["pytest>=7"]
+# integration extras (v0.2.4): one pattern, extras on this package
+qiskit = ["qiskit>=1.0"]
+pytket = ["pytket>=1.0", "pytket-qiskit"]
+integrations = ["qiskit>=1.0", "pytket>=1.0", "pytket-qiskit"]
 
 [project.scripts]
 compactq = "compactq.__main__:main"

@@ -105,31 +105,39 @@ def gate_matrix(name, params):
 
 
 def apply_dense(U, g, ws, n):
-    """Return G·U where G acts on `ws`.  Convention: ws[0] is the MOST
-    significant local wire — matching the standard gate-matrix basis
-    (|q_ws0 q_ws1 ...⟩ ordering)."""
+    """Return G·U where G acts on `ws`.  Wire conventions: the GLOBAL
+    basis is little-endian (wire w <-> bit w, matching compactq's QASM
+    semantics), while the gate matrix's LOCAL basis is big-endian
+    (ws[0] is the most significant local wire — control before target
+    for CX), matching the standard gate-matrix definitions.
+
+    new[r][c] = sum_kpat g[rpat][kpat] * U[s][c], where rpat = r's ws
+    bits and s = r with its ws bits replaced by kpat.  Every (r, c) is
+    recomputed — cells the gate does not mix are re-derived too, never
+    carried over stale."""
     d = 1 << n
-    shifts = [n - 1 - w for w in ws]
-    m = 1 << len(ws)
+    shifts = [w for w in ws]
     L = len(ws)
-    new = [row[:] for row in U]
-    for col in range(d):
-        for rpat in range(m):
+    new = [[0j] * d for _ in range(d)]
+    for r in range(d):
+        rpat_bits = [(r >> shifts[b]) & 1 for b in range(L)]
+        rpat = 0
+        for b in range(L):
+            rpat |= rpat_bits[b] << (L - 1 - b)
+        for c in range(d):
             acc = 0j
-            for kpat in range(m):
-                srow = col
+            for kpat in range(m_local(L)):
+                s = r
                 for b in range(L):
-                    sh = shifts[b]
                     kb = (kpat >> (L - 1 - b)) & 1
-                    srow = (srow & ~(1 << sh)) | (kb << sh)
-                acc += g[rpat][kpat] * U[srow][col]
-            rrow = col
-            for b in range(L):
-                sh = shifts[b]
-                rb = (rpat >> (L - 1 - b)) & 1
-                rrow = (rrow & ~(1 << sh)) | (rb << sh)
-            new[rrow][col] = acc
+                    s = (s & ~(1 << shifts[b])) | (kb << shifts[b])
+                acc += g[rpat][kpat] * U[s][c]
+            new[r][c] = acc
     return new
+
+
+def m_local(L):
+    return 1 << L
 
 
 def build_unitary(ops, n):
@@ -168,9 +176,9 @@ def clifford_canonical(ops, n):
     sign ∈ {0,1} (Pauli = i^sign · X^x Z^z)."""
     gens = []
     for j in range(n):
-        gens.append((1 << j, 0, 0))       # X_j
+        gens.append([1 << j, 0, 0])       # X_j
     for j in range(n):
-        gens.append((0, 1 << j, 0))       # Z_j
+        gens.append([0, 1 << j, 0])       # Z_j
     for (name, _params, qubits) in ops:
         if name == "cx":
             c, t = qubits

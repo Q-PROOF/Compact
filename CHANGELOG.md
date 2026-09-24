@@ -2,6 +2,121 @@
 
 All notable changes to Q-PROOF Compact are documented here.
 
+## [0.2.4] — 2026-09-23
+
+### Added — externally checkable claims, wider proof net, in-toolchain passes
+
+- **Reproducibility contract**: the benchmark suite is PINNED by
+  `results/MANIFEST.json` (per-circuit QASM digests, raw and
+  u3+cx-lowered, plus referee/tool versions).  `scripts/repro_harness.py`
+  validates the freshly built suite against the pin before measuring and
+  aborts loudly on any environment drift (re-pin deliberately with
+  `--update-manifest`).  One command regenerates the artifact families:
+  `python scripts/run_benchmarks.py` (repro + DD ceiling + latency),
+  with machine-readable CSV added (`results/repro.csv`).
+- **VERIFICATION.md** (repo root): the tier-by-tier methodology — what
+  each proof tier proves, the exact coverage boundary of every prover
+  (each backed by a named, passing test in
+  `tests/test_tier_boundaries.py`), and the loud-decline contract.
+  `docs/correctness.md` now redirects there.
+- **CORRECTNESS.md** (repo root): the adversarial-testing invitation —
+  "break the prover, get credited" — with triage commitments, plus the
+  four self-reported edge cases found and fixed this cycle (below).
+- **Qiskit `TransformationPass`** (`compactq.plugins.qiskit_plugin.
+  CompactqPass`): the documented `PassManager([CompactqPass()]).run(qc)`
+  usage previously CRASHED (the lazy facade was not a valid pass) —
+  instantiating `CompactqPass(...)` now returns a real
+  TransformationPass, and the verification verdict survives as
+  inspectable pass output (`property_set["compactq_proof"]` and the
+  output circuit's `metadata["compactq"]`, plus `pass.last_proof`).
+  Output equivalence with direct `compactq` calls is pinned by
+  `tests/test_transpiler_passes.py`.
+- **pytket pass** (`compactq.plugins.pytket_plugin.CompactTketPass`):
+  direct `apply()`, `last_proof` metadata, and `as_tket_pass()` for
+  `SequencePass`/`CompilationUnit` workflows — same verdict-preserving
+  contract, same output-equivalence tests.
+- **pytket bridge** (`compactq.pytket_bridge`): loss-free conversion in
+  both directions with the conventions handled exactly (tket half-turns
+  → radians, TK1/CRz/CCX/CSWAP mappings, `AutoRebase` fallback), each
+  mapping verified against tket's own matrices; `to_qiskit` learned to
+  export `mcx`/`mcp` gates.  Extras: `pip install compactq[qiskit]`,
+  `compactq[pytket]`, or `compactq[integrations]`.
+- **DD-ceiling benchmark** (`scripts/dd_ceiling_bench.py` →
+  `results/dd_ceiling.json|.md`): measured per-family proof ceilings
+  with a committed v0.2.3 baseline for before/after comparison.
+- **COMPARISON.md** (repo root): the competitor matrix GENERATED from
+  the committed artifacts (`scripts/gen_comparison.py`), every row
+  labeled [measured] / [referee] / [literature] / [not runnable here].
+- **OUTREACH.md** (repo root): the independent-validation invitation
+  tracker — named groups and public channels, invitation template,
+  explicitly an OPEN v0.2.4 item (not claimed as validation).
+- **Checker independence audit** (`compactq-check/INDEPENDENCE.md`):
+  documents the shared-no-code property, how it is enforced, what is
+  deliberately shared (the spec), and the residual spec-bug risk with
+  its external-referee mitigation.
+
+### Fixed — found via adversarial testing (v0.2.4 red-team)
+
+- **IR: repeated-qubit gates rejected.**  `cx q[0], q[0]` (any
+  multi-qubit gate acting on a repeated wire) has no well-defined
+  unitary; the IR silently accepted it and passed it through
+  optimization.  Now rejected at `Gate` construction, like unknown
+  gate names.  Found by the pre-release red-team; pinned by
+  `tests/test_adversarial_v024.py::test_same_wire_gates_rejected`.
+- **QASM: qelib1 `ch` imported exactly.**  Controlled-H previously
+  failed import with `unsupported 2q gate`; it now imports via the
+  exact S·H·T·CX·Tdg·H·Sdg decomposition (fidelity 1.0 against the
+  dense controlled-H matrix, both wire orders).
+- **DD prover: false INEQUIVALENT verdict eliminated.**  With ≥7
+  controls, an MCX circuit compared against its OWN COPY received
+  `check_equivalent_dd == False` (self-fidelity 0.992 at 8q): near-
+  cancelling blocks amplified under first-nonzero normalization and
+  corrupted the diagram.  Fixed by max-weight (QMDD-standard)
+  normalization; a new self-consistency norm guard converts any
+  residual build corruption into a loud `DDOverflow` decline instead
+  of any verdict.  QFT-family DD builds are ~7× faster at equal node
+  count as a side effect (bounded edge weights raise the add-memo hit
+  rate); Grover-MCX exact-proof ceiling 10q → 12q
+  (`results/dd_ceiling.json`).
+- **verify(): randomized-tier width ceiling.**  The cascade dispatched
+  to K-state verification with no width cap; a >30q circuit would
+  attempt 2^n-scale statevector allocations and thrash.  Now capped at
+  the documented 30q memory ceiling (`verify_large.RAND_MAX_QUBITS`);
+  wider circuits decline at tier 0 (`prover_unavailable`), never hang.
+- **verify(): wall-clock deadlines on the decline path.**  The DD tier
+  is bounded by node budget (memory) but not time: a 24q Clifford+T
+  circuit ground for many minutes before its bounded decline, and the
+  randomized tier had no bound at all.  Both provers now decline on
+  wall-clock deadlines (`COMPACTQ_DD_DEADLINE_S`,
+  `COMPACTQ_VERIFY_DEADLINE_S`, default 120 s; unset for unbounded)
+  and the DD node budget is tunable (`COMPACTQ_DD_MAX_NODES`) — a
+  smaller budget only widens the loud-decline surface, never a
+  verdict.  Below the deadlines, verdicts stay deterministic.
+- **compactq-check: dense + Clifford kernels fixed.**  The
+  independent checker's dense-unitary application rebuilt source rows
+  from the column's bits and skipped non-mixed cells (wrong INVALID
+  verdicts on any off-diagonal-structured witness — the v0.2.2/0.2.3
+  "known issue"), and its Clifford canonical form crashed mutating
+  tuple generators.  Both pre-existing (reproduced on pristine
+  v0.2.3); both fixed; `tests/test_checker_independence.py` is now
+  CI-registered so the checker cannot rot again.
+
+### Changed
+
+- New suites registered in CI on every push: adversarial red-team
+  (`tests/test_adversarial_v024.py`), tier boundaries
+  (`tests/test_tier_boundaries.py`), and the qiskit+pytket
+  transpiler-pass integration suite (installed in the regression-gate
+  job).  README benchmark numbers re-measured 2026-09-23 through the
+  pinned harness and linked to their `results/` artifacts.
+
+### Evidence
+
+- Full test suite green, including the three new suites; repro
+  harness re-run on the pinned 20-circuit manifest
+  (`results/repro.json|csv|md`, 2026-09-23); DD-ceiling artifacts
+  regenerated with before/after deltas (`results/dd_ceiling.json`).
+
 ## [0.2.3] — 2026-09-20
 
 ### Added — Project 25: exact proof beyond the dense ceiling

@@ -21,7 +21,8 @@ by Qiskit's `Operator`; a 1,018-check end-to-end gauntlet; 100+ test functions;
 pytket / Cirq / **BQSKit** comparisons; stability **demonstrated across the
 tested scalability workload suite through 256Q** (tiered verification:
 algebraic at any width for Clifford and for CX+diagonal circuits,
-**decision-diagram exact proofs for structured circuits to ~18q** (v0.2.3),
+**decision-diagram exact proofs, family-measured** (v0.2.4:
+QFT to 18q, Grover-MCX to 12q, `results/dd_ceiling.json`),
 dense ≤ 8q, compositional where applicable — formal equivalence at large
 widths remains workload- and structure-dependent); hardware-error
 objectives, SABRE-lite routing, and an open error-suppression stack.
@@ -39,6 +40,38 @@ print(opt.stats())
 `pip install compactq` — no dependencies, no account, no cloud. Pure Python ≥ 3.9.
 (From source: `pip install git+https://github.com/Q-PROOF/Compact.git`.)
 
+## Use it inside your existing pipeline
+
+You don't have to leave your toolchain: Compact ships as a transpiler
+pass for **Qiskit** and for **pytket** (`pip install "compactq[qiskit]"`
+/ `pip install "compactq[pytket]"`), and the verification verdict
+survives as inspectable pass output — never silently dropped by the
+pipeline.
+
+```python
+# Qiskit: Compact as a TransformationPass
+from qiskit.transpiler import PassManager
+from compactq.plugins.qiskit_plugin import CompactqPass
+
+pm = PassManager([CompactqPass()])
+out = pm.run(qc)
+print(pm.property_set["compactq_proof"])   # also: out.metadata["compactq"]
+# {'equivalent': True, 'tier': 2, 'method': 'full_unitary', ...}
+```
+
+```python
+# pytket: Compact as a pass, standalone or in a SequencePass
+from compactq.plugins.pytket_plugin import CompactTketPass
+
+p = CompactTketPass()
+tk2 = p.apply(tk)
+print(p.last_proof)                         # the same verdict dict
+```
+
+Both passes run the same optimizer as direct `compactq` calls (tested
+for output equivalence in `tests/test_transpiler_passes.py`); see
+[VERIFICATION.md](VERIFICATION.md) for what the proof tiers mean.
+
 ## Why
 
 Every gate you remove from a quantum circuit removes noise. Compact takes a circuit and
@@ -49,6 +82,14 @@ compactq accepts a slightly deeper circuit when it removes gates, never a larger
 2-qubit count.
 
 ## Correctness model (the part that matters)
+
+> **[VERIFICATION.md](VERIFICATION.md)** defines every proof tier
+> precisely — what each tier proves, exactly where each prover's
+> coverage ends (backed by named tests), and what a decline looks like.
+> **[CORRECTNESS.md](CORRECTNESS.md)** is our adversarial-testing
+> invitation: break the prover, get credited.  Certificates are
+> re-derived by the independent **compactq-check** program —
+> [audit](compactq-check/INDEPENDENCE.md).
 
 - Every rewrite is **exact**: the unitary is preserved up to global phase.
 - For circuits ≤ 8 qubits (6 without the optional native kernel), `optimize_search()`
@@ -101,14 +142,19 @@ verdict **and** the evidence tier:
 | 4 | exact-proven (compositional) | per-block certificates composed (disjoint blocks; sequential segments) | **today (prototype)** |
 | 5 | formal-proof | proof-assistant grade | roadmap |
 
-**Beyond the 8-qubit dense ceiling (v0.2.3).**  The proof cascade now
-carries two more exact provers:
+**Beyond the 8-qubit dense ceiling (v0.2.3, hardened v0.2.4).**  The
+proof cascade carries two more exact provers:
 
 - **Decision-diagram prover** (`compactq.dd`): QMDD-style weighted
-  decision diagrams with a live-node budget prove structured circuits
-  (QFT, adders, Grover shapes, Trotter rings) exactly at 15–18+ qubits —
-  widths where no dense matrix can exist — and decline loudly (fall to
+  decision diagrams (max-weight canonicalization since v0.2.4, plus a
+  self-consistency norm guard) with a live-node budget prove structured
+  circuits exactly well past the dense ceiling — measured per family in
+  `results/dd_ceiling.json` (QFT to 18q, Grover-MCX to 12q, Trotter
+  rings and GHZ through the tested 30q) — and decline loudly (fall to
   the next tier, never guess) when a diagram would exceed the budget.
+  v0.2.4 also made QFT-family builds ~7× faster at equal node count and
+  fixed a false-inequivalent self-verdict on ≥7-control MCX circuits
+  (found by adversarial testing; see CORRECTNESS.md).
 - **Phase-polynomial prover** (`compactq.phasepoly`): circuits over
   CX + diagonal rotations prove ALGEBRAICALLY at any width — exact GF(2)
   linear-map + parity-angle table equality — so 25-qubit Trotter/phase
@@ -119,9 +165,11 @@ carries two more exact provers:
 circuit, instead of the randomized status.  Certificates carry the
 strongest witness (`dd` certificates are re-derived independently by
 `compactq-check`).  And the interactive story got faster: `import
-compactq` is ~20 ms (lazy public API) and small circuits optimize with
-proof in ~1–2 ms (`results/latency.json`) — vs Qiskit's ~580 ms import
-and ~4 ms unproven optimize on the same laptop.
+compactq` is ~26 ms (lazy public API) and small circuits optimize with
+proof in ~1–2 ms — vs Qiskit's ~1050 ms import
+and ~4 ms unproven optimize on the same laptop
+(measured 2026-09-23, produced by `python scripts/latency_bench.py`,
+raw artifact: `results/latency.json`).
 
 "Exact-proven" means a machine-checked certificate of unitary
 equivalence up to global phase — it is **not** a formal
@@ -243,6 +291,35 @@ Compile with anything; trust the circuit only when the evidence tier says so.
 Three axes, all measured on identical inputs (QASMBench unitary cores, level-0
 normalized, same basis, 2026-09-08 run unless noted):
 
+> **Reproducibility contract (v0.2.4):** every comparison number in this
+> section regenerates from one command — `python scripts/run_benchmarks.py`
+> — against the suite pinned in `results/MANIFEST.json` (per-circuit QASM
+> digests + referee/tool versions; any environment drift aborts loudly).
+> Raw artifacts live in [`results/`](results/README.md) with the producer
+> script named for every file.  The per-tool matrix with evidence-source
+> labels is in [COMPARISON.md](COMPARISON.md); the multi-metric corpus
+> scorecard is [`results/SCORECARD.md`](results/SCORECARD.md).
+
+**Standard benchmark corpora (v0.2.4, artifacts committed):**
+
+| corpus | circuits | compactq vs Qiskit L3 (2q count) | refereed |
+|---|---|---|---|
+| MQT Bench (algorithmic) | 44 | **25 W / 19 T / 0 L**, median 2q cut 11.9% | 44/44 fidelity 1.0 |
+| Benchpress abstract-transpile, QASMBench small | 37 ran (+5 out-of-scope skips) | **15 W / 19 T / 3 L** | in-product proof each run |
+| Benchpress abstract-transpile, QASMBench medium | 19 ran (+4 skips) | **13 W / 6 T / 0 L** (total 2q −9%) | in-product proof each run |
+| Feynman benchmark corpus (reversible/Clifford+T) | 42 | median gate reduction 39.4% (geomean 35.6%) | per-circuit proof tier |
+| QASMBench small (unitary cores) | 43 | median 2q cut 16.7% | Operator refereed |
+
+Producers: `scripts/mqtbench_run.py` → `results/mqtbench.json`,
+`scripts/benchpress_run.py` → `results/benchpress/` (native
+pytest-benchmark records through qiskit/benchpress itself — adapter in
+[`benchpress_integration/`](benchpress_integration/)),
+`scripts/feynman_bench.py` → `results/feynman.json`,
+`scripts/scorecard.py` → `results/SCORECARD.md`.  RevLib is not
+automated (dynamic database, `.real/.tfc` formats — its workload class
+is covered by the Feynman corpus); the full dispositions live in the
+scorecard and [`docs/BENCHMARK_PROTOCOL.md`](docs/BENCHMARK_PROTOCOL.md).
+
 Capability matrix (✅ shipped · ◐ partial · ❌ not claimed):
 
 | capability | Compact | Qiskit | TKET | BQSKit | Cirq | Staq |
@@ -258,20 +335,22 @@ Capability matrix (✅ shipped · ◐ partial · ❌ not claimed):
 (The cross-compiler reference point is the Benchpress suite — Qiskit, TKET,
 BQSKit, Cirq, Staq and others.)
 
-**Same-input, same-gate-set reproduction harness (shipped 0.1.8** —
-`scripts/repro_harness.py`, born from an external audit of this repo):
+**Same-input, same-gate-set reproduction harness** —
+`scripts/repro_harness.py`, born from an external audit of this repo:
 every tool receives **identical** qiskit-native inputs across 10 workload
 families (QFT, QAOA, QPE-like, Grover, Heisenberg, Clifford, Clifford+T,
 adder, VQE, redundancy stress), every output is **lowered to u3+cx before
-counting**, and every output is refereed.  First measured run — 17
-circuits, all refereed, `results/repro.md`:
+counting**, and every output is refereed.  The suite is pinned by
+`results/MANIFEST.json` (per-circuit QASM digests + referee version) and
+regenerates with `python scripts/run_benchmarks.py`.  Latest measured run
+— 20 circuits, all refereed, 2026-09-23, `results/repro.json|csv|md`:
 
 | tool | mean 2q cut | median wall (proof incl. for compact) |
 |---|---:|---:|
-| Compact | 10.2% | 21 ms |
-| Qiskit L3 | 14.6% | 4 ms |
-| pytket | 25.0% | 175 ms |
-| Cirq | 2.8% | 51 ms |
+| Compact | 10.2% | 22 ms |
+| Qiskit L3 | 14.6% | 7 ms |
+| pytket | 25.0% | 315 ms |
+| Cirq | 2.8% | 105 ms |
 
 compact vs qiskit 2q head-to-head: **2 W / 12 T / 1 L**.  Compact's
 flagship wins on this suite are Heisenberg evolution (18 vs 36 and 30 vs
@@ -954,8 +1033,11 @@ must not distract from the compilation thesis.
 ```bash
 git clone https://github.com/Q-PROOF/Compact && cd Compact
 python tests/run_tests.py     # zero-dependency test suite
+python tests/test_adversarial_v024.py   # adversarial red-team probes
+python tests/test_tier_boundaries.py    # VERIFICATION.md boundary pins
 python scripts/gauntlet.py    # 1,018-check end-to-end gauntlet (needs qiskit)
 pip install -e .[bench]       # optional: qiskit for the comparison column
+python scripts/run_benchmarks.py       # regenerate results/ from the pinned manifest
 python scripts/realbench.py --size small            # QASMBench vs Qiskit/pytket
 python scripts/realbench.py --size large --max-qubits 32
 pip install mqt-bench cirq ply   # extras for the fourth suite, then:
@@ -969,4 +1051,8 @@ cd native && pip install maturin && maturin build --release -o dist
 pip install dist/compactq_native-*.whl
 ```
 
-MIT licensed. Contributions welcome — every PR must keep the property tests green.
+MIT licensed. Contributions welcome — every PR must keep the property
+tests green, the VERIFICATION.md boundary pins passing, and any
+correctness-relevant change must update
+[CORRECTNESS.md](CORRECTNESS.md)'s found-by-adversarial-testing ledger
+if it introduces one.

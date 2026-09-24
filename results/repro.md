@@ -1,6 +1,6 @@
 # Independent reproduction harness (generated)
 
-Generated 2026-09-20T16:57:08.300416+00:00 | commit `daa1a1b504a5` | tools: compact, qiskit, pytket, cirq
+Generated 2026-09-23T15:21:23.139977+00:00 | commit `ccde0ec41dd8` | tools: compact, qiskit, pytket, cirq
 
 | circuit | qubits | in 2q (u3+cx) | compact 2q | qiskit 2q | pytket 2q | cirq 2q | compact status | qiskit status | pytket status | cirq status |
 |---|---:|---:| ---:|---:|---:|---:| ---|---|---|---|
@@ -27,8 +27,8 @@ Generated 2026-09-20T16:57:08.300416+00:00 | commit `daa1a1b504a5` | tools: comp
 
 ## Summary
 
-- **compact**: mean 2q cut 10.2%, median wall 30 ms
-- **qiskit**: mean 2q cut 14.6%, median wall 5 ms
-- **pytket**: mean 2q cut 25.0%, median wall 199 ms
-- **cirq**: mean 2q cut 2.8%, median wall 62 ms
+- **compact**: mean 2q cut 10.2%, median wall 22 ms
+- **qiskit**: mean 2q cut 14.6%, median wall 7 ms
+- **pytket**: mean 2q cut 25.0%, median wall 315 ms
+- **cirq**: mean 2q cut 2.8%, median wall 105 ms
 - compact vs qiskit 2q W/T/L: [2, 12, 1]

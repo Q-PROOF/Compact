@@ -13,9 +13,11 @@ Design (single canonical structure, tolerance-gated verdicts):
 * A node at level L covers the top L+1 basis bits; its four successors
   cover the 2x2 block decomposition at bit L.  Level -1 is the scalar
   terminal.
-* Normalization: each node's first nonzero successor weight (fixed scan
-  order) is factored out to the incoming edge, making the structure
-  canonical; equal submatrices share nodes through the unique table.
+* Normalization: each node's largest successor weight (fixed scan
+  order on ties, the QMDD standard) is factored out to the incoming
+  edge, making the structure canonical and every normalized edge
+  weight bounded by 1; equal submatrices share nodes through the
+  unique table.
 * Weights are hashed on a 1e-12 rounding grid so near-equal submatrices
   share (best-effort sharing).  The verdict is NEVER structural: it is
   the Hilbert-Schmidt fidelity |Tr(A+ B)|/d > 1 - tol — the same
@@ -33,6 +35,8 @@ CX triple; multi-qubit gates are expanded first.
 """
 from __future__ import annotations
 
+import time
+
 from .circuit import Circuit
 
 __all__ = ["DDOverflow", "dd_fidelity", "check_equivalent_dd",
@@ -41,6 +45,22 @@ __all__ = ["DDOverflow", "dd_fidelity", "check_equivalent_dd",
 DD_MAX_QUBITS = 32          # hard stop; the cascade falls to randomized beyond
 _ZERO_EPS = 1e-14           # edge weight below this is structurally zero
 _GRID = 12                  # weight hashing grid (decimal places)
+
+
+def default_max_nodes() -> int:
+    """Live-node budget used by the verify()/optimize_large cascades.
+
+    400,000 by default (hundreds of MB in pure-Python float tuples +
+    unique-table overhead).  Overridable with $COMPACTQ_DD_MAX_NODES so
+    memory-constrained environments can trade proof reach for a smaller
+    footprint — a smaller budget only widens the loud-decline surface,
+    it can never change a verdict."""
+    import os
+    raw = os.environ.get("COMPACTQ_DD_MAX_NODES", "")
+    try:
+        return max(1000, int(raw)) if raw.strip() else 400_000
+    except ValueError:
+        return 400_000
 
 
 class DDOverflow(Exception):
@@ -57,9 +77,12 @@ class _DD:
     diagram; without GC the table keeps every superseded node and
     memory explodes even when the live diagram stays tiny)."""
 
-    def __init__(self, n: int, max_nodes: int = 400_000):
+    def __init__(self, n: int, max_nodes: int = 400_000,
+                 deadline: float | None = None):
         self.n = n
         self.max_nodes = max_nodes
+        self.deadline = deadline      # absolute perf_counter time or None
+        self._ops = 0                 # mk-call counter for deadline checks
         self.unique: dict = {}
         self.nodes: list = []           # id -> (level, w00, c00, w01, c01,
         self.keys: list = []            #          w10, c10, w11, c11) + key
@@ -74,6 +97,16 @@ class _DD:
         if len(self.allocated) > 8 * self.max_nodes:
             raise DDOverflow(
                 f"decision diagram exceeded {8 * self.max_nodes} nodes")
+
+    def _check_deadline(self):
+        # called from mk() — the chokepoint every node creation passes
+        # through — so a wall-clock deadline fires even inside one
+        # multi-second gate application (a per-gate check alone cannot)
+        self._ops += 1
+        if (self.deadline is not None and (self._ops & 2047) == 0
+                and time.perf_counter() > self.deadline):
+            raise DDOverflow("decision diagram build exceeded its "
+                             "wall-clock deadline")
 
     def sweep(self, roots):
         """Free every node unreachable from `roots` (terminal id 0 is
@@ -104,13 +137,22 @@ class _DD:
     # -- structure ---------------------------------------------------------
     def mk(self, level: int, ch):
         """Make (or reuse) the node for four weighted children; returns
-        the weighted pair (normalization_weight, id)."""
+        the weighted pair (normalization_weight, id).
+
+        Normalization factors out the LARGEST child weight (fixed scan
+        order on ties, the QMDD standard): every normalized edge weight
+        is then bounded by 1, so near-cancelling blocks can never blow
+        the structure up through 1/tiny factoring.  Equal submatrices
+        still share — the canonical form is a deterministic function of
+        the submatrix either way."""
         w00, c00, w01, c01, w10, c10, w11, c11 = ch
         first = None
+        first_abs = -1.0
         for w in (w00, w01, w10, w11):
-            if abs(w) > _ZERO_EPS:
+            aw = abs(w)
+            if aw > _ZERO_EPS and aw > first_abs:
                 first = w
-                break
+                first_abs = aw
         if first is None:
             return (0.0 + 0.0j, 0)
         inv = 1.0 / first
@@ -130,6 +172,7 @@ class _DD:
         nid = self.unique.get(key)
         if nid is None:
             self._check_budget()
+            self._check_deadline()
             if self.free:
                 nid = self.free.pop()
                 self.nodes[nid - 1] = (level, k00, c00, k01, c01,
@@ -383,7 +426,9 @@ def _apply_all(dd, cur, circ, gate_matrix, expand_gate):
         cur = _apply_gate(dd, cur, g, gate_matrix, expand_gate)
         # collect superseded intermediates lazily: sweeping only when the
         # dead frontier grows past the live diagram keeps the bookkeeping
-        # cost off small gates while bounding memory to ~4x live nodes
+        # cost off small gates while bounding memory to ~4x live nodes.
+        # The wall-clock deadline is enforced inside mk() (see
+        # _check_deadline) so it fires even mid-gate-application.
         if len(dd.allocated) > 4 * dd.live_count + 1024:
             dd.sweep(list(dd.gc_roots) + [cur])
             if dd.live_count > dd.max_nodes:
@@ -423,12 +468,25 @@ def _apply_gate(dd, cur, g, gate_matrix, expand_gate):
     return cur
 
 
+def _norm_ok(store, root, n) -> bool:
+    """Self-consistency check: the inner product of any built unitary's
+    diagram with itself must reproduce dimension d.  A diagram whose
+    normalization corrupted (extreme cancellation chains can do this in
+    pure-Python float arithmetic) would poison ANY verdict computed from
+    it — decline the whole build instead.  Decline, never guess."""
+    val = store.inner(root, root, {})
+    return abs(val) > 1.0 - 1e-6
+
+
 def dd_fidelity(circ_a: Circuit, circ_b: Circuit,
-                max_nodes: int = 400_000) -> float:
+                max_nodes: int = 400_000,
+                deadline_s: float | None = None) -> float:
     """|Tr(A+ B)|/d between the two circuits, computed on decision
     diagrams sharing one node store (common submatrices collapse, which
     makes the inner product cheap).  Raises DDOverflow / ValueError —
-    the caller declines."""
+    the caller declines.  `deadline_s` bounds each diagram build in
+    wall-clock time (None = unbounded, the historical contract; the
+    verify() cascade passes its documented default)."""
     from .linalg import gate_matrix
     from .mcx import expand_gate
 
@@ -439,7 +497,8 @@ def dd_fidelity(circ_a: Circuit, circ_b: Circuit,
         raise ValueError("dd prover needs >= 1 qubit")
     if n > DD_MAX_QUBITS:
         raise ValueError(f"dd prover limited to {DD_MAX_QUBITS} qubits")
-    store = _DD(n, max_nodes)
+    deadline = time.perf_counter() + deadline_s if deadline_s else None
+    store = _DD(n, max_nodes, deadline)
     ident = _identity(store, n)
     store.gc_roots = [ident]
     root_a = _apply_all(store, ident, circ_a, gate_matrix, expand_gate)
@@ -450,16 +509,23 @@ def dd_fidelity(circ_a: Circuit, circ_b: Circuit,
                         gate_matrix, expand_gate)
     store.gc_roots = [root_a, root_b]
     store.sweep(store.gc_roots)
+    if not (_norm_ok(store, root_a, n) and _norm_ok(store, root_b, n)):
+        raise DDOverflow(
+            "decision diagram failed its self-consistency check; "
+            "declining rather than returning a possibly wrong verdict")
     val = store.inner(root_a, root_b, {})
     d = 1 << n
     return abs(val) / d
 
 
 def check_equivalent_dd(circ_a: Circuit, circ_b: Circuit, tol: float = 1e-7,
-                        max_nodes: int = 400_000) -> bool:
+                        max_nodes: int = 400_000,
+                        deadline_s: float | None = None) -> bool:
     """True iff the circuits are equal up to global phase, proven on
-    decision diagrams within tolerance `tol`."""
-    return dd_fidelity(circ_a, circ_b, max_nodes) > 1.0 - tol
+    decision diagrams within tolerance `tol`.  `deadline_s` bounds each
+    build in wall-clock time (declines past it)."""
+    return dd_fidelity(circ_a, circ_b, max_nodes,
+                       deadline_s) > 1.0 - tol
 
 
 def dd_node_count(circ: Circuit, max_nodes: int = 400_000) -> int:

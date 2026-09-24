@@ -1,0 +1,1945 @@
+{
+    "machine_info": {
+        "node": "REVANTH",
+        "processor": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+        "machine": "AMD64",
+        "python_compiler": "MSC v.1938 64 bit (AMD64)",
+        "python_implementation": "CPython",
+        "python_implementation_version": "3.11.9",
+        "python_version": "3.11.9",
+        "python_build": [
+            "tags/v3.11.9:de54cf5",
+            "Apr  2 2024 10:12:12"
+        ],
+        "release": "10",
+        "system": "Windows",
+        "cpu": {
+            "python_version": "3.11.9.final.0 (64 bit)",
+            "cpuinfo_version": [
+                10,
+                1,
+                1
+            ],
+            "cpuinfo_version_string": "10.1.1",
+            "arch": "X86_64",
+            "bits": 64,
+            "count": 16,
+            "arch_string_raw": "AMD64",
+            "vendor_id_raw": "GenuineIntel",
+            "brand_raw": "12th Gen Intel(R) Core(TM) i5-12500H",
+            "hz_advertised_friendly": "3.1100 GHz",
+            "hz_actual_friendly": "3.1100 GHz",
+            "hz_advertised": [
+                3110000000,
+                0
+            ],
+            "hz_actual": [
+                3110000000,
+                0
+            ],
+            "flags": [
+                "3dnow",
+                "3dnowprefetch",
+                "abm",
+                "acpi",
+                "adx",
+                "aes",
+                "apic",
+                "avx",
+                "avx2",
+                "bmi1",
+                "bmi2",
+                "clflush",
+                "clflushopt",
+                "clwb",
+                "cmov",
+                "cx16",
+                "cx8",
+                "de",
+                "dts",
+                "erms",
+                "est",
+                "f16c",
+                "fma",
+                "fpu",
+                "fxsr",
+                "gfni",
+                "ht",
+                "hypervisor",
+                "ia64",
+                "intel_pt",
+                "invpcid",
+                "lahf_lm",
+                "mca",
+                "mce",
+                "mmx",
+                "monitor",
+                "movbe",
+                "msr",
+                "mtrr",
+                "osxsave",
+                "pae",
+                "pat",
+                "pbe",
+                "pcid",
+                "pclmulqdq",
+                "pdcm",
+                "pge",
+                "pni",
+                "popcnt",
+                "pse",
+                "pse36",
+                "rdpid",
+                "rdrnd",
+                "rdseed",
+                "sep",
+                "serial",
+                "sha",
+                "smap",
+                "smep",
+                "ss",
+                "sse",
+                "sse2",
+                "sse4_1",
+                "sse4_2",
+                "ssse3",
+                "tm",
+                "tm2",
+                "tsc",
+                "tscdeadline",
+                "umip",
+                "vaes",
+                "vme",
+                "vpclmulqdq",
+                "x2apic",
+                "xsave",
+                "xtpr"
+            ],
+            "l2_cache_size": 65536,
+            "l2_cache_line_size": 1280,
+            "l2_cache_associativity": 7,
+            "stepping": 3,
+            "model": 154,
+            "family": 6
+        }
+    },
+    "commit_info": {
+        "id": "ccde0ec41dd8d22c349ad91759b7955cab2e7fff",
+        "time": "2026-09-20T22:37:15+05:30",
+        "author_time": "2026-09-20T22:37:15+05:30",
+        "dirty": true,
+        "project": "Compact",
+        "branch": "main"
+    },
+    "benchmarks": [
+        {
+            "group": "Transpile - Abstract",
+            "name": "test_QASMBench_medium[bigadder_n18-all-to-all]",
+            "fullname": "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[bigadder_n18-all-to-all]",
+            "params": {
+                "circ_and_topo": [
+                    "D:\\qzip\\third_party\\benchpress\\benchpress\\qasm\\qasmbench-medium\\bigadder_n18\\bigadder_n18.qasm",
+                    "all-to-all"
+                ]
+            },
+            "param": "bigadder_n18-all-to-all",
+            "extra_info": {
+                "qasm_load_time": 0.0008462000041618012,
+                "input_num_qubits": 18,
+                "output_num_qubits": 18,
+                "output_gate_count": 218,
+                "output_depth": 144,
+                "output_2q_gate_count": 98,
+                "output_2q_depth": 79
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 1,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.4169244000004255,
+                "max": 0.44513730000471696,
+                "mean": 0.43103085000257124,
+                "stddev": 0.019949532909972454,
+                "rounds": 2,
+                "median": 0.43103085000257124,
+                "iqr": 0.02821290000429144,
+                "q1": 0.4169244000004255,
+                "q3": 0.44513730000471696,
+                "iqr_outliers": 0,
+                "stddev_outliers": 0,
+                "outliers": "0;0",
+                "ld15iqr": 0.4169244000004255,
+                "hd15iqr": 0.44513730000471696,
+                "ops": 2.320019553110954,
+                "total": 0.8620617000051425,
+                "data": [
+                    0.4169244000004255,
+                    0.44513730000471696
+                ],
+                "iterations": 1
+            }
+        },
+        {
+            "group": "Transpile - Abstract",
+            "name": "test_QASMBench_medium[bv_n14-all-to-all]",
+            "fullname": "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[bv_n14-all-to-all]",
+            "params": {
+                "circ_and_topo": [
+                    "D:\\qzip\\third_party\\benchpress\\benchpress\\qasm\\qasmbench-medium\\bv_n14\\bv_n14.qasm",
+                    "all-to-all"
+                ]
+            },
+            "param": "bv_n14-all-to-all",
+            "extra_info": {
+                "qasm_load_time": 0.000793100000009872,
+                "input_num_qubits": 14,
+                "output_num_qubits": 14,
+                "output_gate_count": 40,
+                "output_depth": 15,
+                "output_2q_gate_count": 13,
+                "output_2q_depth": 13
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 1,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.010745499996119179,
+                "max": 0.01510460000281455,
+                "mean": 0.011474724705262548,
+                "stddev": 0.0007160675996079114,
+                "rounds": 85,
+                "median": 0.011268099995504599,
+                "iqr": 0.0006189250034367433,
+                "q1": 0.011027124994143378,
+                "q3": 0.011646049997580121,
+                "iqr_outliers": 7,
+                "stddev_outliers": 13,
+                "outliers": "13;7",
+                "ld15iqr": 0.010745499996119179,
+                "hd15iqr": 0.012604700001247693,
+                "ops": 87.14806025292957,
+                "total": 0.9753515999473166,
+                "data": [
+                    0.011551200004760176,
+                    0.011140599999635015,
+                    0.01111720000335481,
+                    0.01510460000281455,
+                    0.012839199996960815,
+                    0.011956599999393802,
+                    0.011492099998577032,
+                    0.012493800000811461,
+                    0.01361969999561552,
+                    0.011374599998816848,
+                    0.011130300001241267,
+                    0.012092599994502962,
+                    0.011342600002535619,
+                    0.011080299998866394,
+                    0.011699900001985952,
+                    0.011062400000810158,
+                    0.011774799997510854,
+                    0.01277019999542972,
+                    0.011330000001180451,
+                    0.011655199996312149,
+                    0.011322300000756513,
+                    0.011230500000237953,
+                    0.010942499997327104,
+                    0.010873999999603257,
+                    0.011028999993868638,
+                    0.01139580000017304,
+                    0.012198799995530862,
+                    0.01213129999814555,
+                    0.011084300000220537,
+                    0.01090709999698447,
+                    0.011210099997697398,
+                    0.011406099998566788,
+                    0.011642999998002779,
+                    0.011261100000410806,
+                    0.011443700001109391,
+                    0.011247499998717103,
+                    0.010903599999437574,
+                    0.011034299997845665,
+                    0.011307400003715884,
+                    0.012424300002749078,
+                    0.01328300000022864,
+                    0.010813900000357535,
+                    0.010959100000036415,
+                    0.010916599996562582,
+                    0.011242399996262975,
+                    0.011585100000957027,
+                    0.011007900000549853,
+                    0.011524699999426957,
+                    0.011203200003365055,
+                    0.011447800003224984,
+                    0.01176090000080876,
+                    0.011686899997584987,
+                    0.011147999997774605,
+                    0.010946500005957205,
+                    0.011029100001906045,
+                    0.010925000002316665,
+                    0.010809499995957594,
+                    0.011319099998218007,
+                    0.011399299997719936,
+                    0.011419000002206303,
+                    0.01162789999943925,
+                    0.010876799999095965,
+                    0.010766100000182632,
+                    0.011143399999127723,
+                    0.010745499996119179,
+                    0.010979599996062461,
+                    0.01130389999889303,
+                    0.011021499994967598,
+                    0.010769599997729529,
+                    0.01122870000108378,
+                    0.011056699993787333,
+                    0.010929800002486445,
+                    0.012604700001247693,
+                    0.012074199999915436,
+                    0.010757500000181608,
+                    0.011760100001993123,
+                    0.011109299994132016,
+                    0.010911500001384411,
+                    0.011247200003708713,
+                    0.01141549999738345,
+                    0.012903899994853418,
+                    0.011353400004736613,
+                    0.011268099995504599,
+                    0.012446599997929297,
+                    0.010998500001733191
+                ],
+                "iterations": 1
+            }
+        },
+        {
+            "group": "Transpile - Abstract",
+            "name": "test_QASMBench_medium[bv_n19-all-to-all]",
+            "fullname": "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[bv_n19-all-to-all]",
+            "params": {
+                "circ_and_topo": [
+                    "D:\\qzip\\third_party\\benchpress\\benchpress\\qasm\\qasmbench-medium\\bv_n19\\bv_n19.qasm",
+                    "all-to-all"
+                ]
+            },
+            "param": "bv_n19-all-to-all",
+            "extra_info": {
+                "qasm_load_time": 0.0007082000010996126,
+                "input_num_qubits": 19,
+                "output_num_qubits": 19,
+                "output_gate_count": 55,
+                "output_depth": 20,
+                "output_2q_gate_count": 18,
+                "output_2q_depth": 18
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 1,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.015413300003274344,
+                "max": 0.01799830000527436,
+                "mean": 0.016120037705075477,
+                "stddev": 0.0005424020047248631,
+                "rounds": 61,
+                "median": 0.015962599994963966,
+                "iqr": 0.0005198999970161822,
+                "q1": 0.015794250002727495,
+                "q3": 0.016314149999743677,
+                "iqr_outliers": 5,
+                "stddev_outliers": 11,
+                "outliers": "11;5",
+                "ld15iqr": 0.015413300003274344,
+                "hd15iqr": 0.017236899999261368,
+                "ops": 62.03459435365619,
+                "total": 0.9833223000096041,
+                "data": [
+                    0.016494999996211845,
+                    0.01626140000007581,
+                    0.015962599994963966,
+                    0.015787500000442378,
+                    0.015670000000682194,
+                    0.015768400000524707,
+                    0.017554199999722186,
+                    0.015890000002400484,
+                    0.015809999997145496,
+                    0.015713900000264402,
+                    0.015413300003274344,
+                    0.01637710000068182,
+                    0.015757000001030974,
+                    0.016214300005231053,
+                    0.016036000000895,
+                    0.016311100000166334,
+                    0.017755500004568603,
+                    0.016023399999539834,
+                    0.016020199997001328,
+                    0.016112600002088584,
+                    0.015888100002484862,
+                    0.015894699994532857,
+                    0.015847299997403752,
+                    0.015669999993406236,
+                    0.015740200004074723,
+                    0.015786500000103842,
+                    0.01633629999560071,
+                    0.016577399997913744,
+                    0.01585940000222763,
+                    0.015873399999691173,
+                    0.01550639999913983,
+                    0.016806999999971595,
+                    0.0157965000034892,
+                    0.015882899999269284,
+                    0.015549000003375113,
+                    0.015817400002561044,
+                    0.016049199999542907,
+                    0.015945999999530613,
+                    0.016010200000891928,
+                    0.016369299999496434,
+                    0.016617900000710506,
+                    0.015948799999023322,
+                    0.01620320000074571,
+                    0.01595140000426909,
+                    0.016323299998475704,
+                    0.01617670000268845,
+                    0.015810199998668395,
+                    0.01596570000401698,
+                    0.015680100004829,
+                    0.016327500001352746,
+                    0.015565100002277177,
+                    0.017236899999261368,
+                    0.017583999993803445,
+                    0.015879799997492228,
+                    0.015976499998942018,
+                    0.015716899994004052,
+                    0.016376499996113125,
+                    0.016157700003532227,
+                    0.01799830000527436,
+                    0.015485500000067987,
+                    0.016199600002437364
+                ],
+                "iterations": 1
+            }
+        },
+        {
+            "group": "Transpile - Abstract",
+            "name": "test_QASMBench_medium[cat_state_n22-all-to-all]",
+            "fullname": "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[cat_state_n22-all-to-all]",
+            "params": {
+                "circ_and_topo": [
+                    "D:\\qzip\\third_party\\benchpress\\benchpress\\qasm\\qasmbench-medium\\cat_state_n22\\cat_state_n22.qasm",
+                    "all-to-all"
+                ]
+            },
+            "param": "cat_state_n22-all-to-all",
+            "extra_info": {
+                "qasm_load_time": 0.0026300999961677007,
+                "input_num_qubits": 22,
+                "output_num_qubits": 22,
+                "output_gate_count": 22,
+                "output_depth": 22,
+                "output_2q_gate_count": 21,
+                "output_2q_depth": 21
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 1,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.016981099994154647,
+                "max": 0.020684700000856537,
+                "mean": 0.017783129090755457,
+                "stddev": 0.0006299624944786136,
+                "rounds": 55,
+                "median": 0.017673700000159442,
+                "iqr": 0.0005708999997295905,
+                "q1": 0.017403350000677165,
+                "q3": 0.017974250000406755,
+                "iqr_outliers": 3,
+                "stddev_outliers": 11,
+                "outliers": "11;3",
+                "ld15iqr": 0.016981099994154647,
+                "hd15iqr": 0.018954200000735,
+                "ops": 56.233073206438625,
+                "total": 0.9780720999915502,
+                "data": [
+                    0.017736099995090626,
+                    0.017564000001584645,
+                    0.018144900001061615,
+                    0.017639999998209532,
+                    0.017421800002921373,
+                    0.01799100000062026,
+                    0.017341599996143486,
+                    0.018466400004399475,
+                    0.017689699998300057,
+                    0.01705490000313148,
+                    0.018355600004724693,
+                    0.017840799999248702,
+                    0.01766459999635117,
+                    0.01728039999579778,
+                    0.01822140000149375,
+                    0.018565799997304566,
+                    0.01822330000140937,
+                    0.017923999999766238,
+                    0.017598500002350193,
+                    0.01730170000519138,
+                    0.018237500000395812,
+                    0.01710869999806164,
+                    0.020684700000856537,
+                    0.018954200000735,
+                    0.019439700001385063,
+                    0.017869100003736094,
+                    0.017540100001497194,
+                    0.018425800000841264,
+                    0.0179987000010442,
+                    0.017748699996445794,
+                    0.017787499993573874,
+                    0.01772509999864269,
+                    0.017237000000022817,
+                    0.017404100006388035,
+                    0.017673700000159442,
+                    0.017595799996342976,
+                    0.01740309999877354,
+                    0.01700449999771081,
+                    0.017246800001885276,
+                    0.017695199996524025,
+                    0.01750470000115456,
+                    0.017172399995615706,
+                    0.017776799999410287,
+                    0.017817699997976888,
+                    0.01749730000301497,
+                    0.017569000003277324,
+                    0.017310100003669504,
+                    0.01740810000046622,
+                    0.017234300001291558,
+                    0.01853539999865461,
+                    0.017738499998813495,
+                    0.01782199999433942,
+                    0.0175706000009086,
+                    0.016981099994154647,
+                    0.017327599998679943
+                ],
+                "iterations": 1
+            }
+        },
+        {
+            "group": "Transpile - Abstract",
+            "name": "test_QASMBench_medium[dnn_n16-all-to-all]",
+            "fullname": "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[dnn_n16-all-to-all]",
+            "params": {
+                "circ_and_topo": [
+                    "D:\\qzip\\third_party\\benchpress\\benchpress\\qasm\\qasmbench-medium\\dnn_n16\\dnn_n16.qasm",
+                    "all-to-all"
+                ]
+            },
+            "param": "dnn_n16-all-to-all",
+            "extra_info": {
+                "qasm_load_time": 0.006901500004460104,
+                "input_num_qubits": 16,
+                "output_num_qubits": 16,
+                "output_gate_count": 432,
+                "output_depth": 37,
+                "output_2q_gate_count": 128,
+                "output_2q_depth": 16
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 1,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.4100244000001112,
+                "max": 0.4526326999985031,
+                "mean": 0.4285405333333377,
+                "stddev": 0.02184458555288725,
+                "rounds": 3,
+                "median": 0.42296450000139885,
+                "iqr": 0.031956224998793914,
+                "q1": 0.4132594250004331,
+                "q3": 0.445215649999227,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.4100244000001112,
+                "hd15iqr": 0.4526326999985031,
+                "ops": 2.3335015528674763,
+                "total": 1.2856216000000131,
+                "data": [
+                    0.4526326999985031,
+                    0.4100244000001112,
+                    0.42296450000139885
+                ],
+                "iterations": 1
+            }
+        },
+        {
+            "group": "Transpile - Abstract",
+            "name": "test_QASMBench_medium[factor247_n15-all-to-all]",
+            "fullname": "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[factor247_n15-all-to-all]",
+            "params": {
+                "circ_and_topo": [
+                    "D:\\qzip\\third_party\\benchpress\\benchpress\\qasm\\qasmbench-medium\\factor247_n15\\factor247_n15.qasm",
+                    "all-to-all"
+                ]
+            },
+            "param": "factor247_n15-all-to-all",
+            "extra_info": {
+                "qasm_load_time": 1.6643884000004618,
+                "input_num_qubits": 15,
+                "output_num_qubits": 15,
+                "output_gate_count": 613713,
+                "output_depth": 466544,
+                "output_2q_gate_count": 243586,
+                "output_2q_depth": 261917
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 1,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 335.62796450000315,
+                "max": 335.62796450000315,
+                "mean": 335.62796450000315,
+                "stddev": 0,
+                "rounds": 1,
+                "median": 335.62796450000315,
+                "iqr": 0.0,
+                "q1": 335.62796450000315,
+                "q3": 335.62796450000315,
+                "iqr_outliers": 0,
+                "stddev_outliers": 0,
+                "outliers": "0;0",
+                "ld15iqr": 335.62796450000315,
+                "hd15iqr": 335.62796450000315,
+                "ops": 0.0029794895115183126,
+                "total": 335.62796450000315,
+                "data": [
+                    335.62796450000315
+                ],
+                "iterations": 1
+            }
+        },
+        {
+            "group": "Transpile - Abstract",
+            "name": "test_QASMBench_medium[gcm_h6-all-to-all]",
+            "fullname": "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[gcm_h6-all-to-all]",
+            "params": {
+                "circ_and_topo": [
+                    "D:\\qzip\\third_party\\benchpress\\benchpress\\qasm\\qasmbench-medium\\gcm_n13\\gcm_h6.qasm",
+                    "all-to-all"
+                ]
+            },
+            "param": "gcm_h6-all-to-all",
+            "extra_info": {
+                "qasm_load_time": 0.09361789999820758,
+                "input_num_qubits": 13,
+                "output_num_qubits": 13,
+                "output_gate_count": 1219,
+                "output_depth": 902,
+                "output_2q_gate_count": 480,
+                "output_2q_depth": 503
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 1,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 1.5369915000046603,
+                "max": 1.5369915000046603,
+                "mean": 1.5369915000046603,
+                "stddev": 0,
+                "rounds": 1,
+                "median": 1.5369915000046603,
+                "iqr": 0.0,
+                "q1": 1.5369915000046603,
+                "q3": 1.5369915000046603,
+                "iqr_outliers": 0,
+                "stddev_outliers": 0,
+                "outliers": "0;0",
+                "ld15iqr": 1.5369915000046603,
+                "hd15iqr": 1.5369915000046603,
+                "ops": 0.65062168528386,
+                "total": 1.5369915000046603,
+                "data": [
+                    1.5369915000046603
+                ],
+                "iterations": 1
+            }
+        },
+        {
+            "group": "Transpile - Abstract",
+            "name": "test_QASMBench_medium[ghz_state_n23-all-to-all]",
+            "fullname": "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[ghz_state_n23-all-to-all]",
+            "params": {
+                "circ_and_topo": [
+                    "D:\\qzip\\third_party\\benchpress\\benchpress\\qasm\\qasmbench-medium\\ghz_state_n23\\ghz_state_n23.qasm",
+                    "all-to-all"
+                ]
+            },
+            "param": "ghz_state_n23-all-to-all",
+            "extra_info": {
+                "qasm_load_time": 0.018098100001225248,
+                "input_num_qubits": 23,
+                "output_num_qubits": 23,
+                "output_gate_count": 23,
+                "output_depth": 23,
+                "output_2q_gate_count": 22,
+                "output_2q_depth": 22
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 1,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.018832699999620672,
+                "max": 0.026238399994326755,
+                "mean": 0.019843007692683247,
+                "stddev": 0.0016320143930324803,
+                "rounds": 52,
+                "median": 0.01930855000318843,
+                "iqr": 0.0004014999940409325,
+                "q1": 0.019198750003852183,
+                "q3": 0.019600249997893116,
+                "iqr_outliers": 8,
+                "stddev_outliers": 5,
+                "outliers": "5;8",
+                "ld15iqr": 0.018832699999620672,
+                "hd15iqr": 0.02023660000122618,
+                "ops": 50.39558596596886,
+                "total": 1.0318364000195288,
+                "data": [
+                    0.021619899998768233,
+                    0.026085899997269735,
+                    0.026238399994326755,
+                    0.022027700004400685,
+                    0.025277599997934885,
+                    0.018912399995315354,
+                    0.01901920000091195,
+                    0.01970870000513969,
+                    0.019367299995792564,
+                    0.019204200005333405,
+                    0.019074300005740952,
+                    0.01990269999805605,
+                    0.018845899998268578,
+                    0.019280200001958292,
+                    0.01928559999942081,
+                    0.019271600001957268,
+                    0.019485699995129835,
+                    0.01924229999713134,
+                    0.018832699999620672,
+                    0.019226800002797972,
+                    0.019463899996480905,
+                    0.018972999998368323,
+                    0.019090000001597218,
+                    0.019296900005429052,
+                    0.019321300002047792,
+                    0.019256499996117782,
+                    0.01900980000209529,
+                    0.019988600004580803,
+                    0.020500700004049577,
+                    0.01932220000162488,
+                    0.01931969999714056,
+                    0.019257599997217767,
+                    0.019302000000607222,
+                    0.019233900005929172,
+                    0.018955400002596434,
+                    0.02110730000276817,
+                    0.019350499998836312,
+                    0.019640099999378435,
+                    0.019403899997996632,
+                    0.019122000005154405,
+                    0.01919330000237096,
+                    0.019040899998799432,
+                    0.019315100005769636,
+                    0.019148999999742955,
+                    0.01924950000102399,
+                    0.019851099998049904,
+                    0.02023660000122618,
+                    0.019453000000794418,
+                    0.019211300001188647,
+                    0.01933209999697283,
+                    0.019560399996407796,
+                    0.019419700001890305
+                ],
+                "iterations": 1
+            }
+        },
+        {
+            "group": "Transpile - Abstract",
+            "name": "test_QASMBench_medium[ising_n26-all-to-all]",
+            "fullname": "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[ising_n26-all-to-all]",
+            "params": {
+                "circ_and_topo": [
+                    "D:\\qzip\\third_party\\benchpress\\benchpress\\qasm\\qasmbench-medium\\ising_n26\\ising_n26.qasm",
+                    "all-to-all"
+                ]
+            },
+            "param": "ising_n26-all-to-all",
+            "extra_info": {
+                "qasm_load_time": 0.018732500000623986,
+                "input_num_qubits": 26,
+                "output_num_qubits": 26,
+                "output_gate_count": 101,
+                "output_depth": 5,
+                "output_2q_gate_count": 0,
+                "output_2q_depth": 2
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 1,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.15598039999895263,
+                "max": 0.15985879999789177,
+                "mean": 0.157956957141453,
+                "stddev": 0.001327911618665477,
+                "rounds": 7,
+                "median": 0.15791380000155186,
+                "iqr": 0.001930324997374555,
+                "q1": 0.15701379999882192,
+                "q3": 0.15894412499619648,
+                "iqr_outliers": 0,
+                "stddev_outliers": 2,
+                "outliers": "2;0",
+                "ld15iqr": 0.15598039999895263,
+                "hd15iqr": 0.15985879999789177,
+                "ops": 6.330838591075693,
+                "total": 1.105698699990171,
+                "data": [
+                    0.15598039999895263,
+                    0.15918849999434315,
+                    0.15675449999980628,
+                    0.15779169999586884,
+                    0.15821100000175647,
+                    0.15791380000155186,
+                    0.15985879999789177
+                ],
+                "iterations": 1
+            }
+        },
+        {
+            "group": "Transpile - Abstract",
+            "name": "test_QASMBench_medium[knn_n25-all-to-all]",
+            "fullname": "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[knn_n25-all-to-all]",
+            "params": {
+                "circ_and_topo": [
+                    "D:\\qzip\\third_party\\benchpress\\benchpress\\qasm\\qasmbench-medium\\knn_n25\\knn_n25.qasm",
+                    "all-to-all"
+                ]
+            },
+            "param": "knn_n25-all-to-all",
+            "extra_info": {
+                "qasm_load_time": 0.01487710000219522,
+                "input_num_qubits": 25,
+                "output_num_qubits": 25,
+                "output_gate_count": 170,
+                "output_depth": 77,
+                "output_2q_gate_count": 60,
+                "output_2q_depth": 50
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 1,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.18746110000211047,
+                "max": 0.19876510000176495,
+                "mean": 0.19111513333336916,
+                "stddev": 0.004175831602585021,
+                "rounds": 6,
+                "median": 0.18996564999906695,
+                "iqr": 0.004707699998107273,
+                "q1": 0.18791280000004917,
+                "q3": 0.19262049999815645,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.18746110000211047,
+                "hd15iqr": 0.19876510000176495,
+                "ops": 5.232448014755918,
+                "total": 1.146690800000215,
+                "data": [
+                    0.19262049999815645,
+                    0.1896915999968769,
+                    0.18791280000004917,
+                    0.18746110000211047,
+                    0.19876510000176495,
+                    0.190239700001257
+                ],
+                "iterations": 1
+            }
+        },
+        {
+            "group": "Transpile - Abstract",
+            "name": "test_QASMBench_medium[multiplier_n15-all-to-all]",
+            "fullname": "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[multiplier_n15-all-to-all]",
+            "params": {
+                "circ_and_topo": [
+                    "D:\\qzip\\third_party\\benchpress\\benchpress\\qasm\\qasmbench-medium\\multiplier_n15\\multiplier_n15.qasm",
+                    "all-to-all"
+                ]
+            },
+            "param": "multiplier_n15-all-to-all",
+            "extra_info": {
+                "qasm_load_time": 0.027432599999883678,
+                "input_num_qubits": 15,
+                "output_num_qubits": 15,
+                "output_gate_count": 399,
+                "output_depth": 211,
+                "output_2q_gate_count": 174,
+                "output_2q_depth": 117
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 1,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.34662260000186507,
+                "max": 0.3608433000044897,
+                "mean": 0.3531039333344476,
+                "stddev": 0.007193334626567986,
+                "rounds": 3,
+                "median": 0.351845899996988,
+                "iqr": 0.01066552500196849,
+                "q1": 0.3479284250006458,
+                "q3": 0.3585939500026143,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.34662260000186507,
+                "hd15iqr": 0.3608433000044897,
+                "ops": 2.8320273596409793,
+                "total": 1.0593118000033428,
+                "data": [
+                    0.34662260000186507,
+                    0.3608433000044897,
+                    0.351845899996988
+                ],
+                "iterations": 1
+            }
+        },
+        {
+            "group": "Transpile - Abstract",
+            "name": "test_QASMBench_medium[multiply_n13-all-to-all]",
+            "fullname": "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[multiply_n13-all-to-all]",
+            "params": {
+                "circ_and_topo": [
+                    "D:\\qzip\\third_party\\benchpress\\benchpress\\qasm\\qasmbench-medium\\multiply_n13\\multiply_n13.qasm",
+                    "all-to-all"
+                ]
+            },
+            "param": "multiply_n13-all-to-all",
+            "extra_info": {
+                "qasm_load_time": 0.023932500000228174,
+                "input_num_qubits": 13,
+                "output_num_qubits": 13,
+                "output_gate_count": 74,
+                "output_depth": 32,
+                "output_2q_gate_count": 28,
+                "output_2q_depth": 19
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 1,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.14166090000071563,
+                "max": 0.14804609999555396,
+                "mean": 0.1452478142860595,
+                "stddev": 0.0023222871903854684,
+                "rounds": 7,
+                "median": 0.14575999999942724,
+                "iqr": 0.003671524998935638,
+                "q1": 0.1432882500030246,
+                "q3": 0.14695977500196022,
+                "iqr_outliers": 0,
+                "stddev_outliers": 3,
+                "outliers": "3;0",
+                "ld15iqr": 0.14166090000071563,
+                "hd15iqr": 0.14804609999555396,
+                "ops": 6.884785185342216,
+                "total": 1.0167347000024165,
+                "data": [
+                    0.14714030000322964,
+                    0.14498730000195792,
+                    0.14804609999555396,
+                    0.14575999999942724,
+                    0.14641819999815198,
+                    0.14272190000338014,
+                    0.14166090000071563
+                ],
+                "iterations": 1
+            }
+        },
+        {
+            "group": "Transpile - Abstract",
+            "name": "test_QASMBench_medium[qec9xz_n17-all-to-all]",
+            "fullname": "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[qec9xz_n17-all-to-all]",
+            "params": {
+                "circ_and_topo": [
+                    "D:\\qzip\\third_party\\benchpress\\benchpress\\qasm\\qasmbench-medium\\qec9xz_n17\\qec9xz_n17.qasm",
+                    "all-to-all"
+                ]
+            },
+            "param": "qec9xz_n17-all-to-all",
+            "extra_info": {
+                "qasm_load_time": 0.020196800003759563,
+                "input_num_qubits": 17,
+                "output_num_qubits": 17,
+                "output_gate_count": 53,
+                "output_depth": 16,
+                "output_2q_gate_count": 32,
+                "output_2q_depth": 12
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 1,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.01247519999742508,
+                "max": 0.017457600006309804,
+                "mean": 0.013326095890577512,
+                "stddev": 0.0006745897151689096,
+                "rounds": 73,
+                "median": 0.01316900000529131,
+                "iqr": 0.0004642000021704007,
+                "q1": 0.01301012499970966,
+                "q3": 0.013474325001880061,
+                "iqr_outliers": 4,
+                "stddev_outliers": 8,
+                "outliers": "8;4",
+                "ld15iqr": 0.01247519999742508,
+                "hd15iqr": 0.014240600001357961,
+                "ops": 75.04073272555921,
+                "total": 0.9728050000121584,
+                "data": [
+                    0.013925100000051316,
+                    0.013144299999112263,
+                    0.013142299998435192,
+                    0.013109300001815427,
+                    0.013347699998121243,
+                    0.013111300002492499,
+                    0.013536699996620882,
+                    0.012477099997340702,
+                    0.01310840000223834,
+                    0.013165099997422658,
+                    0.013464600000588689,
+                    0.013058800002909265,
+                    0.013190400000894442,
+                    0.013415699999313802,
+                    0.013266499998280779,
+                    0.013810999997076578,
+                    0.01314249999995809,
+                    0.012678400002187118,
+                    0.013037099997745827,
+                    0.01274369999737246,
+                    0.013503500005754177,
+                    0.013397200003964826,
+                    0.01291740000306163,
+                    0.012941200002387632,
+                    0.012825099998735823,
+                    0.013174599997000769,
+                    0.012867400000686757,
+                    0.01381779999792343,
+                    0.0135322999994969,
+                    0.012614500003110152,
+                    0.01316900000529131,
+                    0.012717900004645344,
+                    0.012915600003907457,
+                    0.012812300003133714,
+                    0.017457600006309804,
+                    0.01312329999927897,
+                    0.014510200002405327,
+                    0.01303149999876041,
+                    0.013183099996240344,
+                    0.012971700001799036,
+                    0.013645300001371652,
+                    0.013878699995984789,
+                    0.013763399998424575,
+                    0.01301919999968959,
+                    0.013117200003762264,
+                    0.01264390000142157,
+                    0.01320059999852674,
+                    0.012770100001944229,
+                    0.013341500001843087,
+                    0.01247519999742508,
+                    0.013397599999734666,
+                    0.01296889999503037,
+                    0.013727899997320492,
+                    0.01363419999688631,
+                    0.013071599998511374,
+                    0.013227800001914147,
+                    0.013441299997793976,
+                    0.013114499997755047,
+                    0.013843200002156664,
+                    0.013175699998100754,
+                    0.013871000002836809,
+                    0.012918300002638716,
+                    0.013377199997194111,
+                    0.013438499998301268,
+                    0.014240600001357961,
+                    0.013407099999312777,
+                    0.013658799995027948,
+                    0.013044700004684273,
+                    0.013393300003372133,
+                    0.013156399996660184,
+                    0.01298289999976987,
+                    0.01537790000293171,
+                    0.013121299998601899
+                ],
+                "iterations": 1
+            }
+        },
+        {
+            "group": "Transpile - Abstract",
+            "name": "test_QASMBench_medium[qf21_n15-all-to-all]",
+            "fullname": "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[qf21_n15-all-to-all]",
+            "params": {
+                "circ_and_topo": [
+                    "D:\\qzip\\third_party\\benchpress\\benchpress\\qasm\\qasmbench-medium\\qf21_n15\\qf21_n15.qasm",
+                    "all-to-all"
+                ]
+            },
+            "param": "qf21_n15-all-to-all",
+            "extra_info": {
+                "qasm_load_time": 0.02552849999483442,
+                "input_num_qubits": 15,
+                "output_num_qubits": 15,
+                "output_gate_count": 166,
+                "output_depth": 93,
+                "output_2q_gate_count": 16,
+                "output_2q_depth": 64
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 1,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.19805339999584248,
+                "max": 0.19970330000069225,
+                "mean": 0.19868160000017573,
+                "stddev": 0.000617049257510283,
+                "rounds": 6,
+                "median": 0.19866990000082296,
+                "iqr": 0.0008705000072950497,
+                "q1": 0.19806129999778932,
+                "q3": 0.19893180000508437,
+                "iqr_outliers": 0,
+                "stddev_outliers": 3,
+                "outliers": "3;0",
+                "ld15iqr": 0.19805339999584248,
+                "hd15iqr": 0.19970330000069225,
+                "ops": 5.033178714078785,
+                "total": 1.1920896000010544,
+                "data": [
+                    0.19893180000508437,
+                    0.19876369999838062,
+                    0.19805339999584248,
+                    0.19970330000069225,
+                    0.1985761000032653,
+                    0.19806129999778932
+                ],
+                "iterations": 1
+            }
+        },
+        {
+            "group": "Transpile - Abstract",
+            "name": "test_QASMBench_medium[qft_n18-all-to-all]",
+            "fullname": "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[qft_n18-all-to-all]",
+            "params": {
+                "circ_and_topo": [
+                    "D:\\qzip\\third_party\\benchpress\\benchpress\\qasm\\qasmbench-medium\\qft_n18\\qft_n18.qasm",
+                    "all-to-all"
+                ]
+            },
+            "param": "qft_n18-all-to-all",
+            "extra_info": {
+                "qasm_load_time": 0.022163499997986946,
+                "input_num_qubits": 18,
+                "output_num_qubits": 18,
+                "output_gate_count": 341,
+                "output_depth": 52,
+                "output_2q_gate_count": 0,
+                "output_2q_depth": 33
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 1,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.6164673999955994,
+                "max": 0.6201682000028086,
+                "mean": 0.618317799999204,
+                "stddev": 0.0026168607809128365,
+                "rounds": 2,
+                "median": 0.618317799999204,
+                "iqr": 0.003700800007209182,
+                "q1": 0.6164673999955994,
+                "q3": 0.6201682000028086,
+                "iqr_outliers": 0,
+                "stddev_outliers": 0,
+                "outliers": "0;0",
+                "ld15iqr": 0.6164673999955994,
+                "hd15iqr": 0.6201682000028086,
+                "ops": 1.6172913023064956,
+                "total": 1.236635599998408,
+                "data": [
+                    0.6164673999955994,
+                    0.6201682000028086
+                ],
+                "iterations": 1
+            }
+        },
+        {
+            "group": "Transpile - Abstract",
+            "name": "test_QASMBench_medium[qram_n20-all-to-all]",
+            "fullname": "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[qram_n20-all-to-all]",
+            "params": {
+                "circ_and_topo": [
+                    "D:\\qzip\\third_party\\benchpress\\benchpress\\qasm\\qasmbench-medium\\qram_n20\\qram_n20.qasm",
+                    "all-to-all"
+                ]
+            },
+            "param": "qram_n20-all-to-all",
+            "extra_info": {
+                "qasm_load_time": 0.028745100004016422,
+                "input_num_qubits": 20,
+                "output_num_qubits": 20,
+                "output_gate_count": 241,
+                "output_depth": 121,
+                "output_2q_gate_count": 90,
+                "output_2q_depth": 70
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 1,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.20487470000080066,
+                "max": 0.27003829999739537,
+                "mean": 0.22061093999946024,
+                "stddev": 0.02771661571654457,
+                "rounds": 5,
+                "median": 0.20932860000175424,
+                "iqr": 0.018353625000600005,
+                "q1": 0.2072422249984811,
+                "q3": 0.2255958499990811,
+                "iqr_outliers": 1,
+                "stddev_outliers": 1,
+                "outliers": "1;1",
+                "ld15iqr": 0.20487470000080066,
+                "hd15iqr": 0.27003829999739537,
+                "ops": 4.5328667744330655,
+                "total": 1.1030546999973012,
+                "data": [
+                    0.21078169999964302,
+                    0.20932860000175424,
+                    0.27003829999739537,
+                    0.20487470000080066,
+                    0.20803139999770792
+                ],
+                "iterations": 1
+            }
+        },
+        {
+            "group": "Transpile - Abstract",
+            "name": "test_QASMBench_medium[sat_n11-all-to-all]",
+            "fullname": "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[sat_n11-all-to-all]",
+            "params": {
+                "circ_and_topo": [
+                    "D:\\qzip\\third_party\\benchpress\\benchpress\\qasm\\qasmbench-medium\\sat_n11\\sat_n11.qasm",
+                    "all-to-all"
+                ]
+            },
+            "param": "sat_n11-all-to-all",
+            "extra_info": {
+                "qasm_load_time": 0.023814000000129454,
+                "input_num_qubits": 11,
+                "output_num_qubits": 11,
+                "output_gate_count": 462,
+                "output_depth": 357,
+                "output_2q_gate_count": 172,
+                "output_2q_depth": 184
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 1,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.4177482000013697,
+                "max": 0.4312546000001021,
+                "mean": 0.42268809999950463,
+                "stddev": 0.00744781047790794,
+                "rounds": 3,
+                "median": 0.4190614999970421,
+                "iqr": 0.010129799999049283,
+                "q1": 0.4180765250002878,
+                "q3": 0.4282063249993371,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.4177482000013697,
+                "hd15iqr": 0.4312546000001021,
+                "ops": 2.365810629637248,
+                "total": 1.2680642999985139,
+                "data": [
+                    0.4312546000001021,
+                    0.4177482000013697,
+                    0.4190614999970421
+                ],
+                "iterations": 1
+            }
+        },
+        {
+            "group": "Transpile - Abstract",
+            "name": "test_QASMBench_medium[swap_test_n25-all-to-all]",
+            "fullname": "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[swap_test_n25-all-to-all]",
+            "params": {
+                "circ_and_topo": [
+                    "D:\\qzip\\third_party\\benchpress\\benchpress\\qasm\\qasmbench-medium\\swap_test_n25\\swap_test_n25.qasm",
+                    "all-to-all"
+                ]
+            },
+            "param": "swap_test_n25-all-to-all",
+            "extra_info": {
+                "qasm_load_time": 0.015806800001882948,
+                "input_num_qubits": 25,
+                "output_num_qubits": 25,
+                "output_gate_count": 176,
+                "output_depth": 77,
+                "output_2q_gate_count": 60,
+                "output_2q_depth": 50
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 1,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.20328539999900386,
+                "max": 0.205662400003348,
+                "mean": 0.20490290000016104,
+                "stddev": 0.0009612855253175292,
+                "rounds": 5,
+                "median": 0.20508919999701902,
+                "iqr": 0.001116924997404567,
+                "q1": 0.20448907500212954,
+                "q3": 0.2056059999995341,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.20328539999900386,
+                "hd15iqr": 0.205662400003348,
+                "ops": 4.880360404851342,
+                "total": 1.0245145000008051,
+                "data": [
+                    0.20489030000317143,
+                    0.20508919999701902,
+                    0.205662400003348,
+                    0.20328539999900386,
+                    0.2055871999982628
+                ],
+                "iterations": 1
+            }
+        },
+        {
+            "group": "Transpile - Abstract",
+            "name": "test_QASMBench_medium[wstate_n27-all-to-all]",
+            "fullname": "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[wstate_n27-all-to-all]",
+            "params": {
+                "circ_and_topo": [
+                    "D:\\qzip\\third_party\\benchpress\\benchpress\\qasm\\qasmbench-medium\\wstate_n27\\wstate_n27.qasm",
+                    "all-to-all"
+                ]
+            },
+            "param": "wstate_n27-all-to-all",
+            "extra_info": {
+                "qasm_load_time": 0.017988399995374493,
+                "input_num_qubits": 27,
+                "output_num_qubits": 27,
+                "output_gate_count": 105,
+                "output_depth": 54,
+                "output_2q_gate_count": 26,
+                "output_2q_depth": 28
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 1,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.028696699999272823,
+                "max": 0.03117749999364605,
+                "mean": 0.029376709374446364,
+                "stddev": 0.000562700923909681,
+                "rounds": 32,
+                "median": 0.02929990000120597,
+                "iqr": 0.0004232500032230746,
+                "q1": 0.029109899998729816,
+                "q3": 0.02953315000195289,
+                "iqr_outliers": 2,
+                "stddev_outliers": 7,
+                "outliers": "7;2",
+                "ld15iqr": 0.028696699999272823,
+                "hd15iqr": 0.031168499997875188,
+                "ops": 34.040572320528874,
+                "total": 0.9400546999822836,
+                "data": [
+                    0.03117749999364605,
+                    0.028729500001645647,
+                    0.02951970000140136,
+                    0.029393199998594355,
+                    0.031168499997875188,
+                    0.029518900002585724,
+                    0.02926339999976335,
+                    0.0297740000023623,
+                    0.02958859999489505,
+                    0.028993200001423247,
+                    0.028696699999272823,
+                    0.02915249999932712,
+                    0.029011200000240933,
+                    0.028747999996994622,
+                    0.028779299995221663,
+                    0.029329999997571576,
+                    0.029509799998777453,
+                    0.029550699997344054,
+                    0.02916669999831356,
+                    0.029109600000083447,
+                    0.02936549999867566,
+                    0.029787200001010206,
+                    0.02917590000288328,
+                    0.02934119999554241,
+                    0.028700900002149865,
+                    0.02954660000250442,
+                    0.029110199997376185,
+                    0.029252499996800907,
+                    0.02922210000542691,
+                    0.02977180000016233,
+                    0.0293286000014632,
+                    0.02927120000094874
+                ],
+                "iterations": 1
+            }
+        }
+    ],
+    "datetime": "2026-09-24T05:25:08.097866+00:00",
+    "version": "5.3.0",
+    "total_duration": 1035.0984501838684,
+    "env_info": {
+        "numpy": "2.4.6",
+        "scipy": "1.17.1"
+    },
+    "test_status_counts": {
+        "passed": 19,
+        "failed": 0,
+        "xfailed": 0,
+        "skipped": 4
+    },
+    "test_dumps": {
+        "passed": {
+            "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[bigadder_n18-all-to-all]": {
+                "duration": 1.7890263000008417,
+                "exception": "None",
+                "keywords": {
+                    "test_QASMBench_medium[bigadder_n18-all-to-all]": 1,
+                    "parametrize": 1,
+                    "pytestmark": 1,
+                    "bigadder_n18-all-to-all": 1,
+                    "TestWorkoutAbstractQasmBenchMedium": 1,
+                    "benchmark": 1,
+                    "test_qasmbench.py": 1,
+                    "abstract_transpile": 1,
+                    "compactq_gym": 1,
+                    "benchpress": 1,
+                    "": 1
+                }
+            },
+            "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[bv_n14-all-to-all]": {
+                "duration": 1.0031384999965667,
+                "exception": "None",
+                "keywords": {
+                    "test_QASMBench_medium[bv_n14-all-to-all]": 1,
+                    "parametrize": 1,
+                    "pytestmark": 1,
+                    "bv_n14-all-to-all": 1,
+                    "TestWorkoutAbstractQasmBenchMedium": 1,
+                    "benchmark": 1,
+                    "test_qasmbench.py": 1,
+                    "abstract_transpile": 1,
+                    "compactq_gym": 1,
+                    "benchpress": 1,
+                    "": 1
+                }
+            },
+            "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[bv_n19-all-to-all]": {
+                "duration": 1.0195234999991953,
+                "exception": "None",
+                "keywords": {
+                    "test_QASMBench_medium[bv_n19-all-to-all]": 1,
+                    "parametrize": 1,
+                    "pytestmark": 1,
+                    "bv_n19-all-to-all": 1,
+                    "TestWorkoutAbstractQasmBenchMedium": 1,
+                    "benchmark": 1,
+                    "test_qasmbench.py": 1,
+                    "abstract_transpile": 1,
+                    "compactq_gym": 1,
+                    "benchpress": 1,
+                    "": 1
+                }
+            },
+            "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[cat_state_n22-all-to-all]": {
+                "duration": 1.0203431000045384,
+                "exception": "None",
+                "keywords": {
+                    "test_QASMBench_medium[cat_state_n22-all-to-all]": 1,
+                    "parametrize": 1,
+                    "pytestmark": 1,
+                    "cat_state_n22-all-to-all": 1,
+                    "TestWorkoutAbstractQasmBenchMedium": 1,
+                    "benchmark": 1,
+                    "test_qasmbench.py": 1,
+                    "abstract_transpile": 1,
+                    "compactq_gym": 1,
+                    "benchpress": 1,
+                    "": 1
+                }
+            },
+            "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[dnn_n16-all-to-all]": {
+                "duration": 2.1776362000018707,
+                "exception": "None",
+                "keywords": {
+                    "test_QASMBench_medium[dnn_n16-all-to-all]": 1,
+                    "parametrize": 1,
+                    "pytestmark": 1,
+                    "dnn_n16-all-to-all": 1,
+                    "TestWorkoutAbstractQasmBenchMedium": 1,
+                    "benchmark": 1,
+                    "test_qasmbench.py": 1,
+                    "abstract_transpile": 1,
+                    "compactq_gym": 1,
+                    "benchpress": 1,
+                    "": 1
+                }
+            },
+            "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[factor247_n15-all-to-all]": {
+                "duration": 1001.4494950000008,
+                "exception": "None",
+                "keywords": {
+                    "test_QASMBench_medium[factor247_n15-all-to-all]": 1,
+                    "parametrize": 1,
+                    "pytestmark": 1,
+                    "factor247_n15-all-to-all": 1,
+                    "TestWorkoutAbstractQasmBenchMedium": 1,
+                    "benchmark": 1,
+                    "test_qasmbench.py": 1,
+                    "abstract_transpile": 1,
+                    "compactq_gym": 1,
+                    "benchpress": 1,
+                    "": 1
+                }
+            },
+            "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[gcm_h6-all-to-all]": {
+                "duration": 5.172850399998424,
+                "exception": "None",
+                "keywords": {
+                    "test_QASMBench_medium[gcm_h6-all-to-all]": 1,
+                    "parametrize": 1,
+                    "pytestmark": 1,
+                    "gcm_h6-all-to-all": 1,
+                    "TestWorkoutAbstractQasmBenchMedium": 1,
+                    "benchmark": 1,
+                    "test_qasmbench.py": 1,
+                    "abstract_transpile": 1,
+                    "compactq_gym": 1,
+                    "benchpress": 1,
+                    "": 1
+                }
+            },
+            "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[ghz_state_n23-all-to-all]": {
+                "duration": 1.0935386999990442,
+                "exception": "None",
+                "keywords": {
+                    "test_QASMBench_medium[ghz_state_n23-all-to-all]": 1,
+                    "parametrize": 1,
+                    "pytestmark": 1,
+                    "ghz_state_n23-all-to-all": 1,
+                    "TestWorkoutAbstractQasmBenchMedium": 1,
+                    "benchmark": 1,
+                    "test_qasmbench.py": 1,
+                    "abstract_transpile": 1,
+                    "compactq_gym": 1,
+                    "benchpress": 1,
+                    "": 1
+                }
+            },
+            "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[ising_n26-all-to-all]": {
+                "duration": 1.4487332999997307,
+                "exception": "None",
+                "keywords": {
+                    "test_QASMBench_medium[ising_n26-all-to-all]": 1,
+                    "parametrize": 1,
+                    "pytestmark": 1,
+                    "ising_n26-all-to-all": 1,
+                    "TestWorkoutAbstractQasmBenchMedium": 1,
+                    "benchmark": 1,
+                    "test_qasmbench.py": 1,
+                    "abstract_transpile": 1,
+                    "compactq_gym": 1,
+                    "benchpress": 1,
+                    "": 1
+                }
+            },
+            "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[knn_n25-all-to-all]": {
+                "duration": 1.6460335000010673,
+                "exception": "None",
+                "keywords": {
+                    "test_QASMBench_medium[knn_n25-all-to-all]": 1,
+                    "parametrize": 1,
+                    "pytestmark": 1,
+                    "knn_n25-all-to-all": 1,
+                    "TestWorkoutAbstractQasmBenchMedium": 1,
+                    "benchmark": 1,
+                    "test_qasmbench.py": 1,
+                    "abstract_transpile": 1,
+                    "compactq_gym": 1,
+                    "benchpress": 1,
+                    "": 1
+                }
+            },
+            "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[multiplier_n15-all-to-all]": {
+                "duration": 1.78787800000282,
+                "exception": "None",
+                "keywords": {
+                    "test_QASMBench_medium[multiplier_n15-all-to-all]": 1,
+                    "parametrize": 1,
+                    "pytestmark": 1,
+                    "multiplier_n15-all-to-all": 1,
+                    "TestWorkoutAbstractQasmBenchMedium": 1,
+                    "benchmark": 1,
+                    "test_qasmbench.py": 1,
+                    "abstract_transpile": 1,
+                    "compactq_gym": 1,
+                    "benchpress": 1,
+                    "": 1
+                }
+            },
+            "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[multiply_n13-all-to-all]": {
+                "duration": 1.3333448999983375,
+                "exception": "None",
+                "keywords": {
+                    "test_QASMBench_medium[multiply_n13-all-to-all]": 1,
+                    "parametrize": 1,
+                    "pytestmark": 1,
+                    "multiply_n13-all-to-all": 1,
+                    "TestWorkoutAbstractQasmBenchMedium": 1,
+                    "benchmark": 1,
+                    "test_qasmbench.py": 1,
+                    "abstract_transpile": 1,
+                    "compactq_gym": 1,
+                    "benchpress": 1,
+                    "": 1
+                }
+            },
+            "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[qec9xz_n17-all-to-all]": {
+                "duration": 1.0228693000026396,
+                "exception": "None",
+                "keywords": {
+                    "test_QASMBench_medium[qec9xz_n17-all-to-all]": 1,
+                    "parametrize": 1,
+                    "pytestmark": 1,
+                    "qec9xz_n17-all-to-all": 1,
+                    "TestWorkoutAbstractQasmBenchMedium": 1,
+                    "benchmark": 1,
+                    "test_qasmbench.py": 1,
+                    "abstract_transpile": 1,
+                    "compactq_gym": 1,
+                    "benchpress": 1,
+                    "": 1
+                }
+            },
+            "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[qf21_n15-all-to-all]": {
+                "duration": 1.6211631000041962,
+                "exception": "None",
+                "keywords": {
+                    "test_QASMBench_medium[qf21_n15-all-to-all]": 1,
+                    "parametrize": 1,
+                    "pytestmark": 1,
+                    "qf21_n15-all-to-all": 1,
+                    "TestWorkoutAbstractQasmBenchMedium": 1,
+                    "benchmark": 1,
+                    "test_qasmbench.py": 1,
+                    "abstract_transpile": 1,
+                    "compactq_gym": 1,
+                    "benchpress": 1,
+                    "": 1
+                }
+            },
+            "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[qft_n18-all-to-all]": {
+                "duration": 2.534130499996536,
+                "exception": "None",
+                "keywords": {
+                    "test_QASMBench_medium[qft_n18-all-to-all]": 1,
+                    "parametrize": 1,
+                    "pytestmark": 1,
+                    "qft_n18-all-to-all": 1,
+                    "TestWorkoutAbstractQasmBenchMedium": 1,
+                    "benchmark": 1,
+                    "test_qasmbench.py": 1,
+                    "abstract_transpile": 1,
+                    "compactq_gym": 1,
+                    "benchpress": 1,
+                    "": 1
+                }
+            },
+            "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[qram_n20-all-to-all]": {
+                "duration": 1.5525875000021188,
+                "exception": "None",
+                "keywords": {
+                    "test_QASMBench_medium[qram_n20-all-to-all]": 1,
+                    "parametrize": 1,
+                    "pytestmark": 1,
+                    "qram_n20-all-to-all": 1,
+                    "TestWorkoutAbstractQasmBenchMedium": 1,
+                    "benchmark": 1,
+                    "test_qasmbench.py": 1,
+                    "abstract_transpile": 1,
+                    "compactq_gym": 1,
+                    "benchpress": 1,
+                    "": 1
+                }
+            },
+            "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[sat_n11-all-to-all]": {
+                "duration": 2.1623965999970096,
+                "exception": "None",
+                "keywords": {
+                    "test_QASMBench_medium[sat_n11-all-to-all]": 1,
+                    "parametrize": 1,
+                    "pytestmark": 1,
+                    "sat_n11-all-to-all": 1,
+                    "TestWorkoutAbstractQasmBenchMedium": 1,
+                    "benchmark": 1,
+                    "test_qasmbench.py": 1,
+                    "abstract_transpile": 1,
+                    "compactq_gym": 1,
+                    "benchpress": 1,
+                    "": 1
+                }
+            },
+            "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[swap_test_n25-all-to-all]": {
+                "duration": 1.4631466999999247,
+                "exception": "None",
+                "keywords": {
+                    "test_QASMBench_medium[swap_test_n25-all-to-all]": 1,
+                    "parametrize": 1,
+                    "pytestmark": 1,
+                    "swap_test_n25-all-to-all": 1,
+                    "TestWorkoutAbstractQasmBenchMedium": 1,
+                    "benchmark": 1,
+                    "test_qasmbench.py": 1,
+                    "abstract_transpile": 1,
+                    "compactq_gym": 1,
+                    "benchpress": 1,
+                    "": 1
+                }
+            },
+            "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[wstate_n27-all-to-all]": {
+                "duration": 1.0243312999955378,
+                "exception": "None",
+                "keywords": {
+                    "test_QASMBench_medium[wstate_n27-all-to-all]": 1,
+                    "parametrize": 1,
+                    "pytestmark": 1,
+                    "wstate_n27-all-to-all": 1,
+                    "TestWorkoutAbstractQasmBenchMedium": 1,
+                    "benchmark": 1,
+                    "test_qasmbench.py": 1,
+                    "abstract_transpile": 1,
+                    "compactq_gym": 1,
+                    "benchpress": 1,
+                    "": 1
+                }
+            }
+        },
+        "failed": {},
+        "xfailed": {},
+        "skipped": {
+            "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[bwt_n21-all-to-all]": {
+                "duration": 0.7985668999972404,
+                "exception": "('D:\\\\qzip\\\\third_party\\\\benchpress\\\\benchpress\\\\compactq_gym\\\\abstract_transpile\\\\test_qasmbench.py', 87, \"Skipped: outside compactq's unitary-core scope: circuit contains non-unitary operation(s): reset. compactq optimizes unitary circuits; strip them first (e.g.\")",
+                "keywords": {
+                    "test_QASMBench_medium[bwt_n21-all-to-all]": 1,
+                    "parametrize": 1,
+                    "pytestmark": 1,
+                    "bwt_n21-all-to-all": 1,
+                    "TestWorkoutAbstractQasmBenchMedium": 1,
+                    "benchmark": 1,
+                    "test_qasmbench.py": 1,
+                    "abstract_transpile": 1,
+                    "compactq_gym": 1,
+                    "benchpress": 1,
+                    "": 1
+                }
+            },
+            "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[cc_n12-all-to-all]": {
+                "duration": 0.007251099996210542,
+                "exception": "('D:\\\\qzip\\\\third_party\\\\benchpress\\\\benchpress\\\\compactq_gym\\\\abstract_transpile\\\\test_qasmbench.py', 87, \"Skipped: outside compactq's unitary-core scope: circuit contains non-unitary operation(s): if_else, measure. compactq optimizes unitary circuits; strip them f\")",
+                "keywords": {
+                    "test_QASMBench_medium[cc_n12-all-to-all]": 1,
+                    "parametrize": 1,
+                    "pytestmark": 1,
+                    "cc_n12-all-to-all": 1,
+                    "TestWorkoutAbstractQasmBenchMedium": 1,
+                    "benchmark": 1,
+                    "test_qasmbench.py": 1,
+                    "abstract_transpile": 1,
+                    "compactq_gym": 1,
+                    "benchpress": 1,
+                    "": 1
+                }
+            },
+            "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[seca_n11-all-to-all]": {
+                "duration": 0.028950500003702473,
+                "exception": "('D:\\\\qzip\\\\third_party\\\\benchpress\\\\benchpress\\\\compactq_gym\\\\abstract_transpile\\\\test_qasmbench.py', 87, \"Skipped: outside compactq's unitary-core scope: circuit contains non-unitary operation(s): measure. compactq optimizes unitary circuits; strip them first (e.g\")",
+                "keywords": {
+                    "test_QASMBench_medium[seca_n11-all-to-all]": 1,
+                    "parametrize": 1,
+                    "pytestmark": 1,
+                    "seca_n11-all-to-all": 1,
+                    "TestWorkoutAbstractQasmBenchMedium": 1,
+                    "benchmark": 1,
+                    "test_qasmbench.py": 1,
+                    "abstract_transpile": 1,
+                    "compactq_gym": 1,
+                    "benchpress": 1,
+                    "": 1
+                }
+            },
+            "compactq_gym/abstract_transpile/test_qasmbench.py::TestWorkoutAbstractQasmBenchMedium::test_QASMBench_medium[square_root_n18-all-to-all]": {
+                "duration": 0.020649400001275353,
+                "exception": "('D:\\\\qzip\\\\third_party\\\\benchpress\\\\benchpress\\\\compactq_gym\\\\abstract_transpile\\\\test_qasmbench.py', 87, \"Skipped: outside compactq's unitary-core scope: circuit contains non-unitary operation(s): reset. compactq optimizes unitary circuits; strip them first (e.g.\")",
+                "keywords": {
+                    "test_QASMBench_medium[square_root_n18-all-to-all]": 1,
+                    "parametrize": 1,
+                    "pytestmark": 1,
+                    "square_root_n18-all-to-all": 1,
+                    "TestWorkoutAbstractQasmBenchMedium": 1,
+                    "benchmark": 1,
+                    "test_qasmbench.py": 1,
+                    "abstract_transpile": 1,
+                    "compactq_gym": 1,
+                    "benchpress": 1,
+                    "": 1
+                }
+            }
+        }
+    }
+}

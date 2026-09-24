@@ -150,7 +150,8 @@ def test_determinism_same_seed_same_output():
     rng0 = random.Random(123)
     for _ in range(20):
         if rng0.random() < 0.5:
-            ops.append(Gate("cx", (), (rng0.randrange(4), rng0.randrange(4))))
+            a, b = rng0.sample(range(4), 2)
+            ops.append(Gate("cx", (), (a, b)))
         else:
             nm = rng0.choice(["rz", "ry", "h"])
             ops.append(Gate(nm,
@@ -385,6 +386,8 @@ def test_qasm_import_extended_oracle():
         "sx": "qreg q[1];\nsx q[0];\nrz(0.7) q[0];\n",
         "cu1": "qreg q[2];\ncu1(pi/3) q[0], q[1];\n",
         "cy": "qreg q[2];\ncy q[0], q[1];\ncy q[1], q[0];\n",
+        "ch": ("qreg q[2];\nch q[0], q[1];\nch q[1], q[0];\n"
+               "rz(0.3) q[0];\n"),  # found via v0.2.4 adversarial testing
         "crz": "qreg q[2];\ncrz(pi/4) q[0], q[1];\ncrz(0.9) q[1], q[0];\n",
         "rzz_rxx": "qreg q[2];\nrzz(1.1) q[0], q[1];\nrxx(0.6) q[0], q[1];\n",
         "custom_gate": ("gate mygate(a, b) c, t {\n rz(a) t;\n cx c, t;\n"
@@ -1434,7 +1437,8 @@ def test_target_estimates_are_honest():
     rng = random.Random(12)
     ops = []
     for _ in range(14):
-        ops.append(Gate("cx", (), (rng.randrange(5), rng.randrange(5))))
+        a, b = rng.sample(range(5), 2)
+        ops.append(Gate("cx", (), (a, b)))
         ops.append(Gate("rz", (rng.uniform(0, 3),), (rng.randrange(6),)))
         ops.append(Gate("h", (), (rng.randrange(6),)))
     c = Circuit(6, ops)

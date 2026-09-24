@@ -29,6 +29,12 @@ class Gate:
 
     def __post_init__(self) -> None:
         n = len(self.qubits)
+        if n >= 2 and len(set(self.qubits)) != n:
+            # e.g. cx(0,0) or mcx with control == target: no well-defined
+            # unitary, and silently keeping it would make every later
+            # proof meaningless — reject at construction, like unknown names
+            raise ValueError(
+                f"{self.name!r} acts on a repeated qubit: {self.qubits}")
         if n == 1 and self.name not in ONE_Q_GATES:
             raise ValueError(f"unknown 1-qubit gate: {self.name!r}")
         if n >= 2 and self.name in MULTI_Q_GATES:

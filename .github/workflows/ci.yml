@@ -37,6 +37,12 @@ jobs:
         run: python tests/test_verify_api.py
       - name: Trust-layer tests
         run: python tests/test_trust_layer.py
+      - name: Adversarial red-team suite
+        run: python tests/test_adversarial_v024.py
+      - name: Tier-boundary suite
+        run: python tests/test_tier_boundaries.py
+      - name: Checker-independence suite
+        run: python tests/test_checker_independence.py
       - name: Benchmark provenance gate (blocking)
         run: python scripts/check_provenance.py
       - name: Quick benchmark (regression guard)
@@ -52,7 +58,9 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-      - name: Install numpy + qiskit
-        run: pip install numpy "qiskit==2.5.2"
+      - name: Install numpy + qiskit + pytket
+        run: pip install numpy "qiskit==2.5.2" "pytket==2.18.1" "pytket-qiskit"
       - name: Optimization regression gate
         run: python scripts/bench_gate.py
+      - name: Transpiler-pass integration suite (qiskit + pytket)
+        run: python tests/test_transpiler_passes.py

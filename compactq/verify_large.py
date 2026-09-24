@@ -14,6 +14,10 @@ OPTIONAL accelerator: needs numpy.  compactq's core remains zero-dependency.
 """
 from __future__ import annotations
 
+import time
+
+RAND_MAX_QUBITS = 30        # 2^30 * 16 B per statevector: memory ceiling
+
 
 def _np():
     import numpy
@@ -62,14 +66,19 @@ def _mat2q(name, params):
     raise ValueError(f"verify_large: unsupported 2q gate {name!r}")
 
 
-def state_apply(circ, sv):
-    """Apply circuit to a 2^n statevector (numpy).  `sv` is modified copy."""
+def state_apply(circ, sv, deadline=None):
+    """Apply circuit to a 2^n statevector (numpy).  `sv` is modified copy.
+    `deadline` (absolute perf_counter time) bounds the application: a
+    wide slow circuit declines instead of running for hours."""
     np = _np()
     from .linalg import gate_matrix
     from .mcx import expand_gate
     n = circ.num_qubits
     sv = sv.copy()
     for g in circ.ops:
+        if deadline is not None and time.perf_counter() > deadline:
+            raise ValueError("randomized verification exceeded its "
+                             "wall-clock deadline")
         if len(g.qubits) == 1:
             m = np.asarray(gate_matrix(g), dtype=complex).reshape(2, 2)
             t = sv.reshape([2] * n)
@@ -89,27 +98,37 @@ def state_apply(circ, sv):
             ex = expand_gate(g)
             if ex is None:
                 raise ValueError(f"verify_large: unsupported gate {g.name!r}")
-            sv = state_apply(type(circ)(circ.num_qubits, ex), sv)
+            sv = state_apply(type(circ)(circ.num_qubits, ex), sv, deadline)
     return sv
 
 
-def states_agree(circ_a, circ_b, k: int = 32, tol: float = 1e-8, seed: int = 0):
+def states_agree(circ_a, circ_b, k: int = 32, tol: float = 1e-8, seed: int = 0,
+                 deadline_s: float | None = None):
     """True iff both circuits map K random product states to identical
     outputs (within tol).  Probabilistically exact; K=32 gives failure
-    probability far below hardware error rates."""
+    probability far below hardware error rates.
+
+    Refuses widths above ~30 qubits (statevector memory) and declines
+    past `deadline_s` (wall clock) — the caller falls through, never
+    gets a guessed answer."""
     np = _np()
     if circ_a.num_qubits != circ_b.num_qubits:
         return False
     n = circ_a.num_qubits
+    if n > RAND_MAX_QUBITS:
+        raise ValueError(
+            f"randomized verification limited to {RAND_MAX_QUBITS} qubits "
+            "(statevector memory); the caller declines beyond this")
     rng = np.random.default_rng(seed)
+    deadline = time.perf_counter() + deadline_s if deadline_s else None
     for _ in range(k):
         psi = np.ones(1, dtype=complex)
         for _ in range(n):
             v = rng.normal(size=2) + 1j * rng.normal(size=2)
             v /= np.linalg.norm(v)
             psi = np.kron(psi, v)
-        da = state_apply(circ_a, psi)
-        db = state_apply(circ_b, psi)
+        da = state_apply(circ_a, psi, deadline)
+        db = state_apply(circ_b, psi, deadline)
         # phase-insensitive: circuits are equal up to global phase
         na = np.linalg.norm(da)
         nb = np.linalg.norm(db)
@@ -147,17 +166,33 @@ def optimize_large(circ, k: int = 32, tol: float = 1e-8, max_qubits: int = 30):
     if pp is False:
         return circ, "rejected"
 
-    # exact tier 2: decision-diagram proof (node-budgeted; a blowup is
-    # a decline, never a wrong answer)
-    from .dd import check_equivalent_dd, dd_fidelity
+    # exact tier 2: decision-diagram proof (node-budgeted AND
+    # wall-clock-deadline-bounded; a blowup or a slow diagram is a
+    # decline, never a wrong answer — same deadline contract as the
+    # verify() cascade)
+    from .dd import check_equivalent_dd, dd_fidelity, default_max_nodes
+    import os as _os
+    raw = _os.environ.get("COMPACTQ_DD_DEADLINE_S", "120")
+    deadline = float(raw) if raw.strip() else None
+    nodes = default_max_nodes()
     try:
-        if check_equivalent_dd(circ, out):
+        if check_equivalent_dd(circ, out, max_nodes=nodes,
+                               deadline_s=deadline):
             return out, "exact-proven (decision-diagram)"
-        if dd_fidelity(circ, out) < 1.0 - 1e-7:
+        if dd_fidelity(circ, out, max_nodes=nodes,
+                       deadline_s=deadline) < 1.0 - 1e-7:
             return circ, "rejected"
     except Exception:
-        pass  # budget exhausted / unsupported gate: fall to randomized
+        pass  # budget / deadline exhausted / unsupported gate: fall to randomized
 
-    if states_agree(circ, out, k=k, tol=tol):
-        return out, "exact"
-    return circ, "rejected"
+    try:
+        raw2 = _os.environ.get("COMPACTQ_VERIFY_DEADLINE_S", "120")
+        rand_deadline = float(raw2) if raw2.strip() else None
+        if states_agree(circ, out, k=k, tol=tol, deadline_s=rand_deadline):
+            return out, "exact"
+        return circ, "rejected"
+    except (MemoryError, ValueError):
+        # statevector memory exhausted, width refused, or deadline hit:
+        # could not decide — return the original (never ship unproven),
+        # loudly
+        return circ, "unverified (prover declined)"

@@ -193,6 +193,12 @@ class _Importer:
             self.ops.append(Gate("sdg", (), (b,)))
             self.ops.append(Gate("cx", (), (a, b)))
             self.ops.append(Gate("s", (), (b,)))
+        elif name == "ch":  # controlled-H, exact: S.H.T . CX . Tdg.H.Sdg (target)
+            for gn in ("s", "h", "t"):
+                self.ops.append(Gate(gn, (), (b,)))
+            self.ops.append(Gate("cx", (), (a, b)))
+            for gn in ("tdg", "h", "sdg"):
+                self.ops.append(Gate(gn, (), (b,)))
         elif name == "crz":
             lam = params[0]
             self.ops.append(Gate("rz", (lam / 2,), (b,)))

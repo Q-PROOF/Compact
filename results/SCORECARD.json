@@ -1,0 +1,384 @@
+{
+  "generated": "2026-09-23T15:21:23.139977+00:00",
+  "positioning": "compactq is a VERIFIED optimizer: every corpus row reports correctness alongside size; hardware-fidelity claims are NOT derived from these logical-metric reductions",
+  "sections": {
+    "qasmbench_small": {
+      "corpus": "QASMBench small (32 scored of 43 circuits)",
+      "artifact": "bench_results.json (repo root)",
+      "referee": "qiskit Operator, level-0 normalized inputs",
+      "configs": {
+        "compactq": {
+          "gate_reduction_pct": {
+            "median": 51.65,
+            "geomean": 7.25
+          },
+          "entangling_reduction_pct": {
+            "median": 16.67,
+            "geomean": 0.02
+          },
+          "depth_reduction_pct": {
+            "median": 53.27,
+            "geomean": 3.57
+          },
+          "compile_ms": {
+            "median": 11.0,
+            "p95": 281
+          },
+          "error_rate": 0.0
+        },
+        "qiskit_l3": {
+          "gate_reduction_pct": {
+            "median": 35.83,
+            "geomean": 1.46
+          },
+          "entangling_reduction_pct": {
+            "median": 0.0,
+            "geomean": 0.0
+          },
+          "depth_reduction_pct": {
+            "median": 33.81,
+            "geomean": 0.26
+          },
+          "compile_ms": {
+            "median": null,
+            "p95": null
+          },
+          "error_rate": 0.0
+        }
+      },
+      "correctness": {
+        "verified": "30/32 in-product",
+        "referee": "qiskit Operator (all outputs, both tools)"
+      }
+    },
+    "repro_harness": {
+      "corpus": "repro harness (20 pinned circuits, 10 families)",
+      "artifact": "results/repro.json|csv|md",
+      "referee": "qiskit Operator, every output lowered to u3+cx",
+      "configs": {
+        "compact": {
+          "ok": 20,
+          "entangling_reduction_pct": {
+            "median": 0.0,
+            "geomean": 0.0
+          },
+          "compile_ms": {
+            "median": 23,
+            "p95": 135
+          },
+          "error_rate": 0.0
+        },
+        "qiskit": {
+          "ok": 15,
+          "entangling_reduction_pct": {
+            "median": 0.0,
+            "geomean": 0.0
+          },
+          "compile_ms": {
+            "median": 6,
+            "p95": 59
+          },
+          "error_rate": 0.25
+        },
+        "pytket": {
+          "ok": 13,
+          "entangling_reduction_pct": {
+            "median": 0.0,
+            "geomean": 0.0
+          },
+          "compile_ms": {
+            "median": 271,
+            "p95": 681
+          },
+          "error_rate": 0.35
+        },
+        "cirq": {
+          "ok": 16,
+          "entangling_reduction_pct": {
+            "median": 0.0,
+            "geomean": 0.0
+          },
+          "compile_ms": {
+            "median": 105.0,
+            "p95": 260
+          },
+          "error_rate": 0.2
+        }
+      },
+      "compact_vs_qiskit_2q_WTL": [
+        2,
+        12,
+        1
+      ]
+    },
+    "mqt_bench": {
+      "corpus": "MQT Bench (44 algorithm-level circuits)",
+      "artifact": "results/mqtbench.json|md",
+      "referee": "qiskit Operator, circuits <= 8q",
+      "configs": {
+        "compact": {
+          "ok": 44,
+          "entangling_reduction_pct": {
+            "median": 11.94
+          },
+          "compile_ms": {
+            "median": 29.0,
+            "p95": 224
+          },
+          "verified_refereed": "44/44",
+          "error_rate": 0.0
+        },
+        "qiskit_l3": {
+          "ok": 44,
+          "entangling_reduction_pct": {
+            "median": 0.0
+          },
+          "compile_ms": {
+            "median": 4.0,
+            "p95": 8
+          },
+          "verified_refereed": "44/44",
+          "error_rate": 0.0
+        },
+        "pytket": {
+          "ok": 44,
+          "entangling_reduction_pct": {
+            "median": 0.0
+          },
+          "compile_ms": {
+            "median": 217.0,
+            "p95": 1455
+          },
+          "verified_refereed": "34/44",
+          "error_rate": 0.0
+        },
+        "cirq": {
+          "ok": 44,
+          "entangling_reduction_pct": {
+            "median": 0.0
+          },
+          "compile_ms": {
+            "median": 33.5,
+            "p95": 262
+          },
+          "verified_refereed": "42/42",
+          "error_rate": 0.0
+        }
+      }
+    },
+    "benchpress": {
+      "corpus": "Benchpress abstract-transpile, QASMBench, all-to-all (pytest-benchmark native records)",
+      "artifact": "results/benchpress/",
+      "input_2q_note": "the Benchpress record does not carry input 2q counts; reductions below pair the compactq output against the qiskit output on the same circuit",
+      "compactq_small": {
+        "ran": 37,
+        "paired_vs_qiskit_2q_WTL": [
+          15,
+          19,
+          3
+        ],
+        "compact_out_2q_total": 6576,
+        "qiskit_out_2q_total": 6626
+      },
+      "compactq_medium": {
+        "ran": 19,
+        "paired_vs_qiskit_2q_WTL": [
+          13,
+          6,
+          0
+        ],
+        "compact_out_2q_total": 245024,
+        "qiskit_out_2q_total": 269394
+      },
+      "runs": {
+        "compactq/medium": [
+          "test_QASMBench_medium[bigadder_n18-all-to-all]",
+          "test_QASMBench_medium[bv_n14-all-to-all]",
+          "test_QASMBench_medium[bv_n19-all-to-all]",
+          "test_QASMBench_medium[cat_state_n22-all-to-all]",
+          "test_QASMBench_medium[dnn_n16-all-to-all]",
+          "test_QASMBench_medium[factor247_n15-all-to-all]",
+          "test_QASMBench_medium[gcm_h6-all-to-all]",
+          "test_QASMBench_medium[ghz_state_n23-all-to-all]",
+          "test_QASMBench_medium[ising_n26-all-to-all]",
+          "test_QASMBench_medium[knn_n25-all-to-all]",
+          "test_QASMBench_medium[multiplier_n15-all-to-all]",
+          "test_QASMBench_medium[multiply_n13-all-to-all]",
+          "test_QASMBench_medium[qec9xz_n17-all-to-all]",
+          "test_QASMBench_medium[qf21_n15-all-to-all]",
+          "test_QASMBench_medium[qft_n18-all-to-all]",
+          "test_QASMBench_medium[qram_n20-all-to-all]",
+          "test_QASMBench_medium[sat_n11-all-to-all]",
+          "test_QASMBench_medium[swap_test_n25-all-to-all]",
+          "test_QASMBench_medium[wstate_n27-all-to-all]"
+        ],
+        "compactq/small": [
+          "test_QASMBench_small[adder_n10-all-to-all]",
+          "test_QASMBench_small[adder_n4-all-to-all]",
+          "test_QASMBench_small[basis_change_n3-all-to-all]",
+          "test_QASMBench_small[basis_test_n4-all-to-all]",
+          "test_QASMBench_small[basis_trotter_n4-all-to-all]",
+          "test_QASMBench_small[bell_n4-all-to-all]",
+          "test_QASMBench_small[cat_state_n4-all-to-all]",
+          "test_QASMBench_small[deutsch_n2-all-to-all]",
+          "test_QASMBench_small[dnn_n2-all-to-all]",
+          "test_QASMBench_small[dnn_n8-all-to-all]",
+          "test_QASMBench_small[error_correctiond3_n5-all-to-all]",
+          "test_QASMBench_small[fredkin_n3-all-to-all]",
+          "test_QASMBench_small[grover_n2-all-to-all]",
+          "test_QASMBench_small[hhl_n7-all-to-all]",
+          "test_QASMBench_small[hs4_n4-all-to-all]",
+          "test_QASMBench_small[ising_n10-all-to-all]",
+          "test_QASMBench_small[iswap_n2-all-to-all]",
+          "test_QASMBench_small[linearsolver_n3-all-to-all]",
+          "test_QASMBench_small[lpn_n5-all-to-all]",
+          "test_QASMBench_small[pea_n5-all-to-all]",
+          "test_QASMBench_small[qaoa_n3-all-to-all]",
+          "test_QASMBench_small[qaoa_n6-all-to-all]",
+          "test_QASMBench_small[qec_en_n5-all-to-all]",
+          "test_QASMBench_small[qft_n4-all-to-all]",
+          "test_QASMBench_small[qpe_n9-all-to-all]",
+          "test_QASMBench_small[qrng_n4-all-to-all]",
+          "test_QASMBench_small[quantumwalks_n2-all-to-all]",
+          "test_QASMBench_small[sat_n7-all-to-all]",
+          "test_QASMBench_small[simon_n6-all-to-all]",
+          "test_QASMBench_small[teleportation_n3-all-to-all]",
+          "test_QASMBench_small[toffoli_n3-all-to-all]",
+          "test_QASMBench_small[variational_n4-all-to-all]",
+          "test_QASMBench_small[vqe_n4-all-to-all]",
+          "test_QASMBench_small[vqe_uccsd_n4-all-to-all]",
+          "test_QASMBench_small[vqe_uccsd_n6-all-to-all]",
+          "test_QASMBench_small[vqe_uccsd_n8-all-to-all]",
+          "test_QASMBench_small[wstate_n3-all-to-all]"
+        ],
+        "qiskit/medium": [
+          "test_QASMBench_medium[bigadder_n18-all-to-all]",
+          "test_QASMBench_medium[bv_n14-all-to-all]",
+          "test_QASMBench_medium[bv_n19-all-to-all]",
+          "test_QASMBench_medium[bwt_n21-all-to-all]",
+          "test_QASMBench_medium[cat_state_n22-all-to-all]",
+          "test_QASMBench_medium[cc_n12-all-to-all]",
+          "test_QASMBench_medium[dnn_n16-all-to-all]",
+          "test_QASMBench_medium[factor247_n15-all-to-all]",
+          "test_QASMBench_medium[gcm_h6-all-to-all]",
+          "test_QASMBench_medium[ghz_state_n23-all-to-all]",
+          "test_QASMBench_medium[ising_n26-all-to-all]",
+          "test_QASMBench_medium[knn_n25-all-to-all]",
+          "test_QASMBench_medium[multiplier_n15-all-to-all]",
+          "test_QASMBench_medium[multiply_n13-all-to-all]",
+          "test_QASMBench_medium[qec9xz_n17-all-to-all]",
+          "test_QASMBench_medium[qf21_n15-all-to-all]",
+          "test_QASMBench_medium[qft_n18-all-to-all]",
+          "test_QASMBench_medium[qram_n20-all-to-all]",
+          "test_QASMBench_medium[sat_n11-all-to-all]",
+          "test_QASMBench_medium[seca_n11-all-to-all]",
+          "test_QASMBench_medium[square_root_n18-all-to-all]",
+          "test_QASMBench_medium[swap_test_n25-all-to-all]",
+          "test_QASMBench_medium[wstate_n27-all-to-all]"
+        ],
+        "qiskit/small": [
+          "test_QASMBench_small[adder_n10-all-to-all]",
+          "test_QASMBench_small[adder_n4-all-to-all]",
+          "test_QASMBench_small[basis_change_n3-all-to-all]",
+          "test_QASMBench_small[basis_test_n4-all-to-all]",
+          "test_QASMBench_small[basis_trotter_n4-all-to-all]",
+          "test_QASMBench_small[bb84_n8-all-to-all]",
+          "test_QASMBench_small[bell_n4-all-to-all]",
+          "test_QASMBench_small[cat_state_n4-all-to-all]",
+          "test_QASMBench_small[deutsch_n2-all-to-all]",
+          "test_QASMBench_small[dnn_n2-all-to-all]",
+          "test_QASMBench_small[dnn_n8-all-to-all]",
+          "test_QASMBench_small[error_correctiond3_n5-all-to-all]",
+          "test_QASMBench_small[fredkin_n3-all-to-all]",
+          "test_QASMBench_small[grover_n2-all-to-all]",
+          "test_QASMBench_small[hhl_n7-all-to-all]",
+          "test_QASMBench_small[hs4_n4-all-to-all]",
+          "test_QASMBench_small[inverseqft_n4-all-to-all]",
+          "test_QASMBench_small[ipea_n2-all-to-all]",
+          "test_QASMBench_small[ising_n10-all-to-all]",
+          "test_QASMBench_small[iswap_n2-all-to-all]",
+          "test_QASMBench_small[linearsolver_n3-all-to-all]",
+          "test_QASMBench_small[lpn_n5-all-to-all]",
+          "test_QASMBench_small[pea_n5-all-to-all]",
+          "test_QASMBench_small[qaoa_n3-all-to-all]",
+          "test_QASMBench_small[qaoa_n6-all-to-all]",
+          "test_QASMBench_small[qec_en_n5-all-to-all]",
+          "test_QASMBench_small[qec_sm_n5-all-to-all]",
+          "test_QASMBench_small[qft_n4-all-to-all]",
+          "test_QASMBench_small[qpe_n9-all-to-all]",
+          "test_QASMBench_small[qrng_n4-all-to-all]",
+          "test_QASMBench_small[quantumwalks_n2-all-to-all]",
+          "test_QASMBench_small[sat_n7-all-to-all]",
+          "test_QASMBench_small[shor_n5-all-to-all]",
+          "test_QASMBench_small[simon_n6-all-to-all]",
+          "test_QASMBench_small[teleportation_n3-all-to-all]",
+          "test_QASMBench_small[toffoli_n3-all-to-all]",
+          "test_QASMBench_small[variational_n4-all-to-all]",
+          "test_QASMBench_small[vqe_n4-all-to-all]",
+          "test_QASMBench_small[vqe_uccsd_n4-all-to-all]",
+          "test_QASMBench_small[vqe_uccsd_n6-all-to-all]",
+          "test_QASMBench_small[vqe_uccsd_n8-all-to-all]",
+          "test_QASMBench_small[wstate_n3-all-to-all]"
+        ]
+      }
+    },
+    "feynman": {
+      "corpus": "Feynman benchmarks/qasm (reversible / Clifford+T)",
+      "artifact": "results/feynman.json|md",
+      "configs": {
+        "compact": {
+          "circuits": 42,
+          "gate_reduction_pct": {
+            "median": 39.38,
+            "geomean": 35.61
+          },
+          "t_count_median": 231.0,
+          "compile_ms": {
+            "median": 383.95
+          }
+        }
+      },
+      "correctness": {
+        "verified": "18/42 in-product; qiskit Operator <= 8q"
+      },
+      "feynver_tool": "not runnable here (Haskell toolchain required); external referees are QCEC + PyZX"
+    },
+    "proofs_and_latency": {
+      "proof_ceiling": {
+        "qft": 18,
+        "trotter_ring": 30,
+        "ghz": 30,
+        "grover_mcx": 12
+      },
+      "latency": {
+        "import_ms": 26.48,
+        "qiskit_import_ms": 1049.44,
+        "optimize_with_proof_ms": {
+          "p50": 1.211,
+          "p95": 2.155
+        },
+        "artifact": "results/latency.json"
+      },
+      "proof_ceiling_artifact": "results/dd_ceiling.json"
+    },
+    "not_runnable_here": {
+      "RevLib": "dynamic per-file database, majority .real/.tfc formats: needs a .real parser + scraper; the same reversible/oracle workload class is covered by the Feynman corpus (adders, Toffoli networks, GF(2) multipliers)",
+      "feynver (Feynman's verifier)": "Haskell toolchain required; QCEC + PyZX are the external referees in this release",
+      "Quantum Benchmark Zoo": "submission target for docs/BENCHMARK_PROTOCOL.md once the protocol stabilizes (outreach item, not a measurement)"
+    }
+  },
+  "reproducibility": {
+    "commits": [],
+    "commands": {
+      "repro": "python scripts/repro_harness.py",
+      "qasmbench_small": "python scripts/bench_json.py",
+      "mqtbench": "python scripts/mqtbench_run.py",
+      "benchpress": "python scripts/benchpress_run.py --gym compactq",
+      "feynman": "python scripts/feynman_bench.py",
+      "ddceiling": "python scripts/dd_ceiling_bench.py",
+      "latency": "python scripts/latency_bench.py"
+    },
+    "manifest": "results/MANIFEST.json (pinned suite)",
+    "package_versions": []
+  }
+}

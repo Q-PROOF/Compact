@@ -36,6 +36,11 @@ def to_qiskit(circ: Circuit):
             qc.swap(g.qubits[0], g.qubits[1])
         elif g.name == "u3":  # QuantumCircuit.u3 was removed in Qiskit 2.x
             qc.u(*params, *g.qubits)
+        elif g.name == "mcx":  # k controls + target
+            qc.mcx(list(g.qubits[:-1]), g.qubits[-1])
+        elif g.name == "mcp":
+            qc.mcp(params[0] if params else 0.0,
+                   list(g.qubits[:-1]), g.qubits[-1])
         else:
             getattr(qc, g.name)(*params, *g.qubits)
     return qc

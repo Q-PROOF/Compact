@@ -1,0 +1,18 @@
+{
+  "generated": "2026-09-24T05:33:53.832265+00:00",
+  "benchpress_checkout": "D:\\qzip\\third_party\\benchpress",
+  "gym_files": "benchpress_integration/compactq_gym (MIT, compactq)",
+  "protocol": "Benchpress abstract-transpilation workout, QASMBench suites, all-to-all topology, pytest-benchmark native records; the timed region for compactq is exactly optimize_search (its proof included)",
+  "records": [
+    "benchpress_compactq_medium_20260924-103751.json",
+    "benchpress_compactq_small_20260924-101218.json",
+    "benchpress_compactq_small_20260924-101312.json",
+    "benchpress_compactq_small_20260924-101500.json",
+    "benchpress_compactq_small_20260924-101746.json",
+    "benchpress_compactq_small_20260924-101933.json",
+    "benchpress_compactq_small_20260924-102451.json",
+    "benchpress_compactq_small_20260924-110307.json",
+    "benchpress_qiskit_medium_20260924-105535.json",
+    "benchpress_qiskit_small_20260924-102629.json"
+  ]
+}

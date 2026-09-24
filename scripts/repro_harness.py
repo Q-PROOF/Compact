@@ -7,17 +7,26 @@ GATE SET (u3 + cx) before counting, counts are taken at two levels
 (CX-native 2q, and CP-native where cp counts as one 2-qubit gate), and
 every output is refereed with qiskit's Operator.
 
-This is the script that settles gate-set and input-representation
-questions for everyone.  Usage:
+The suite is PINNED by results/MANIFEST.json: per-circuit QASM digests
+plus referee/tool versions.  Any drift (a qiskit version change that
+alters a library circuit, a changed generator) fails the run loudly
+instead of silently producing numbers a stranger cannot reproduce.
+Regenerate the manifest deliberately with --update-manifest.
+
+Usage:
 
     python scripts/repro_harness.py [--tools compact,qiskit,pytket,cirq]
                                     [--out-dir results]
+                                    [--update-manifest]
 
-Artifacts: results/repro.json + results/repro.md
+Artifacts: results/repro.json + results/repro.csv + results/repro.md
+Pinning:   results/MANIFEST.json
 """
 from __future__ import annotations
 
 import argparse
+import csv
+import hashlib
 import json
 import statistics
 import sys
@@ -35,6 +44,9 @@ warnings.filterwarnings("ignore")
 # the in-product proof is not what is being measured here
 _OFF = False
 
+MANIFEST_VERSION = 1
+REF_TOL = 1e-6
+
 import numpy as np  # noqa: E402
 from qiskit import QuantumCircuit, qasm2, transpile  # noqa: E402
 from qiskit.quantum_info import Operator  # noqa: E402
@@ -42,6 +54,10 @@ from qiskit.quantum_info import Operator  # noqa: E402
 from provenance import environment, git_sha  # noqa: E402
 
 BASIS = ["u3", "cx"]
+
+
+def _qasm_digest(qc: QuantumCircuit) -> str:
+    return hashlib.sha256(qasm2.dumps(qc).encode("utf-8")).hexdigest()
 
 
 def build_suite() -> dict[str, QuantumCircuit]:
@@ -263,10 +279,88 @@ TOOL_RUNNERS["pyzx"] = pyzx_run
 TOOL_RUNNERS["bqskit"] = bqskit_run
 
 
+def _manifest(out_dir: Path, suite: dict, tools: list) -> dict:
+    """Build the manifest dict describing the suite + referee pins."""
+    import qiskit
+    circuits = {}
+    for name, inp in suite.items():
+        circuits[name] = {"qubits": inp.num_qubits,
+                          "depth": inp.depth(),
+                          "qasm_sha256": _qasm_digest(inp),
+                          "lowered_sha256": _qasm_digest(lower_2q(inp))}
+    return {
+        "manifest_version": MANIFEST_VERSION,
+        "protocol": ("same input for every tool; every output lowered to "
+                     "u3+cx before counting; every output refereed by "
+                     "qiskit.quantum_info.Operator, fidelity tolerance "
+                     f"{REF_TOL}"),
+        "referee": {"tool": "qiskit.quantum_info.Operator",
+                    "qiskit_version_pinned": qiskit.__version__,
+                    "tolerance": REF_TOL},
+        "tools": tools,
+        "suite_generator": "scripts/repro_harness.py::build_suite",
+        "circuits": circuits,
+        "outputs": ["repro.json", "repro.csv", "repro.md"],
+    }
+
+
+def _check_manifest(out_dir: Path, manifest: dict, update: bool) -> int:
+    """Compare the freshly built suite against the committed pin.
+    Returns 0 when compatible, 1 on mismatch (unless updating)."""
+    path = out_dir / "MANIFEST.json"
+    if not path.exists():
+        path.write_text(json.dumps(manifest, indent=2,
+                                   sort_keys=True) + "\n", encoding="utf-8")
+        print(f"wrote {path} ({len(manifest['circuits'])} circuits pinned)")
+        return 0
+    old = json.loads(path.read_text(encoding="utf-8"))
+    problems = []
+    if old.get("manifest_version") != MANIFEST_VERSION:
+        problems.append(f"manifest_version {old.get('manifest_version')} "
+                        f"!= {MANIFEST_VERSION}")
+    old_ref = (old.get("referee") or {}).get("qiskit_version_pinned")
+    new_ref = manifest["referee"]["qiskit_version_pinned"]
+    if old_ref != new_ref:
+        problems.append(f"referee qiskit {old_ref} -> {new_ref}")
+    for name, new in manifest["circuits"].items():
+        prev = old.get("circuits", {}).get(name)
+        if prev is None:
+            problems.append(f"{name}: newly added to the suite")
+        elif prev.get("qasm_sha256") != new["qasm_sha256"] or \
+                prev.get("lowered_sha256") != new["lowered_sha256"]:
+            problems.append(f"{name}: circuit digest changed "
+                            f"(generator/library drift)")
+    for name in sorted(set(old.get("circuits", {})) -
+                       set(manifest["circuits"])):
+        problems.append(f"{name}: removed from the suite")
+    if problems:
+        if update:
+            path.write_text(json.dumps(manifest, indent=2,
+                                       sort_keys=True) + "\n",
+                            encoding="utf-8")
+            print(f"MANIFEST UPDATED ({len(problems)} changes):")
+        else:
+            print("MANIFEST MISMATCH — numbers would not be comparable "
+                  "with the committed pin:")
+        for p in problems:
+            print(f"  - {p}")
+        if update:
+            print(f"rewrote {path}")
+            return 0
+        print("fix the environment or re-pin deliberately with "
+              "--update-manifest")
+        return 1
+    print(f"manifest OK: {len(manifest['circuits'])} circuits, referee "
+          f"qiskit {new_ref}")
+    return 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="same-input reproduction harness")
     ap.add_argument("--tools", default="compact,qiskit,pytket,cirq")
     ap.add_argument("--out-dir", default=str(REPO / "results"))
+    ap.add_argument("--update-manifest", action="store_true",
+                    help="re-pin results/MANIFEST.json to this environment")
     args = ap.parse_args()
     tools = [t.strip() for t in args.tools.split(",") if t.strip()]
     for t in tools:
@@ -274,7 +368,15 @@ def main() -> int:
             print(f"unknown tool {t!r}; expected {sorted(TOOL_RUNNERS)}")
             return 1
 
+    out_dir = Path(args.out_dir)
+    out_dir.mkdir(exist_ok=True)
+
     suite = build_suite()
+    rc = _check_manifest(out_dir, _manifest(out_dir, suite, tools),
+                         update=args.update_manifest)
+    if rc:
+        return rc
+
     print(f"suite: {len(suite)} circuits; tools: {tools}")
     records = []
     for name, inp in suite.items():
@@ -354,6 +456,27 @@ def main() -> int:
     (out_dir / "repro.json").write_text(
         json.dumps(doc, indent=2) + "\n", encoding="utf-8")
 
+    with (out_dir / "repro.csv").open("w", newline="", encoding="utf-8") as fh:
+        cols = ["circuit", "qubits", "input_2q_cx_lowered",
+                "input_2q_cp_native"]
+        for t in tools:
+            cols += [f"{t}_gates", f"{t}_2q", f"{t}_depth", f"{t}_fidelity",
+                     f"{t}_status", f"{t}_wall_ms"]
+        wr = csv.DictWriter(fh, fieldnames=cols, extrasaction="ignore")
+        wr.writeheader()
+        for r in records:
+            flat = {k: v for k, v in r.items() if not isinstance(v, dict)}
+            for t in tools:
+                tr = r.get(t) or {}
+                if isinstance(tr, dict):
+                    flat[f"{t}_gates"] = tr.get("gates")
+                    flat[f"{t}_2q"] = tr.get("two_qubit")
+                    flat[f"{t}_depth"] = tr.get("depth")
+                    flat[f"{t}_fidelity"] = tr.get("output_fidelity")
+                    flat[f"{t}_status"] = tr.get("status")
+                    flat[f"{t}_wall_ms"] = tr.get("wall_ms")
+            wr.writerow(flat)
+
     lines = ["# Independent reproduction harness (generated)", "",
              f"Generated {doc['generated']} | commit `{doc['commit']}` | "
              f"tools: {', '.join(tools)}", "",
@@ -381,7 +504,7 @@ def main() -> int:
             lines.append(f"- compact vs qiskit 2q W/T/L: {s}")
     (out_dir / "repro.md").write_text("\n".join(lines) + "\n",
                                       encoding="utf-8")
-    print(f"wrote {out_dir / 'repro.json'} + repro.md")
+    print(f"wrote {out_dir / 'repro.json'} + repro.csv + repro.md")
     return 0
 
 

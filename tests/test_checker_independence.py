@@ -150,7 +150,8 @@ def test_mutations_all_killed():
         lines = t.splitlines()
         for i in range(len(lines) - 1, -1, -1):
             if lines[i].strip().startswith("cx "):
-                a, b = lines[i].strip().rstrip(";").split()[1:]
+                a, b = [x.strip().rstrip(",").strip()
+                        for x in lines[i].strip().rstrip(";").split()[1:]]
                 lines[i] = f"cx {b}, {a};"
                 return "\n".join(lines) + "\n"
         return t

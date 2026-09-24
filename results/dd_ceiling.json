@@ -1,0 +1,339 @@
+{
+  "generated": "2026-09-23T15:21:23.205925+00:00",
+  "commit": "ccde0ec41dd8",
+  "compactq_version": "0.2.4",
+  "budget_nodes": 400000,
+  "normalization": "max-weight (QMDD standard, v0.2.4)",
+  "self_consistency_guard": true,
+  "baseline": {
+    "version": "0.2.3",
+    "commit": "ccde0ec",
+    "normalization": "first-nonzero",
+    "note": "v0.2.3 self-comparison bug on >=7-control mcx is fixed this release; QFT node counts are unchanged (2^n - 1); wall time improves ~2.3x from bounded edge weights"
+  },
+  "families": {
+    "qft": {
+      "rows": [
+        {
+          "width": 8,
+          "nodes": 255,
+          "wall_ms": 61,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 10,
+          "nodes": 1023,
+          "wall_ms": 244,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 12,
+          "nodes": 4095,
+          "wall_ms": 1083,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 14,
+          "nodes": 16383,
+          "wall_ms": 4756,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 16,
+          "nodes": 65535,
+          "wall_ms": 22683,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 18,
+          "nodes": 262143,
+          "wall_ms": 110703,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 20,
+          "status": "overflow (loud decline)"
+        }
+      ],
+      "proven_upto": 18,
+      "baseline": {
+        "proven_widths": [
+          8,
+          10,
+          12,
+          14,
+          16,
+          18
+        ],
+        "first_overflow_width": 20,
+        "nodes": {
+          "8": 255,
+          "10": 1023,
+          "12": 4095,
+          "14": 16383,
+          "16": 65535,
+          "18": 262143
+        },
+        "wall_ms": {
+          "8": 164,
+          "10": 928,
+          "12": 4954,
+          "14": 24871,
+          "16": 119365,
+          "18": 547202
+        },
+        "self_comparison_bug": "mcx with >= 7 controls returned a false INEQUIVALENT verdict (self-fidelity 0.992 at 8q)"
+      }
+    },
+    "trotter_ring": {
+      "rows": [
+        {
+          "width": 8,
+          "nodes": 26,
+          "wall_ms": 64,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 10,
+          "nodes": 34,
+          "wall_ms": 51,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 12,
+          "nodes": 42,
+          "wall_ms": 96,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 14,
+          "nodes": 50,
+          "wall_ms": 90,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 16,
+          "nodes": 58,
+          "wall_ms": 106,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 18,
+          "nodes": 66,
+          "wall_ms": 233,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 20,
+          "nodes": 74,
+          "wall_ms": 240,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 22,
+          "nodes": 82,
+          "wall_ms": 284,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 24,
+          "nodes": 90,
+          "wall_ms": 324,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 26,
+          "nodes": 98,
+          "wall_ms": 342,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 28,
+          "nodes": 106,
+          "wall_ms": 434,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 30,
+          "nodes": 114,
+          "wall_ms": 469,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        }
+      ],
+      "proven_upto": 30,
+      "baseline": {
+        "proven_widths": [
+          8,
+          10,
+          12,
+          14,
+          16,
+          18,
+          20,
+          22,
+          24,
+          26
+        ]
+      }
+    },
+    "ghz": {
+      "rows": [
+        {
+          "width": 8,
+          "nodes": 15,
+          "wall_ms": 4,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 10,
+          "nodes": 19,
+          "wall_ms": 4,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 12,
+          "nodes": 23,
+          "wall_ms": 5,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 14,
+          "nodes": 27,
+          "wall_ms": 42,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 16,
+          "nodes": 31,
+          "wall_ms": 26,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 18,
+          "nodes": 35,
+          "wall_ms": 28,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 20,
+          "nodes": 39,
+          "wall_ms": 16,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 22,
+          "nodes": 43,
+          "wall_ms": 19,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 24,
+          "nodes": 47,
+          "wall_ms": 25,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 26,
+          "nodes": 51,
+          "wall_ms": 31,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 28,
+          "nodes": 55,
+          "wall_ms": 42,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 30,
+          "nodes": 59,
+          "wall_ms": 35,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        }
+      ],
+      "proven_upto": 30,
+      "baseline": {
+        "proven_widths": [
+          8,
+          10,
+          12,
+          14,
+          16,
+          18,
+          20,
+          22,
+          24,
+          26
+        ]
+      }
+    },
+    "grover_mcx": {
+      "rows": [
+        {
+          "width": 8,
+          "nodes": 15,
+          "wall_ms": 4732,
+          "self_fidelity": 1.0,
+          "status": "proven"
+        },
+        {
+          "width": 10,
+          "nodes": 19,
+          "wall_ms": 39310,
+          "self_fidelity": 1.000000000003,
+          "status": "proven"
+        },
+        {
+          "width": 12,
+          "nodes": 23,
+          "wall_ms": 284075,
+          "self_fidelity": 0.999999999991,
+          "status": "proven"
+        },
+        {
+          "width": 14,
+          "status": "overflow (loud decline)"
+        }
+      ],
+      "proven_upto": 12,
+      "baseline": {
+        "proven_widths": [
+          8,
+          10
+        ],
+        "first_overflow_width": 12,
+        "self_comparison_bug": true
+      }
+    }
+  }
+}

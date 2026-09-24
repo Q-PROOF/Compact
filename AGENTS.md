@@ -32,6 +32,8 @@ compactq/
 ├── io_qasm3.py     # OpenQASM 3.0 export
 ├── qiskit_bridge.py# Qiskit interop + transpiler plugin (optional)
 ├── cirq_bridge.py  # Cirq export (optional)
+├── pytket_bridge.py# pytket conversion, both directions (optional)
+├── plugins/        # qiskit TransformationPass + pytket pass (proof metadata)
 ├── noise.py        # NoiseModel (T1/T2, gate infidelity, readout, drift)
 ├── suppress.py     # twirling + benefit-gated DD + one-call suppression
 ├── mitigate.py     # tensored readout mitigation + MLE

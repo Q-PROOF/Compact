@@ -1,0 +1,143 @@
+{
+  "circuits": {
+    "adder_4": {
+      "depth": 4,
+      "lowered_sha256": "6b92cb687115cf91737696162042011835ea2c0df3ae0ec7902dd2b25139fca7",
+      "qasm_sha256": "2c63899b317739c784e32faf48b834db409f65834afaf0bb6e55a9a3bcc4f7e8",
+      "qubits": 4
+    },
+    "adder_6": {
+      "depth": 6,
+      "lowered_sha256": "e09553e3bf0f0438455db1ab8f973047bc1245a858c8497fc2d149ade3e1944b",
+      "qasm_sha256": "9c41298946887e9823b34abcd32f6de7590cd3ae66c5b8ee0391b83b43f0bd39",
+      "qubits": 6
+    },
+    "clifford_5": {
+      "depth": 47,
+      "lowered_sha256": "b574afe06a2963bf21cc552d5184dcc318a88a6e7593bf696a74b3e63f34bc9f",
+      "qasm_sha256": "7a7676c7c3ced49b6ff823649f465c1aab058b816ffcaa3117e0d25c5526510f",
+      "qubits": 5
+    },
+    "cliffordt_5": {
+      "depth": 0,
+      "lowered_sha256": "edce17e2a099e4fde7615d07a572a8e87fc5759dc531306fc11778f045f105a9",
+      "qasm_sha256": "edce17e2a099e4fde7615d07a572a8e87fc5759dc531306fc11778f045f105a9",
+      "qubits": 5
+    },
+    "grover_3": {
+      "depth": 25,
+      "lowered_sha256": "bc4e6500024367b7d92451e8b64d12c0eee5f5488529adf8e64759206def1470",
+      "qasm_sha256": "9e74c74a4b0ab52397e9e6f51f05927ec55b9f3e73582f052dc3893214d3c0e4",
+      "qubits": 3
+    },
+    "grover_5": {
+      "depth": 25,
+      "lowered_sha256": "83df2ac98968aa0193c6e801ebce63534d46edeb8e2a19f6eb54c016f7b22fe2",
+      "qasm_sha256": "59ca253a81001282283768eff1451044b442ca1354d243e551f69157e1e429ff",
+      "qubits": 5
+    },
+    "heisenberg_4": {
+      "depth": 15,
+      "lowered_sha256": "01085db961b1d3689b11a48ced92d2d16551b8d4bb05ba298b0b945eae88d429",
+      "qasm_sha256": "0242672f3956405280061c189beb1edd03f416144706438085a60d22e73474e1",
+      "qubits": 4
+    },
+    "heisenberg_6": {
+      "depth": 21,
+      "lowered_sha256": "6dc4dabfc7af12cd2caaea319c20497bea0a6757802a60f27d59b6df364615cb",
+      "qasm_sha256": "24b2eb8d75d7af52dab71f25ede6932f50ce0dbf5b05541b3e01d6da1925fd58",
+      "qubits": 6
+    },
+    "qaoa_4": {
+      "depth": 7,
+      "lowered_sha256": "3480d8a57d3aa82b4c3e50a337ec0443601e24eda84dac816592821cfa03e77f",
+      "qasm_sha256": "71b2c23138b73d243ed0a128518ea6ca2409702592a309b7e4e87c532c37f98d",
+      "qubits": 4
+    },
+    "qaoa_6": {
+      "depth": 9,
+      "lowered_sha256": "d3370fb4c1151eabd0dd7776cf257d0aa0f600f34045cc17657971bafe303d80",
+      "qasm_sha256": "8df995be9759fc79604ffb6ac5331a060a4de32d4b7a1d8c42a5de31d8c50798",
+      "qubits": 6
+    },
+    "qaoa_8": {
+      "depth": 11,
+      "lowered_sha256": "0f344e17aba7dabbf6859faf51dd889a4728cf3143fc4363060b967e83a0685d",
+      "qasm_sha256": "662bd5df1ce550392ddbc3279313740628278cfdccd45399bcced2d786bb1dd0",
+      "qubits": 8
+    },
+    "qft_4": {
+      "depth": 8,
+      "lowered_sha256": "6f81c6adffabad9e733ef696793556ac014f553e67a717eff7b57100c1b1ac11",
+      "qasm_sha256": "1a33f1d769c86ffd02bc11ede04484c1da268fd5b9fad0975f13f54ba5768267",
+      "qubits": 4
+    },
+    "qft_6": {
+      "depth": 12,
+      "lowered_sha256": "ab0c90eaa83060615d93121b7b1440b76b59f624aa0d4b974760a2ec5084b638",
+      "qasm_sha256": "958c644737008dbb59ce23acab4744af38a81aacc5546baceae5200603c270c7",
+      "qubits": 6
+    },
+    "qft_8": {
+      "depth": 16,
+      "lowered_sha256": "58ba039fedc5715d811cf73f37961b499a14d8ea7637d4c106957ba72d1f090f",
+      "qasm_sha256": "90a0804cce9b946eb7853358bbbdf3734e89dcc7aa7cae3d625e41d4ae4dddb6",
+      "qubits": 8
+    },
+    "qpe_4": {
+      "depth": 8,
+      "lowered_sha256": "b4a9a73f8d63070b2fdf3f09da7944f59e5360df60f51564265a477088474a07",
+      "qasm_sha256": "d136ab706e4e32250f2ca095cddecc945602edc18d1c807bba9231117b4a9350",
+      "qubits": 4
+    },
+    "qpe_6": {
+      "depth": 14,
+      "lowered_sha256": "88e0260f8bee767ef12c64d063092ef10a0e2f81d10b374193a96a563e5642e1",
+      "qasm_sha256": "bb05bfd1df631b8e041d3a385a1ab890f408a5eff0b4ce3577473c2e41dc4c97",
+      "qubits": 6
+    },
+    "redundant_4": {
+      "depth": 32,
+      "lowered_sha256": "efacfdd0e1bb0670dc9f08d451750d2e0ca59a782da68b06c405eb909a416f7e",
+      "qasm_sha256": "2cdc4ba18722b2b1b6b6b1d7e277214641e9337c474ce16c8f068fd5343c7e4e",
+      "qubits": 4
+    },
+    "redundant_6": {
+      "depth": 48,
+      "lowered_sha256": "a051b689e567aa66ea639b617129c667f98f882812274d5fcd335739a6a8e4c4",
+      "qasm_sha256": "e123b1af692884926bc78bbb370e213529cf4008ba705fd9189397773b42e89a",
+      "qubits": 6
+    },
+    "vqe_4": {
+      "depth": 7,
+      "lowered_sha256": "92ce2abe63e1061339aa9be9e5aa02c936dc63d45dae417bf97ee561974c4a85",
+      "qasm_sha256": "1b9e872e2e84536251581d3cfe55cadc97069884eb238840a8d032124e04d034",
+      "qubits": 4
+    },
+    "vqe_6": {
+      "depth": 9,
+      "lowered_sha256": "76df2b1f8e1bd8c50203455dec0aad0824bdf0769eddee256484a620ff7f74bc",
+      "qasm_sha256": "0a528eb2f05673c7a45d2fbef93ac40f9a928b720333193e1ae7d98f7f9f8c13",
+      "qubits": 6
+    }
+  },
+  "manifest_version": 1,
+  "outputs": [
+    "repro.json",
+    "repro.csv",
+    "repro.md"
+  ],
+  "protocol": "same input for every tool; every output lowered to u3+cx before counting; every output refereed by qiskit.quantum_info.Operator, fidelity tolerance 1e-06",
+  "referee": {
+    "qiskit_version_pinned": "2.5.2",
+    "tolerance": 1e-06,
+    "tool": "qiskit.quantum_info.Operator"
+  },
+  "suite_generator": "scripts/repro_harness.py::build_suite",
+  "tools": [
+    "compact",
+    "qiskit",
+    "pytket",
+    "cirq"
+  ]
+}

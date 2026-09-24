@@ -37,6 +37,10 @@ jobs:
         run: python tests/test_verify_api.py
       - name: Trust-layer tests
         run: python tests/test_trust_layer.py
+      - name: Adversarial red-team suite
+        run: python tests/test_adversarial_v024.py
+      - name: Tier-boundary suite
+        run: python tests/test_tier_boundaries.py
       - name: Build sdist and wheel
         run: |
           pip install build twine
