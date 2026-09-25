@@ -138,17 +138,21 @@ def test_boundary_dd_tier2_beyond_dense():
 
 def test_boundary_dd_width_cap():
     """At/above DD_MAX_QUBITS (32) the dd prover is out of scope by
-    design: a 33q mixed circuit falls through to the randomized tier
-    (numpy present) or prover-unavailable (tier 0) — never a false
-    exact claim."""
+    design: a 33q mixed circuit falls through — to the compositional
+    sliding-window prover (tier 4, no width cap by design, when a local
+    correspondence exists) or to randomized/prover-unavailable — never
+    a false exact claim either way."""
     n = DD_MAX_QUBITS + 1
     c = _qft(n)
     o = optimize(c)
     v = verify(c, o)
     assert v["equivalent"] is not False, f"{n}q: {v}"
-    assert v["tier"] <= 1, f"{n}q claimed tier {v['tier']}: {v}"
-    assert v["method"] in ("randomized_sampling", "prover_unavailable",
-                           "phase_polynomial", "clifford_tableau"), v
+    if v["tier"] == 4:
+        assert v["method"] == "sliding_windows", v
+    else:
+        assert v["tier"] <= 1, f"{n}q claimed tier {v['tier']}: {v}"
+        assert v["method"] in ("randomized_sampling", "prover_unavailable",
+                               "phase_polynomial", "clifford_tableau"), v
 
 
 def test_boundary_budget_blowup_declines():

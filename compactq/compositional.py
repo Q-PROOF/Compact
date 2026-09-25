@@ -151,3 +151,136 @@ def verify_segmented(a: Circuit, b: Circuit, cuts_a, cuts_b,
     return {"equivalent": True, "tier": 4,
             "method": "compositional_segments",
             "segments": len(segs_a), "global_phase_ignored": True}
+
+
+def _prefix_signatures(ops):
+    """frozenset of wires touched by ops[:i] for every prefix cut i."""
+    sigs = [frozenset()]
+    cur = set()
+    for g in ops:
+        cur.update(g.qubits)
+        sigs.append(frozenset(cur))
+    return sigs
+
+
+def verify_windows(a: Circuit, b: Circuit, max_width: int = 8,
+                   max_checks: int = 2000, max_windows: int = 512,
+                   tol: float = 1e-7):
+    """T4.2 sliding-window compositional proof for CONNECTED circuits.
+
+    Soundness: if the pair can be cut into matched windows (a's gates
+    [lo..i) vs b's [lo'..j)) such that every window pair is equivalent
+    up to global phase on the window's own wires, then the products are
+    equivalent — U_a = S·W, U_b = S'·W', W ≡ W' reduces the question to
+    the suffixes, recursively.  Every window is dense-verified on its
+    OWN active wires (≤ `max_width`), so no 2^n unitary is ever built
+    for the full circuit.  One-directional like verify_segmented:
+    matched windows prove equivalence; an exhausted search DECLINES
+    (None) — it is not evidence of inequivalence.
+
+    The search enumerates candidate cut pairs whose windows have equal
+    active wire sets, widest first, then proportional to the gate-count
+    ratio; dead ends are memoized.  Bounded by `max_checks` dense
+    comparisons and `max_windows`; returns None when the bounds or the
+    width limit are exceeded, or when no alignment exists (callers fall
+    through to the next prover).
+    """
+    from .equivalence import check_equivalent
+    import sys as _sys
+
+    if a.num_qubits != b.num_qubits:
+        return None
+    la, lb = len(a.ops), len(b.ops)
+    if la == 0 and lb == 0:
+        return {"equivalent": True, "tier": 4, "method": "sliding_windows",
+                "windows": 0, "global_phase_ignored": True}
+
+    # the DFS is deep (one frame per matched window); keep headroom and
+    # restore the previous limit on the way out
+    old_limit = _sys.getrecursionlimit()
+    _sys.setrecursionlimit(max(old_limit, 10000))
+    try:
+        return _verify_windows_impl(a, b, la, lb, max_width, max_checks,
+                                    max_windows, tol, check_equivalent)
+    finally:
+        _sys.setrecursionlimit(old_limit)
+
+
+def _verify_windows_impl(a, b, la, lb, max_width, max_checks, max_windows,
+                         tol, check_equivalent):
+    checks = [0]
+    failed = set()
+
+    def window_ok(lo_a, i, lo_b, j):
+        wa = sorted({q for g in a.ops[lo_a:i] for q in g.qubits})
+        wb = sorted({q for g in b.ops[lo_b:j] for q in g.qubits})
+        if not wa or wa != wb or len(wa) > max_width:
+            return False
+        remap = {q: x for x, q in enumerate(wa)}
+
+        def narrow(ops, lo, hi):
+            return Circuit(len(wa),
+                           [Gate(g.name, g.params,
+                                 tuple(remap[q] for q in g.qubits))
+                            for g in ops[lo:hi]])
+
+        checks[0] += 1
+        return check_equivalent(narrow(a.ops, lo_a, i),
+                                narrow(b.ops, lo_b, j), tol)
+
+    def dfs(lo_a, lo_b):
+        if (lo_a, lo_b) in failed:
+            return None
+        if lo_a == la and lo_b == lb:
+            return 0
+        # enumerate windows from lo_a: grow one gate at a time; the
+        # window's ACTIVE set is the union of its own gates' wires
+        # (gates may re-touch wires seen before earlier cuts — that is
+        # fine; what is bounded is the window's own distinct-wire count)
+        cands = []
+        i = lo_a
+        wa = set()
+        while i < la:
+            wa.update(a.ops[i].qubits)
+            i += 1
+            if len(wa) > max_width:
+                break
+            if lo_b == lb:
+                continue
+            j = lo_b
+            wb = set()
+            while j < lb:
+                wb.update(b.ops[j].qubits)
+                j += 1
+                if len(wb) > max_width:
+                    break
+                if wb == wa:
+                    cands.append((i + j, i, j))
+        # prefer LARGE windows (shallower recursion, fewer dense checks),
+        # then proportional cuts among comparable sizes: compilers
+        # rewrite locally, so the matching cut in b sits near the global
+        # gate-count ratio (both sides in window-relative positions)
+        ratio = (lb - lo_b) / max(1, (la - lo_a))
+        cands.sort(key=lambda t: (-(t[1] - lo_a + t[2] - lo_b),
+                                  abs((t[2] - lo_b)
+                                      - ratio * (t[1] - lo_a))))
+        tried = 0
+        for _score, i, j in cands:
+            if tried >= 128 or checks[0] >= max_checks:
+                break
+            tried += 1
+            if not window_ok(lo_a, i, lo_b, j):
+                continue
+            sub = dfs(i, j)
+            if sub is not None:
+                return sub + 1
+        failed.add((lo_a, lo_b))
+        if len(failed) > max_windows * 8:
+            return None
+        return None
+
+    windows = dfs(0, 0)
+    if windows is None:
+        return None
+    return {"equivalent": True, "tier": 4, "method": "sliding_windows",
+            "windows": windows, "global_phase_ignored": True}

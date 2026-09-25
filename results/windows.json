@@ -1,0 +1,74 @@
+{
+  "generated": "2026-09-25T04:08:08.822151+00:00",
+  "compactq_version": "0.2.5",
+  "protocol": "connected 2-layer rings; LOCAL exact rewrites (adjacent-rz merges, rz-across-control commutes); sliding-window prover (<=8-wire windows, dense per window); one-directional soundness \u2014 declined pairs are recorded as declined, never guessed",
+  "scope_note": "globally-commuted pairs (aggressive search passes) have no <=8-wire aligned prefix boundary and decline loudly; carry-tracking windows are roadmap",
+  "records": [
+    {
+      "qubits": 32,
+      "gates": 256,
+      "rewritten_positions": 0,
+      "windows": 18,
+      "verify_s": 0.057,
+      "tier": 4,
+      "method": "sliding_windows",
+      "equivalent": true,
+      "status": "exact-proven (sliding windows)"
+    },
+    {
+      "qubits": 64,
+      "gates": 512,
+      "rewritten_positions": 0,
+      "windows": 35,
+      "verify_s": 0.091,
+      "tier": 4,
+      "method": "sliding_windows",
+      "equivalent": true,
+      "status": "exact-proven (sliding windows)"
+    },
+    {
+      "qubits": 96,
+      "gates": 768,
+      "rewritten_positions": 0,
+      "windows": 52,
+      "verify_s": 0.132,
+      "tier": 4,
+      "method": "sliding_windows",
+      "equivalent": true,
+      "status": "exact-proven (sliding windows)"
+    },
+    {
+      "qubits": 128,
+      "gates": 1024,
+      "rewritten_positions": 0,
+      "windows": 69,
+      "verify_s": 0.166,
+      "tier": 4,
+      "method": "sliding_windows",
+      "equivalent": true,
+      "status": "exact-proven (sliding windows)"
+    },
+    {
+      "qubits": 192,
+      "gates": 1536,
+      "rewritten_positions": 0,
+      "windows": 103,
+      "verify_s": 0.259,
+      "tier": 4,
+      "method": "sliding_windows",
+      "equivalent": true,
+      "status": "exact-proven (sliding windows)"
+    },
+    {
+      "qubits": 256,
+      "gates": 2048,
+      "rewritten_positions": 0,
+      "windows": 138,
+      "verify_s": 0.337,
+      "tier": 4,
+      "method": "sliding_windows",
+      "equivalent": true,
+      "status": "exact-proven (sliding windows)"
+    }
+  ]
+}

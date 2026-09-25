@@ -128,9 +128,8 @@ def verify(original: Circuit, optimized: Circuit) -> dict:
         except Exception:
             pass  # numerical doubt: fall through
 
-    # tier 4: compositional proof for block-structured circuits at any
-    # width (per-block dense verification over disjoint components — no
-    # 2^total unitary is ever built)
+    # tier 4: compositional proof for block-structured circuits (disjoint
+    # components — no 2^total unitary is ever built)
     from .compositional import verify_compositional
     comp = verify_compositional(original, optimized)
     if comp is not None:
@@ -156,6 +155,16 @@ def verify(original: Circuit, optimized: Circuit) -> dict:
                         2, "dd_full_unitary")
         except Exception:
             pass  # budget / deadline exhausted / unsupported gate: fall through
+
+    # tier 4 (continued): sliding windows — CONNECTED circuits the DD
+    # prover declined or cannot cover (> 32q).  The search cuts both
+    # circuits into matched ≤ 8-wire windows and re-proves each densely;
+    # an exhausted alignment search declines (None), never a guess.
+    from .compositional import verify_windows
+    win = verify_windows(original, optimized)
+    if win is not None:
+        return pack(win["equivalent"], 4, win["method"],
+                    {"windows": win["windows"]})
 
     # tier 1: randomized K-state sampling (numpy optional).  Widths above
     # the ~30q statevector ceiling decline to tier 0 rather than thrash.

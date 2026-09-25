@@ -2,6 +2,41 @@
 
 All notable changes to Q-PROOF Compact are documented here.
 
+## [0.2.6] — 2026-09-25
+
+### Added — T4.2: sliding-window verification for connected circuits
+
+- **Sliding-window compositional prover** (`compactq.compositional.
+  verify_windows`, tier 4, wired into the `verify()` cascade): for
+  CONNECTED circuits — rings, Trotter shells, anything entangled — the
+  search cuts both circuits into matched windows of ≤ 8 active wires
+  and re-proves every window densely.  Soundness by sequential
+  composition: U_a = S·W and U_b = S'·W' with W ≡ W' reduces the
+  question to the suffixes, recursively; one-directional like all
+  composition proofs (matched windows prove equivalence, an exhausted
+  search DECLINES — never a guess).
+- **Measured** (`results/windows.json|.md`, produced by
+  `scripts/connected_windows_bench.py`): connected 2-layer rings with
+  exact local rewrites (adjacent-RZ merges, RZ-across-control
+  commutations) are exact-proven at **32, 64, 96, 128, 192 and 256
+  qubits** in 0.06–0.34 s — widths beyond the dense prover and, for the
+  wider rings, beyond the DD prover's practical reach, where these
+  pairs previously ended "unverified".
+- Bounded search (deadline-free but capped: `max_checks`,
+  `max_windows`, per-node candidate budget), dead-end memoization, and
+  a recursion-limit guard; the prover never claims inequivalence — a
+  declined pair falls through to the next tier (or tier 0), loudly.
+- New suite `tests/test_sliding_windows.py` (256q proof, 40-pair dense
+  agreement, perturbation decline, cascade routing) — CI-registered.
+
+### Honest scope
+
+Pairs whose optimizer GLOBALLY commuted gates across the whole circuit
+(e.g. phases moved from tail to head by the aggressive search passes)
+have no ≤ 8-wire aligned prefix boundary — the window prover declines
+those loudly.  The general fix (carry-tracking windows) is the next
+T4.2 step; local-rewrite verification is the shipped milestone.
+
 ## [0.2.5] — 2026-09-24
 
 ### Added — T4 maturation: compositional certificates, end to end

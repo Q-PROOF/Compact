@@ -45,6 +45,8 @@ jobs:
         run: python tests/test_checker_independence.py
       - name: Compositional-certificate suite
         run: python tests/test_compositional_certs.py
+      - name: Sliding-window prover suite
+        run: python tests/test_sliding_windows.py
       - name: Build sdist and wheel
         run: |
           pip install build twine
